@@ -1,0 +1,126 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>Consulta de Parte Informativo (Documentos)</title>
+</head>
+<body>
+	<section class="content-header">
+		<h1>Consulta de Parte Informativo (Documentos)</h1>
+		<ol class="breadcrumb">
+			<li>
+				<a><i class="{{breadCrumbs.icono}}"></i>{{breadCrumbs.modulo}}</a>
+			</li>
+			<li class="active">
+				{{breadCrumbs.servicio}}
+			</li>
+		</ol>
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<form role="form" name="form" novalidate>
+			<div class="row">
+				<div class="col-md-6 col-md-offset-3">
+					<!-- Datos Del Infractor -->
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Búsqueda</h3>
+						</div>
+
+						<div class="box-body">
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-list-ul"></i>
+											</div>
+											<select ng-model="parametroBusqueda.tipoBusqueda" class="form-control select2" style="width: 100%;" 
+													name="tipoBusqueda" id="tipoBusqueda"
+													ng-options='option.codigo as option.descripcion for option in filterValues' ng-change="changeFilter()">
+											</select>
+										</div>									
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<div class="input-group">
+											<span class="input-group-addon">
+												<i class="fa fa-pencil" aria-hidden="true"></i>
+											</span>
+											<input type="text" ng-model="parametroBusqueda.valor" class="form-control"  ng-disabled="inputvalor" ng-required="!inputvalor" name="txtvalor"></input> <span class="input-group-btn">
+											<button type="button" ng-click="buscarPIDocumentos(parametroBusqueda.tipoBusqueda, parametroBusqueda.valor)" class="btn btn-danger btn-flat">Buscar</button>
+											</span>
+										</div>
+										<div ng-if="form.txtvalor.$invalid && form.txtvalor.$dirty" ng-style="{color:'red'}">El valor es requerido</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row" ng-if="documentos.length > 0">
+				<div class="col-xs-12">
+					<div class="box box-danger">
+						<div class="box-header row">
+							<div class="col-md-6 col-xs-12">
+								<h3 class="box-title">Registros Encontrados: {{ (documentos | filter:view.searchSomething).length }}</h3>	
+							</div>
+							
+							<div class="col-md-offset-3 col-md-3 col-xs-10">
+								<div class="input-group">
+									<input id="searchsomething" type="text" class="form-control" placeholder="Buscar por filtro" ng-model="view.searchSomething">
+									<span class="input-group-addon"><i class="fa fa-search"></i></span>
+								</div>
+							</div>
+						</div>
+						
+						<div class="box-body table-responsive">
+								<table id="tabla_documentos" class="table table-striped table-hover header-fixed">
+									<thead>
+										<tr>
+											<th class="center">CONSECUTIVO</th>
+											<th class="center">OFICIAL PLACA</th>
+											<th class="center">OFICIAL NOMBRE</th>
+											<th class="center">FECHA RECEPCIÓN</th>
+											<th class="center">ACCIÓN</th>
+										</tr>
+									</thead>
+									
+									<tbody>
+										<tr dir-paginate="documento in documentos | filter:view.searchSomething | itemsPerPage: view.rowsPerPage">
+											<td class="center">{{documento.noConsecutivo}}</td>
+											<td class="center">{{documento.oficialPlaca}}</td>
+											<td class="center">{{documento.oficialNombre}}</td>
+											<td class="center">{{documento.fecha}}</td>
+											<td class="center">
+												<a href="#/busquedaDocumentos/modificacionDocumentos/{{documento.idPi}}" class="btn btn-danger" role="button" tooltip="Editar">
+													<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+												</a>
+											</td>
+										</tr>
+										<tr ng-if="(documentos | filter:view.searchSomething).length < 1"><td colspan="5" class="text-center"><h4>No se encontraron coincidencias</h4></td></tr>
+									</tbody>
+								</table>
+						</div>
+						
+						<div class="container-fluid">
+							<div class="fixed-table-pagination" style="display:block;">
+								<rows-per-page rows="view.rowsPerPage" filtro="view.searchSomething" array="documentos"></rows-per-page>
+								
+								<div class="pull-right pagination">
+									<dir-pagination-controls class="pagination"></dir-pagination-controls>
+								</div>
+							</div>
+						</div>
+						
+					</div>
+					
+				</div>
+			</div>
+		</form>
+	</section>
+</body>
+</html>

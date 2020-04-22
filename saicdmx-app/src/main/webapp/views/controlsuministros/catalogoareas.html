@@ -1,0 +1,137 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>Catalogo de Áreas</title>
+</head>
+<body>
+	<section class="content-header">
+		<h1>Catálogo de Áreas</h1>
+		<ol class="breadcrumb">
+			<li>
+				<a><i class="{{breadCrumbs.icono}}"></i>{{breadCrumbs.modulo}}</a>
+			</li>
+			<li class="active">
+				{{breadCrumbs.servicio}}
+			</li>
+		</ol>
+	</section>
+	
+   	<section class="content">        
+   		<form name="formCatalogoAreas" role="form" novalidate>
+			<div class="row">
+  				<div class="col-md-3"></div>
+      			<div class="col-md-6">
+      				<div class="box box-danger">
+		                <div class="box-header with-border text-center">
+	              			<h3 class="box-title">Búsqueda</h3>
+	      				</div>
+              		<div class="box-body">
+              			<div class="row">
+		                   	<div class="col-xs-6">
+			                   	<div class="form-group" ng-class="{'has-error': formCatalogoAreas.regional.$invalid && formCatalogoAreas.regional.$dirty}">
+									<label>Regional:</label>
+				                      	<div class="input-group">
+											<span class="input-group-addon">
+												<i class="fa fa-list-ul" aria-hidden="true"></i>
+											</span>
+					                        <select class="form-control" name="regional" id="regional" style="width: 100%;"
+													ng-options="regional.reg_id as regional.reg_nombre for regional in catalogoAreaVO.regionales"
+													ng-model="catalogoAreaVO.lstRegional" ng-change="actualizarAreaOpe()" required>
+													<option value="" selected="selected">Seleccione</option>
+											</select>
+										</div>	
+				                       	<div ng-show="formCatalogoAreas.regional.$error.required && formCatalogoAreas.regional.$dirty"
+											ng-style="{color:'red'}">El campo regional es requerido</div>
+				                    </div>
+				                </div>
+
+                  				<div class="col-xs-6">
+                    				<div class="form-group" ng-class="{'has-error': formCatalogoAreas.areaOpe.$invalid && formCatalogoAreas.areaOpe.$dirty}">
+                      					<label>Área Operativa:</label>
+                      					<div class="input-group">
+											<span class="input-group-addon">
+												<i class="fa fa-list-ul" aria-hidden="true"></i>
+											</span>
+	                      					<select ng-disabled="catalogoAreaVO.areaOperativa.length < 1" class="form-control" name="areaOpe" id="areaOpe" style="width: 100%;"
+												ng-options="areaOpe.upc_id as areaOpe.upc_nombre for areaOpe in catalogoAreaVO.areaOperativa"
+												ng-model="catalogoAreaVO.lstAreaOpe" ng-change="actualizarAuxiliar()" required
+												>
+												<option value="" selected="selected">Seleccione</option>
+											</select>
+										</div>
+                       					<div ng-show="formCatalogoAreas.areaOpe.$error.required && formCatalogoAreas.areaOpe.$dirty"
+										ng-style="{color:'red'}">El campo recibe es requerido</div>
+                    				</div>
+                 				</div>
+                 			</div>
+                		</div>
+           			</div>
+      			</div>
+                <div class="col-md-3"></div>
+           	</div>
+             
+            <div class="row" ng-if="catalogoAreaVO.auxiliares.length > 0">
+            	<div class="col-xs-12">
+					<div class="box box-danger">
+						<div class="box-header row">
+							<div class="col-md-6 col-xs-12">
+								<h3 class="box-title">Registros Encontrados: {{ (catalogoAreaVO.auxiliares | filter : searchSomething).length }} </h3>	
+							</div>
+							
+							<div class="col-md-offset-2 col-md-3 col-xs-10">
+								<div class="input-group pull-right">
+									<input type="text" id="searchsomething" class="form-control" placeholder="Buscar por filtro" ng-model="searchSomething">
+									<span class="input-group-addon"><i class="fa fa-search"></i></span>
+								</div>
+							</div>
+							<div class="col-md-1 col-xs-1 pull-right">
+								<a ng-click="showDialog('',1)" class="btn btn-danger pull-right" role="button" tooltip="Crear Auxiliar">
+									<i class="fa fa-user-plus" aria-hidden="true"></i>
+								</a>
+							</div>
+						</div>
+						<div class="box-body table-responsive">
+							<table id="tabla_oficiales" class="table table-striped table-hover header-fixed">
+								<thead>
+									<tr>
+										<th sort order="'tipo'" by="order" reverse="reverse" class="center">TIPO</th>
+										<th sort order="'oficial_placa'" by="order" reverse="reverse" class="center">PLACA OFICIAL</th>
+										<th sort order="'oficial_nombre'" by="order" reverse="reverse" class="center">NOMBRE OFICIAL</th>
+										<th class="center">ACCIÓN</th>
+									</tr>
+								</thead>
+								
+								<tbody>
+									<tr dir-paginate="auxiliar in catalogoAreaVO.auxiliares | orderBy:order:reverse | filter:searchSomething | itemsPerPage: rowsPerPage">
+										<td class="center">{{auxiliar.tipo}}</td>
+										<td class="center">{{auxiliar.oficial_placa}}</td>
+										<td class="center">{{auxiliar.oficial_nombre}}</td>
+										<td class="center">
+											<a ng-click="quitarAuxiliar(auxiliar.id_registro,auxiliar.oficial_nombre)" role="button" ng-if="auxiliar.tipo == 'AUXILIAR'" class="btn btn-danger" tooltip="Eliminar"><i class="fa fa-times" aria-hidden="true"></i></a>
+											<a ng-click="showDialog(auxiliar, 0)" class="btn btn-danger" role="button" tooltip="Editar"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+										</td>
+									</tr>
+									
+									<tr ng-if="(catalogoAreaVO.auxiliares | filter:searchSomething).length < 1"><td colspan="4" class="text-center"><h4>No se encontraron coincidencias</h4></td></tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="container-fluid">
+							<div class="fixed-table-pagination" style="display:block;">
+								<rows-per-page rows="rowsPerPage" filtro="searchSomething" array="catalogoAreaVO.auxiliares"></rows-per-page>
+								
+								<div class="pull-right pagination">
+									<dir-pagination-controls class="pagination"></dir-pagination-controls>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+            </div>   
+  		</form>
+  	</section>
+
+
+
+	<body>
+</html>

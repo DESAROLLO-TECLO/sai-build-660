@@ -1,0 +1,129 @@
+<html>
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+	<form name="formsgeneral.formCrud">
+<!-- 		<div class="row" ng-if="datos.length > 0"> -->
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box box-danger">
+					<div class="box-header col-md-12">
+						<div class="col-md-6" ng-if="datos.length > 0">
+							<h3 class="box-title">Registros Encontrados: {{ (datos | filter:view.searchSomething).length }}</h3>
+						</div>
+						<div class="col-md-6" ng-if="datos == null">
+							<h3 class="box-title">Registros Encontrados: {{ (datos | filter:view.searchSomething).length }}</h3>
+						</div>
+						<div class="col-md-6 form-group">
+							<div class="row">
+								<div class="col-md-offset-4 col-md-6 col-xs-8">
+					      			<div class="input-group pull-right">
+					        			<input id="searchsomething" type="text" class="form-control" placeholder="Buscar por filtro" ng-model="view.searchSomething">
+										<div class="input-group-addon"><i class="fa fa-search"></i></div>
+					     			</div>
+					     		</div>
+				     			<div class="col-md-1 col-xs-1">
+				     				<button type="button" data-toggle="modal" data-target="#datosCrud" class="btn btn-primary btn-sm pull-right" >
+									  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+									</button>
+								</div>
+								<div ng-show="datos.length>0" class="col-md-1 col-xs-1">
+				     				<a ng-click="generarExcel('/catalogos/tipoEmpleado/reporte')" >
+										<span class="pull-right "><img src="static/dist/img/excel.png"></span>
+									</a>
+				     			</div> 
+				     		</div>  
+						</div>
+					</div>
+					<!-- /.box-header -->
+					<div class="box-body table-responsive no-padding">
+						<table id="tabla" class="table table-hover table-striped header-fixed">
+							<thead>
+								<tr>
+									<th sort order="'empTipCodigo'" by="order" reverse="reverse" class="center">CÓDIGO</th>									
+									<th sort order="'empTipNombre'" by="order" reverse="reverse">NOMBRE</th>
+									<th sort order="'statusDesc'" by="order" reverse="reverse" class="center">ESTATUS</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr dir-paginate="dato in datos | orderBy:order:reverse | filter:view.searchSomething | itemsPerPage: view.rowsPerPage">
+									<td class="center"><a ng-click="setCrud(dato)" data-toggle="modal" data-target="#datosCrud">{{::dato.empTipCodigo}}</a></td>							
+									<td>{{::dato.empTipNombre}}</td>
+									<td class="center">{{::dato.statusDesc}}</td>
+								</tr>
+								<tr ng-if="datos == null"><td colspan="5" class="text-center"><h4>No se encontraron coincidencias</h4></td></tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="container-fluid">
+							<div class="fixed-table-pagination" style="display:block;">
+								<rows-per-page rows="view.rowsPerPage" filtro="view.searchSomething" array="datos"></rows-per-page>
+								
+								<div class="pull-right pagination">
+									<dir-pagination-controls class="pagination"></dir-pagination-controls>
+								</div>
+							</div>
+						</div>
+					
+				</div>
+				<!-- /.box -->
+			</div>
+		</div>
+
+		<div class="modal fade" id="datosCrud" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header bg-red-active text-center">
+						<button type="button" ng-click="limpiarRespuesta()" class="close" data-dismiss="modal">&times;</button>				
+						<h4 class="modal-title">Tipo Empleado</h4>
+					</div>
+					<div class="modal-body">
+							<div class="form-group" ng-class="{'has-error': formsgeneral.formCrud.codigo.$invalid && formsgeneral.formCrud.codigo.$dirty}">
+							<label for="codigo">*Código:</label> 
+							<div class="input-group">
+								<div class="input-group-addon">
+									<span class="fa fa-pencil"  aria-hidden="true">
+									</span>
+								</div>	
+								<input ng-disabled="crud.statusDesc != undefined" required="true" 
+								ng-model="crud.empTipCodigo" type="text" class="form-control" id="codigo" 
+								name="codigo" maxlength="10">
+							</div>
+							<div ng-show="formsgeneral.formCrud.codigo.$error.required && formsgeneral.formCrud.codigo.$dirty" ng-style="{color:'red'}">
+								El código es requerido
+							</div>
+						</div>						
+						<div class="form-group" ng-class="{'has-error': formsgeneral.formCrud.nombre.$invalid && formsgeneral.formCrud.nombre.$dirty}">
+							<label for="nombre">*Nombre:</label>
+							<div class="input-group">
+								<div class="input-group-addon">
+									<span class="fa fa-check-square-o" aria-hidden="true">
+									</span>
+								</div>
+								<input maxlength="60" required="true" ng-model="crud.empTipNombre" type="text" class="form-control" id="nombre" 
+								name="nombre">
+							</div>
+							<div ng-show="formsgeneral.formCrud.nombre.$error.required && formsgeneral.formCrud.nombre.$dirty" ng-style="{color:'red'}">
+								El nombre es requerido
+							</div>
+						</div>
+						
+					</div>
+					<div class="modal-footer">
+						<button ng-show="crud.statusDesc == undefined" type="button" ng-click="alta(crud)"  
+						class="btn btn-primary">Guardar</button>
+						<button ng-show="crud.statusDesc == 'Activo'" type="button" ng-click="actualizar(crud)" 
+						class="btn btn-primary">Actualizar</button>
+						<button ng-show="crud.statusDesc == 'Activo'" type="button" ng-click="desactivarCampo(crud)" 
+						class="btn btn-primary">Desactivar Campo</button>
+						<button ng-show="crud.statusDesc == 'Cancelado'" type="button" ng-click="actualizar(crud)"  
+						class="btn btn-primary">Activar Campo</button>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+<body>
+</html>

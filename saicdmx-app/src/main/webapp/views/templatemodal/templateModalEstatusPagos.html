@@ -1,0 +1,176 @@
+
+<div id="detallePagosCompletos" class="modal fade bannerformmodal"
+	tabindex="-1" role="dialog" aria-labelledby="bannerformmodal"
+	aria-hidden="true" data-keyboard="false" data-backdrop="static">
+	<meta charset="utf-8" />
+	<div class="modal-dialog modal-lg" role="document" >
+		<div class="modal-content ">
+			<div class="modal-header bg-red-active text-center">
+				<button type="button" class="close" data-dismiss="modal"
+					ng-click="cerrarModal()" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title" id="myModalLabel">{{modalPagos.titulo}}
+				</h4>
+			</div>
+
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="box box-danger">
+							<div class="box-header row">
+								<div class="col-md-6 col-xs-12">
+									<h3 class="box-title  text-center">Registros Encontrados:
+										 {{ (listaPagos | filter:view.filterSearch).length }}</h3>
+								</div>
+
+								
+								<div class="col-md-offset-3 col-md-3 col-xs-10">
+									<div class="input-group ">
+										<input id="searchsomething" type="text" class="form-control"
+											placeholder="Buscar por filtro" ng-model="view.filterSearch">
+										<div class="input-group-addon">
+											<i class="fa fa-search"></i>
+										</div>
+									</div>
+								</div>
+								
+
+							</div>
+							<div class="box-body table-responsive">
+								<div style="display: block; overflow: auto;" ng-if="modalPagos.modal == '1' || modalPagos.modal == '0' ">
+
+									<table class="table table-striped tblsnborder"
+										ng-if="modalPagos.modal == '1'">
+										<thead>
+											<tr>
+												<th>FECHA PAGO</th>
+												<th>NCI</th>
+												<th>NO. INFRACCIÓN</th>
+												<th>EMPLEADO PLACA</th>
+												<th>EMPLEADO NOMBRE</th>
+
+											</tr>
+										</thead>
+										<tbody>
+
+											<tr
+												dir-paginate="pagoVO in listaPagos | filter: view.filterSearch | itemsPerPage: view.rowsPerPage ">
+												<td class="center">{{pagoVO.fechaPagoCtroPagos | date:'dd/MM/yyyy
+													HH:mm:ss'}}</td>
+												<td class="center">{{pagoVO.nci}}</td>
+												<td class="center">{{pagoVO.infracNum}}</td>
+												<td class="center">{{pagoVO.empPlaca}}</td>
+												<td class="center">{{pagoVO.empNombre}}</td>
+
+											</tr>
+											<tr ng-if="(listaPagos | filter:view.filterSearch).length < 1"><td colspan="5" class="text-center"><h4>No se encontraron coincidencias</h4></td></tr>
+										</tbody>
+									</table>
+
+<!-- 								</div> -->
+<!-- 								<div style="display: block; overflow: auto;" ng-if="modalPagos.modal == '1' || modalPagos.modal == '0' "> -->
+
+									<table class="table table-striped tblsnborder"
+										ng-if="modalPagos.modal == '0'">
+										<thead>
+											<tr>
+												<th>FECHA PAGO</th>
+												<th>NCI</th>
+												<th>NO. INFRACCIÓN</th>
+												<th>EMPLEADO PLACA</th>
+												<th>EMPLEADO NOMBRE</th>
+												<th>TIENE INFRACCIÓN</th>
+												<th>TIENE PAGO</th>
+												<th>TIENE DETALLE CARGOS</th>
+												<th>TIENE DETALLE PAGOS</th>
+												<th>TIENE PAGO TRANSACCION</th>
+												<th>TIENE INFRAC TRANSACCIÓN</th>
+
+											</tr>
+										</thead>
+										<tbody>
+
+											<tr
+												dir-paginate="pagoVO in listaPagos | filter: view.filterSearch |  itemsPerPage: view.rowsPerPage  ">
+												<td>{{pagoVO.fechaPagoCtroPagos | date:'dd/MM/yyyy
+													HH:mm:ss'}}</td>
+												<td>{{pagoVO.nci}}</td>
+												<td>{{pagoVO.infracNum}}</td>
+												<td>{{pagoVO.empPlaca}}</td>
+												<td>{{pagoVO.empNombre}}</td>
+
+												<td class="center alignMiddle">
+													<span ng-if="pagoVO.existeInfraccion == false">
+														<i class="fa fa-remove text-red fa-3x"></i>
+													</span>
+													<span ng-if="pagoVO.existeInfraccion == true">
+														<i class="fa fa-check text-green fa-3x"></i>
+													</span>
+												</td>
+												<td class="center alignMiddle">
+													<span ng-if="pagoVO.existePago == false">
+														<i class="fa fa-remove text-red fa-3x"></i>
+													</span>
+													<span ng-if="pagoVO.existePago == true">
+														<i class="fa fa-check text-green fa-3x"></i>
+													</span>
+												</td>
+												<td class="center alignMiddle">														
+													<span ng-if="pagoVO.existeDetalleCargos == false">
+														<i class="fa fa-remove text-red fa-3x"></i>
+													</span>
+													<span ng-if="pagoVO.existeDetalleCargos == true">
+														<i class="fa fa-check text-green fa-3x"></i>
+													</span>
+												</td>
+												<td class="center alignMiddle">
+													<span ng-if="pagoVO.existeDetallePagos == false">
+														<i class="fa fa-remove text-red fa-3x"></i>
+													</span>
+													<span ng-if="pagoVO.existeDetallePagos == true">
+														<i class="fa fa-check text-green fa-3x"></i>
+													</span>
+												</td>
+												<td class="center alignMiddle">
+													<span ng-if="pagoVO.existePagoTransaccion == false">
+														<i class="fa fa-remove text-red fa-3x"></i>
+													</span>
+													<span ng-if="pagoVO.existePagoTransaccion == true">
+														<i class="fa fa-check text-green fa-3x"></i>
+													</span>
+												</td>
+												<td class="center alignMiddle">
+													<span ng-if="pagoVO.existeInfracTransaccion == false">
+														<i class="fa fa-remove text-red fa-3x"></i>
+													</span>
+													<span ng-if="pagoVO.existeInfracTransaccion == true">
+														<i class="fa fa-check text-green fa-3x"></i>
+													</span>
+												</td>
+
+
+											</tr>
+											<tr ng-if="(listaPagos | filter:view.filterSearch).length < 1"><td colspan="11" class="text-center"><h4>No se encontraron coincidencias</h4></td></tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							
+							<div class="container-fluid">
+								<div class="fixed-table-pagination" style="display:block;">
+									<rows-per-page rows="view.rowsPerPage" filtro="view.filterSearch" array="listaPagos"></rows-per-page>
+									
+									<div class="pull-right pagination">
+										<dir-pagination-controls class="pagination"></dir-pagination-controls>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+

@@ -1,0 +1,160 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>Consulta Impugnación</title>
+</head>
+<body>
+	<section class="content-header">
+		
+<h1>Consulta Impugnación</h1>
+			           <ol class="breadcrumb">
+			<li><a ><i class="fa fa-book"></i>Impugnación</a></li>
+			<li class="active">Consulta</li>
+		</ol>
+	</section>
+	<!-- Main content -->
+
+	<section class="content">
+		<form name="form">
+			<div class="row">
+				<div class="col-md-2"></div>
+				<div class="col-md-8">
+
+					<!-- Datos generales -->
+					<div class="box box-danger" 
+								align="center">
+						<div class="box-header with-border">
+							<div align="center">
+								<h3 class="box-title">Impugnación</h3>
+							</div>
+							
+						</div>
+						<div class="box-body" ng-repeat="imp in impugna">
+
+							<div class="form-group" align="left">
+								<fieldset>
+									<legend class="text-left">Datos Generales</legend>
+										<div class="row" align="left">
+											<div class="col-md-6">
+												<label for="example2">No. de Juicio:</label>
+												<div class="form-group">
+													
+													{{imp.impugnacionJuicio}}
+
+												</div>
+											</div>
+											<div class="col-md-6">
+													<label for="example1">No. de Oficio Jurídico:</label>
+
+												<div class="form-group">
+													{{imp.impugnacionOficioJur}}
+
+												</div>
+											</div>
+										</div>
+										<div class="row" align="left">
+
+											<div class="col-md-6">
+												<label for="example1">Actor:</label>
+												<div class="form-group">
+													 {{imp.actorNombre}}
+													{{imp.actorApellidoPaterno}} {{imp.actorApellidoMaterno}}
+
+												</div>
+											</div>
+											<div class="col-md-6">
+												<label for="example2"> Constancia de Cumplimiento:</label>
+												<div class="form-group">
+													
+													{{imp.impugnacionConstanciaCump}}
+
+												</div>
+											</div>
+										</div>
+										<div class="row" align="left">
+
+											<div class="col-md-6">
+												<label for="example1"> Fecha de Recepción:</label>
+												<div class="form-group">
+													
+													{{imp.fechaRecepcion}}
+
+												</div>
+											</div>
+											<div class="col-md-6">
+												<label for="example2"> Fecha de Creación:</label>
+												<div class="form-group">
+													
+													{{imp.fechaCreacion}}
+
+												</div>
+											</div>
+										</div>
+								</fieldset>
+
+								<hr />
+								
+								
+								
+										<div class="col-md-3">
+
+											
+										</div>
+
+
+										<div class="col-md-6" align="left">
+										<fieldset>
+										<legend>Infracciones</legend>
+										<div class="col-md-6" align="center">
+
+														<label>Infracción </label><br>
+													
+													<div class="form-group">
+														<div ng-repeat="infraccion in impInfraccion">
+															{{infraccion.infracNum}}</div>
+											
+													
+											</div>
+										</div>
+												
+										<div class="col-md-6" align="center">
+													<label>Estatus Actual</label>
+													<div class="form-group">
+													<div ng-repeat="infraccion in impInfraccion">
+														{{infraccion.estatus}}</div>
+													</div>
+
+										</div>
+										</fieldset>
+										
+									</div>	
+										
+										
+										<div class="col-md-3"></div>
+										<div class="col-md-12">								   
+										<div align="center"><a class="btn btn-danger"
+															 href="#/consultaImpugnacion"
+															 data-toggle="tooltip"
+															data-placement="top"
+													        title="Realizar otra búsqueda">Regresar
+										    
+										
+										</a></div>
+										</div>			
+
+									</div>
+									
+								
+									
+						</div>
+					</div>
+					</div>
+				</div>
+		</form>
+	</section>
+
+
+</body>
+
+
+</html>

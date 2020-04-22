@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteGarantiaEntrega" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="cfc0f208-e477-4a05-8f73-d0ce854728b4">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="287"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sourceforge.barbecue.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="garantiaId" class="java.lang.String">
+		<defaultValueExpression><![CDATA["0"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fecha" class="java.lang.String"/>
+	<parameter name="imagen" class="java.io.InputStream" isForPrompting="false"/>
+	<parameter name="nombre" class="java.lang.String"/>
+	<parameter name="documentoFolio" class="java.lang.String"/>
+	<parameter name="infracNum" class="java.lang.String"/>
+	<parameter name="infracFecha" class="java.lang.String"/>
+	<parameter name="fechaCreacion" class="net.sf.jasperreports.types.date.TimestampRange"/>
+	<parameter name="fechaRecibimiento" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT (CASE
+           WHEN (GARDOC.DOCUMENTO_ID = 1 OR GARDOC.DOCUMENTO_ID = 4)
+           THEN
+              'Placa Vehicular'
+           WHEN (GARDOC.DOCUMENTO_ID = 2 OR GARDOC.DOCUMENTO_ID = 5)
+           THEN
+              'Licencia'
+           WHEN (GARDOC.DOCUMENTO_ID = 3 OR GARDOC.DOCUMENTO_ID = 6)
+           THEN
+              'Tarjeta de Circulación'
+        END)
+          AS NOMBRE,
+       GAR.DOCUMENTO_FOLIO AS DOCUMENTO_FOLIO,
+       INF.INFRAC_NUM AS INFRAC_NUM,
+          TRIM (TO_CHAR (INF.INFRAC_M_FECHA_HORA, 'DD'))
+       || ' de '
+       || TRIM (
+             TO_CHAR (INF.INFRAC_M_FECHA_HORA,
+                      'MONTH',
+                      'nls_date_language=spanish'))
+       || ' de '
+       || TRIM (TO_CHAR (INF.INFRAC_M_FECHA_HORA, 'YYYY'))
+       || ' a las '
+       || TRIM (TO_CHAR (INF.INFRAC_M_FECHA_HORA, 'HH12:MI:SS'))
+       || ' Hrs.'
+          AS INFRAC_FECHA,
+       EST.FECHA_CREACION,
+       'México, a '||to_char(EST.FECHA_CREACION,'DD')||' de '
+       || INITCAP(TO_CHAR (EST.FECHA_CREACION,
+                      'MONTH',
+                      'nls_date_language=spanish'))
+       ||' de '||TO_CHAR (EST.FECHA_CREACION,
+                      'YYYY') as fecha_recibimiento,
+	GAR.GARANTIA_ID
+  FROM ICD.GARANTIAS GAR
+       JOIN ICD.GARANTIAS_CAT_DOCUMENTOS GARDOC
+          ON GAR.GARANTIA_DOCUMENTO_ID = GARDOC.DOCUMENTO_ID
+       JOIN ICD.INFRACCIONES INF
+          ON GAR.INFRAC_NUM = INF.INFRAC_NUM
+       JOIN ICD.GARANTIAS_PROCESO_ESTATUS EST
+          ON EST.GARANTIA_ID = GAR.GARANTIA_ID AND EST.PROCESO_ID = 3
+AND     GAR.GARANTIA_ID = $P{garantiaId}]]>
+	</queryString>
+	<background>
+		<band splitType="Prevent"/>
+	</background>
+	<title>
+		<band splitType="Prevent"/>
+	</title>
+	<pageHeader>
+		<band splitType="Prevent"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Prevent"/>
+	</columnHeader>
+	<detail>
+		<band height="725" splitType="Prevent">
+			<line>
+				<reportElement key="line-1" x="0" y="358" width="570" height="1" uuid="61463372-f9a4-4729-8001-accdecc10e30"/>
+				<graphicElement>
+					<pen lineWidth="1.0" lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement key="staticText-1" x="157" y="130" width="252" height="24" uuid="cfae82e8-0434-495f-a84e-0d96a16498a7"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="18" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Recepción de Garantías]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-3" x="61" y="312" width="154" height="27" uuid="3cd866fc-dcb7-4f14-b0e0-299daa5af259"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Nombre y Firma
+del Oficial]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-4" x="327" y="312" width="173" height="27" uuid="9c308e26-fb1e-4471-be7e-43e611719923"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Nombre y Firma
+del Ciudadano]]></text>
+			</staticText>
+			<line>
+				<reportElement key="line-2" x="61" y="307" width="154" height="1" uuid="480fe8dc-45e7-45a7-a87a-737a22781fb0"/>
+			</line>
+			<line>
+				<reportElement key="line-3" x="327" y="307" width="173" height="1" uuid="7fd64f18-365f-4609-8f90-cfd00ae503fc"/>
+			</line>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-1" x="283" y="83" width="255" height="15" uuid="104466c4-2580-42dc-bf91-fc80f9a5e2d8"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$P{fechaRecibimiento}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-2" x="98" y="185" width="377" height="54" uuid="b7ad21a4-9deb-4431-8c3f-dd6878c10d6a"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Justified"/>
+				<textFieldExpression><![CDATA["Hago constar que recibí el documento "+$P{nombre}+" con folio "+$P{documentoFolio}+ " y número de garantía "+ $P{garantiaId} +", retenido a causa de la infracción "+$P{infracNum}+", con fecha del "+$P{infracFecha}]]></textFieldExpression>
+			</textField>
+			<image isUsingCache="true">
+				<reportElement key="image-1" positionType="Float" stretchType="RelativeToTallestObject" mode="Opaque" x="34" y="0" width="505" height="70" forecolor="#FFFFFF" backcolor="#FFFFFF" uuid="4affdcfe-37b2-40dd-8dad-dba5855077ac"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<imageExpression><![CDATA[$P{imagen}]]></imageExpression>
+			</image>
+			<image isUsingCache="true">
+				<reportElement key="image-2" positionType="Float" stretchType="RelativeToTallestObject" mode="Transparent" x="34" y="384" width="505" height="70" forecolor="#003366" backcolor="#003366" uuid="694c0660-9bbe-4c3b-83aa-f55b36bd11f8"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<graphicElement>
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+				</graphicElement>
+				<imageExpression><![CDATA[$P{imagen}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement key="staticText-7" x="157" y="515" width="252" height="24" uuid="1fadb82f-03a9-448c-b57c-731195167783"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="18" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Entrega de Garantías]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-8" x="61" y="697" width="154" height="27" uuid="161043ea-87aa-4885-b2dd-780721435e25"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Nombre y Firma
+del Oficial]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-9" x="327" y="697" width="173" height="27" uuid="7f388976-aea1-4549-a708-2b838d59814c"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Nombre y Firma
+del Ciudadano]]></text>
+			</staticText>
+			<line>
+				<reportElement key="line-6" x="61" y="692" width="154" height="1" uuid="c5436cf8-6122-4ed0-aa88-36e6c784b782"/>
+			</line>
+			<line>
+				<reportElement key="line-7" x="327" y="692" width="173" height="1" uuid="62317690-8f0d-4778-a9af-2444aa1ed619"/>
+			</line>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-4" x="98" y="570" width="377" height="54" uuid="795204f3-0f72-484f-a9fc-385b6e4370a5"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textFieldExpression><![CDATA["Hago constar que entregué el documento "+ $P{nombre} +" con folio "+$P{documentoFolio}+ " y número de garantía "+ $P{garantiaId} +", retenido a causa de la infracción "+$P{infracNum}+", con fecha del "+ $P{infracFecha}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-5" x="283" y="468" width="255" height="15" uuid="48c2399c-675c-4159-911a-3ac90a99d75e"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$P{fechaRecibimiento}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Prevent"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="9" splitType="Prevent"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Prevent"/>
+	</summary>
+</jasperReport>

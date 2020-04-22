@@ -1,0 +1,86 @@
+<div class="modal fade" id="modalIdd" role="document" 
+	data-keyboard="false" data-backdrop="static">
+	<meta charset="utf-8" />
+	<div class="modal-dialog"> 
+	<form name="formCP"> 
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close" ng-click="closeModal()">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title">Actualizar Código Postal de Detecciones Seleccionadas</h4>
+			</div>
+			<div class="modal-body">		
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="table-responsive no-padding">
+							<table class="table table-striped tblsnborder">
+								<thead>
+									<tr>
+<!-- 										<th class="text-center">#</th> -->
+										<th class="text-center">CÓDIGO POSTAl ACTUAL</th>
+<!-- 										<th class="text-center" ng-if="optionCP.actualCP">CÓDIGO ACTUAL</th> -->
+										<th >CÓDIGO POSTAL NUEVO</th>
+									<tr>
+								</thead>
+								
+								<tbody>
+									<tr>
+										<td align="center">{{localVariables.thisCP}}</td>
+<!-- 										<td align="center">{{dataCP.codigoPost}}</td> -->
+<!-- 										<td align="center">{{thisNewCP}}</td> -->
+										<td>
+										  
+											   <div class="form-group"
+													ng-class="{ 'has-error' : thisNewCP.$invalid && !thisNewCP.$pristine }">
+													<input type="text" ng-model="thisNewCP" id="newCP" name="newCP" minlength="5" maxlength="5"  ng-minlength="5"
+														ng-model="thisNewCP" class="form-control" placeholder="Ingrese el CP" required="required" integer-number >
+														
+<!-- 													<input ng-show="show.btnAceptar"  type="text" ng-model="thisNewCP" name="newCP" -->
+<!-- 														class="form-control" disabled> -->
+														
+										    			<p ng-show="sindatonewcp"
+		    												class="help-block" style="color:red;">El código postal es requerido</p>
+											  </div>
+											  
+										</td>
+									</tr>
+									
+									<tr></tr>
+									
+									<tr class="text-center">
+										<td ng-if="confirmDesh" colspan="4"><label>¡Se ha deshabilitado el
+											registro!</label></td>
+										<td ng-if="confirmHabil" colspan="4">¡Se ha cambiado el CP del
+											registro a <b>{{dataCP.newCP}}</b>!
+										</td>
+									</tr>
+									
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+
+			</div> 
+			<div class="modal-footer">
+				<button ng-if="show.btnCancelarCP"  type="button" ng-click="closeModal(); resetData()"
+					data-dismiss="modal" class="btn btn-primary">Cancelar</button>
+<!-- 				<button ng-if="optionCP.deshabilitarCP" type="button" -->
+<!-- 					class="btn btn-secondary" -->
+<!-- 					ng-click="radarCambiaCpDesh(dataCP.codigoPost)">Deshabilitar -->
+<!-- 					registro</button> -->
+				<button ng-if="show.btnCambiaCP" type="button"
+					class="btn btn-primary"
+					ng-click="cambiaFmCP()">Cambiar
+					CP</button>
+				<button ng-if="show.btnAceptar" type="button"
+					 class="btn btn-primary" data-dismiss="modal"
+					 ng-click="aplicarCambios()">Aplicar cambios</button>
+
+			</div>
+		</div>			
+	   </form>
+	</div>
+</div>

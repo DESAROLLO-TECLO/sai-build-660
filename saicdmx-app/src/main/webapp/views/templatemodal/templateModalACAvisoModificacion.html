@@ -1,0 +1,63 @@
+<div class="modal fade" id="aviso" tabindex="-1" data-keyboard="false" data-backdrop="static" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<meta charset="utf-8" />
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+        <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true" ng-click="close(true)">×</button>
+				<h4 class="modal-title" id="myModalLabel">{{Modal.mensaje}}</h4>
+					
+			</div>
+        <div class="modal-body" id="modal-body">
+            <div class="container">
+                <div class="row">
+					<div class="col-md-12" align="center">
+						<div class="form-group">
+							<label>Folio de Trámite: </label>
+							<span>{{Modal.idACTramite}}</span>
+						</div>
+					</div>
+					<div ng-if="Modal.cdTipoPersona=='PF'" class="col-md-12" align="center">
+						<div class="form-group">
+							<label>Nombre de Ciudadano: </label>
+							<span>{{Modal.nbCiudadano+' '+Modal.nbCPaterno+' '+Modal.nbMaterno}}</span> 
+						</div>
+					</div>
+					
+					<div ng-if="Modal.cdTipoPersona=='PM'" class="col-md-12" align="center">
+						<div class="form-group">
+							<label>Nombre de la Empresa: </label><span> {{Modal.nbEmpresa}}</span> 
+						</div>
+					</div>
+					
+					<div class="col-md-12" align="center">
+						<div class="form-group">
+							<label>Nombre del Oficial: </label>
+							<span>
+								{{convertirNombresMayusYminus(Modal.empId.empNombre,false)}} {{convertirNombresMayusYminus(Modal.empId.empApePaterno,true)}} {{convertirNombresMayusYminus(Modal.empId.empApeMaterno,true)}}
+							</span>
+						</div>
+					</div>
+					
+					<div class="col-md-12" align="center">
+						<div class="form-group">
+							<div>
+								<label for="example1">Tipo de Trámite: </label> <span>
+									{{Modal.listNbTramite + " "}}</span>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-12" align="center">
+						<a ng-click="generaReporteTramite(Modal.idACTramite)">
+							<span><img width="50px" src="static/dist/img/pdf_logo.png"></span>
+						</a>
+					</div>
+				</div>
+            </div>
+        </div>
+        <div class="modal-footer" style="text-align: right;">
+            <button class="btn btn-danger" type="button" ng-click="close(true)" data-dismiss="modal">Cerrar</button>
+        </div>
+    </div>
+  </div>
+</div>

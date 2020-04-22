@@ -1,0 +1,299 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>Alta de Reporte Robo</title>
+</head>
+<body>
+	<section class="content-header">
+		<h1>Alta de Reporte Robo</h1>
+		<ol class="breadcrumb">
+			<li><a><i class="fa fa-book"></i>Vehiculos Robados</a></li>
+			<li class="active">Alta de Reporte Robo</li>
+		</ol>
+	</section>
+	<br>
+	<!-- Main content -->
+
+	<section class="content">	
+		<form role="form" name="form.vehAlta">
+			<div class="row">
+				<div class="col-md-4"></div>
+				<div class="col-md-4 ">
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Búsqueda</h3>
+
+						</div>
+						
+<!-- 		INICIO				box body correspondiente a busqueda #1 version -->
+
+<!-- 						<div class="box-body"> -->
+<!-- 							<div class="row"> -->
+<!-- 								<div class="col-md-6"> -->
+<!-- 									<div class="form-group input-group"> -->
+<!-- 										<div class="input-group-addon"> -->
+<!-- 											<i class="fa fa-list"></i> -->
+<!-- 										</div> -->
+<!-- 										<select ng-model="vehRobadoVO.options" class="form-control" -->
+<!-- 											style="background: white; cursor: default !important;" -->
+<!-- 											ng-options="option.codigoString as option.descripcion for option in combo"> -->
+<!-- 										</select> -->
+<!-- 									</div> -->
+<!-- 								</div> -->
+<!-- 								<div class="col-md-6"> -->
+<!-- 									<div class="form-group" -->
+<!-- 										ng-class="{'has-error': form.vehAlta.valor.$invalid &&  form.vehAlta.valor.$dirty }"> -->
+
+<!-- 										<div class="input-group date"> -->
+<!-- 											<div class="input-group-addon"> -->
+<!-- 												<i class="fa fa-pencil"></i> -->
+<!-- 											</div> -->
+<!-- 											<input ng-required="true" type="text" id="valor" name="valor" -->
+<!-- 												ng-model="vehRobadoVO.values" -->
+<!-- 												class="form-control pull-right"></input> <span -->
+<!-- 												class="input-group-btn"> -->
+<!-- 												<button type="button" id="searchVeh" -->
+<!-- 													ng-click="searchVehRobados()" -->
+<!-- 													class="btn btn-danger btn-flat">Buscar</button> -->
+<!-- 											</span> -->
+<!-- 										</div> -->
+<!-- 										<div> -->
+<!-- 											<div -->
+<!-- 												ng-show="form.vehAlta.valor.$error.required &&  form.vehAlta.valor.$dirty " -->
+<!-- 												ng-style="{color:'red'}">El valor es requerido</div> -->
+<!-- 										</div> -->
+<!-- 									</div> -->
+<!-- 								</div> -->
+<!-- 								<div class="col-md-12" align="center"> -->
+<!-- 									<button type="button" class="btn btn-danger" -->
+<!-- 										ng-click="altaUsuario('x')">Nuevo</button> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+
+<!-- 		FIN				box body correspondiente a busqueda #1 version -->
+
+						<!-- INICIO DE VISTA O BUSQUEDA #2  -->
+
+						<div class="box-body">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group"
+										ng-class="{'has-error': form.vehAlta.valor.$invalid &&  form.vehAlta.valor.$dirty }">
+										<label>Expediente:</label>
+										<div class="input-group date">
+											<div class="input-group-addon">
+												<i class="fa fa-pencil"></i>
+											</div>
+											<input ng-required="true" type="text" id="valor" name="valor"
+												ng-model="vehRobadoVO.values"
+												class="form-control pull-right" maxlength="50"></input> <span
+												class="input-group-btn">
+												<button type="button" id="searchVeh"
+													ng-click="searchVehExpediente()" 
+													class="btn btn-danger btn-flat">Buscar</button>
+											</span>
+										</div>
+										<div>
+											<div
+												ng-show="form.vehAlta.valor.$error.required &&  form.vehAlta.valor.$dirty "
+												ng-style="{color:'red'}">El valor es requerido</div>
+										</div>
+									</div>
+								</div>
+								
+<!-- 								<div class="col-md-12 center"> -->
+<!-- 									<button type="button" id="searchVeh" -->
+<!-- 													ng-click="searchVehExpediente()" ng-if="flagNew" -->
+<!-- 													class="btn btn-danger btn-flat">Buscar</button> -->
+<!-- 								</div> -->
+							</div>
+						</div>
+
+						<!-- FIN DE VISTA O BUSQUEDA #2  -->
+
+					</div>
+				</div>
+			</div>
+
+<!-- 			<div class="row"> -->
+<!-- 			<div class="col-md-4"></div> -->
+<!-- 			<div class="col-md-4" ng-if="flagNew"> -->
+<!-- 				<div class="box box-danger"> -->
+<!-- 					<div class="box-header with-border text-center"> -->
+<!-- 						<h3 class="box-title" align="center"></h3> -->
+<!-- 						<div class="box-tools pull-right"> -->
+<!-- 							<button type="button" class="btn btn-box-tool" -->
+<!-- 								data-widget="collapse"> -->
+<!-- 								<i class="fa fa-minus"></i> -->
+<!-- 							</button> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 					<div class="box-body"> -->
+<!-- 						<div class="box-body table-responsive"> -->
+<!-- 							<div class="col-md-12 form-group center"> -->
+<!-- 								<h5 class="box-title"> -->
+										
+<!-- 								</h5> -->
+<!-- 							</div> -->
+<!-- 							<div class="col-md-12 center form-group"> -->
+<!-- 							<button class="btn btn-danger" value="Aceptar" data-toggle="modal" data-target="#modalDetalle" -->
+<!-- 									ng-click="">Editar</button> -->
+<!-- 							</div>					 -->
+<!-- 						</div> -->
+<!-- 					</div>	 -->
+<!-- 				</div> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+
+
+			<div class="row ngIfAnimate" ng-if="flagNew">
+				<div class="col-xs-12">
+					<div class="box box-danger">
+
+						<div class="box-header">
+							<div class="col-md-12">
+								<div class="col-md-4 col-xs-12">
+									<h3 class="box-title">
+										Registros Encontrados: <span ng-model="NoTam">{{
+											(listVO | filter:view.searchSomething).length }}
+									</h3>
+								</div>
+								<div class="col-md-4 col-xs-12 center">
+									<span>
+										<a data-toggle="modal" data-target="#modalDetalleExp"
+											ng-click="editarExpediente(nombreExpediente)">
+											<h4>{{nombreExpediente}}</h4>
+										</a>
+									</span>	
+								</div>
+								<div class="col-md-3 col-xs-10">
+									<div class="input-group">
+										<input id="searchsomething" type="text" class="form-control"
+											placeholder="Buscar por filtro"
+											ng-model="view.searchSomething"> <span
+											class="input-group-addon"><i class="fa fa-search"></i></span>
+									</div>
+								</div>
+								<div class="col-md-1 col-xs-10 ">
+										<a type="button" id="search" ng-if="flagNew"
+											href="#/detalleRoboVehiculo/{{nombreExpedienteId}}/false"
+											class="btn btn-danger btn-flat "
+											tooltip="Crear reporte de robo" tooltip-placement="top">
+											<span class='glyphicon glyphicon-plus'></span>
+										</a>									
+										<a ng-click="downloadReporte()" ng-if="listVO.length > 0">
+											<span class="pull-right "><img
+												src="static/dist/img/excel.png"></span>
+										</a>									
+								</div>
+								</div>
+						</div>
+
+						<div class="box-body table-responsive no-padding">
+							<table class="table table-hover header-fixed">
+								<thead>
+									<tr>
+										<th sort order="'turnoDgant'" by="order" reverse="reverse" >TURNO DGANT</th>
+										<th sort order="'placaVehiculo'" by="order" reverse="reverse">PLACA VEHICULAR</th>
+										<th sort order="'numSerie'" by="order" reverse="reverse">NÚMERO DE SERIE</th>
+										<th sort order="'numMotor'" by="order" reverse="reverse">NÚMERO DE MOTOR</th>
+										<th sort order="'estatus'" by="order" reverse="reverse">ESTATUS</th>
+										<th sort order="'fechaRoboOrder'" by="order" reverse="reverse">FECHA DE ROBO</th>
+										<th >ACCIÓN</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr
+										dir-paginate="result in listVO |  orderBy:order:reverse | filter:view.searchSomething | itemsPerPage: view.rowsPerPage">
+
+										<td class="center">{{result.turnoDgant}}</td>
+										<td class="center">{{result.placaVehiculo}}</td>
+										<td class="center">{{result.numSerie}}</td>
+										<td class="center">{{result.numMotor}}</td>
+										<td class="center">{{result.estatus}}</td>
+										<td class="center">{{result.fechaRobo}}</td>
+										<td class="center">
+											<a type="button" id="search" ng-if="flagNew"
+													href="#/detalleRoboVehiculo/{{result.idRobo}}/true"											
+													class="btn btn-danger btn-flat " tooltip="Editar reporte de robo" tooltip-placement="top">
+													<span class='glyphicon glyphicon-edit'></span>
+											</a>
+											<button type="button" id="search" ng-if="flagNew" ng-click="cancelar(result.idRobo)"								
+													class="btn btn-danger btn-flat " tooltip="Cancelar reporte de robo" tooltip-placement="top">
+													<span class='glyphicon glyphicon-remove'></span>
+											</button>
+										</td>
+
+
+									</tr>
+									<tr ng-if="(listVO | filter:view.searchSomething).length < 1">
+										<td colspan="5" class="text-center"><h4>No se
+												encontraron coincidencias</h4></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="container-fluid">
+							<div class="fixed-table-pagination" style="display: block;">
+								<rows-per-page rows="view.rowsPerPage"
+									filtro="view.searchSomething" array="listVO"></rows-per-page>
+
+								<div class="pull-right pagination">
+									<dir-pagination-controls class="pagination"></dir-pagination-controls>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+</form>
+			<div class="modal fade" id="modalDetalleExp" role="dialog"
+				data-keyboard="false" data-backdrop="static">
+				<div class="modal-dialog modal-sm"  role="document">
+					<div class="modal-content">
+						<div class="modal-header bg-red-active">
+							<button type="button" class="close" data-dismiss="modal"
+								ng-click="closeExpediente()">&times;</button>
+							<h3 class="modal-title">Actualizar Expediente</h3>
+						</div>
+						<div class="modal-body">
+									<div class="form-group" align="left">
+							<form role="form" name="form.editaExp">
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group"
+											ng-class="{'has-error': form.editaExp.expediente.$invalid && form.editaExp.expediente.$dirty}">
+											<label>*Expediente:</label>
+											<div class="input-group date">
+												<div class="input-group-addon">
+													<i class="fa fa-align-justify"></i>
+												</div>
+												<input type="text" maxlength="30" ng-required="true"
+													class="form-control select2" name="expediente"
+													id="expediente" capitalize ng-model="editaExp.expediente" />
+											</div>
+											<span
+												ng-show="form.editaExp.expediente.$error.required &&  form.editaExp.expediente.$dirty "
+												ng-style="{color:'red'}">El expediente es requerido</span>
+										</div>
+									</div>
+									<div class="col-md-12 center">
+										<button type="button" ng-click="ActualizarExpediente()"
+											class="btn btn-primary">Actualizar</button>
+									</div>
+								</div>
+								
+							</form>
+						</div>
+						</div>
+					</div>
+				</div>
+				</div>
+			
+	</section>
+</body>
+
+
+<body>
+</html>

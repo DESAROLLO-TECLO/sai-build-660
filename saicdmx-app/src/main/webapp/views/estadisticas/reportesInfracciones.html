@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Reportes de Infracciones</title>
+<link rel="stylesheet" href="https://kendo.cdn.telerik.com/2017.1.118/styles/kendo.common-material.min.css" />
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2017.1.118/styles/kendo.material.min.css" />
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2017.1.118/styles/kendo.material.mobile.min.css" />
+<style type="text/css">
+	
+	.optionBar{
+		color: #777 !important;
+	}
+	.colorCapacidad{
+		color: #80DEEA;
+		margin-right: 10px; 
+	}
+	.colorInvenActual{
+		color: #00ACC1;
+	}
+	.colorEntrada{
+		color: #00ACC1;
+		margin-right: 10px;
+	}
+	.colorSalida{
+		color: #80DEEA;
+	}
+	
+</style>
+</head>
+<body>
+	<section class="content-header">
+		<h1>Reportes de Infracciones</h1>
+		<ol class="breadcrumb">
+			<li><a><i class="fa fa-book"></i> Reportes</a></li>
+			<li class="active">Infracciones</li>
+		</ol>
+	</section>
+	
+	<section class="content" ng-init="consultaGraficas()">
+		<form role="form" name="reportesEstadisticasInfracciones" nb-bind="reportesEstadisticasInfracciones">
+			<div class="row">	
+			<!-- INICIA LAS OPCIONES -->
+				<div class="col-md-3"></div>
+				<div class="col-md-6">
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Búsqueda por Fechas </h3>
+						</div>
+						
+						<div class="box-body">
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group" ng-class="{'has-error': reportesEstadisticasInfracciones.fInicio.$invalid &&  reportesEstadisticasInfracciones.fInicio.$dirty }">
+										<label>*Fecha de Inicio:</label>
+										<div class="input-group date" class="col-md-6">
+											<div class="input-group-addon">
+												<i class="fa fa-calendar"></i>
+											</div>
+											<input type="text" 
+												id="fInicio" name="fInicio"
+												class="form-control pull-right inputFecha"
+												ng-required="true" 
+												ng-model="filtroBusqueda.fechaInicio"
+												autocomplete="off"
+												readonly />
+										</div>
+										<div ng-style="{color:'red'}" 
+											ng-show="reportesEstadisticasInfracciones.fInicio.$error.required &&  reportesEstadisticasInfracciones.fInicio.$dirty">
+												La fecha de inicio es requerida
+										</div>
+									</div>
+								</div>
+								
+								<div class="col-md-6">
+									<div class="form-group"  ng-class="{'has-error': reportesEstadisticasInfracciones.fFin.$invalid &&  reportesEstadisticasInfracciones.fFin.$dirty }">
+										<label>*Fecha Fin:</label>
+										<div class="input-group date" class="col-md-6">
+											<div class="input-group-addon">
+												<i class="fa fa-calendar"></i>
+											</div>
+											<input type="text" 
+												id="fFin" name="fFin"
+												class="form-control pull-right inputFecha"
+												ng-required="true"  
+												ng-model="filtroBusqueda.fechaFin" 
+												autocomplete="off" 
+												readonly />
+										</div>
+										<div ng-style="{color:'red'}" 
+											ng-show="reportesEstadisticasInfracciones.fFin.$error.required &&  reportesEstadisticasInfracciones.fFin.$dirty ">
+												La fecha fin es requerida
+										</div>
+									</div>
+								</div>
+								
+								<div class="col-xs-4"></div>
+								
+								<div class="col-xs-4" >
+									<button  type="button" 
+										class="btn bg-red-active center-block" 
+										ng-click="consultaGraficas()">
+											Buscar
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+
+		<article class="row">	
+			<!-- Bar chart -->
+			<div class="col-md-12" ng-show="infraccionesCreadasyPagadas">
+				<div class="box box-danger">
+					<div class="box-header with-border">
+						<h3 class="box-title">Infracciones Creadas vs Pagadas</h3>
+					</div>
+					
+					<div class="box-body">
+						<!-- Morris chart - Sales -->
+						<div id="revenue-chart" style="position: relative; height: 300px;"></div>
+					</div>
+					<!-- /.box-body-->
+				</div>
+			</div>
+			<!-- /.box -->
+			<div class="col-md-6" ng-show="infraccionesPorDispositivos">
+				<div class="box box-danger">
+					<div class="box-header with-border">
+ 						<h3 class="box-title text-center">Infracciones por Dispositivo</h3>
+						<h3 class="box-title text-center"></h3>
+						<div class="box-tools pull-right">
+							<ul class="nav nav-tabs pull-right" style="margin-top: -2px !important;">
+								<li class="active">
+									<a class="optionBar" href="#bar-chart" data-toggle="tab">Barras</a>
+								</li>
+								<li>
+									<a class="optionBar toClick" href="#dispositivos-chart" data-toggle="tab">Dona</a>	
+								</li>
+							</ul>
+						</div>
+					</div>
+					
+					<div class="box-body">
+						<!-- Custom tabs (Charts with tabs)-->
+						<div class="nav-tabs-custom">
+							<!-- Tabs within a box -->						
+							<div class="tab-content no-padding">						
+								<!-- Morris chart - Sales -->					  
+								<div class="chart tab-pane active" id="bar-chart" style="position: relative; height: 300px; width:350 !important;"></div>
+								<div class="chart tab-pane" id="dispositivos-chart" style="position: relative; height: 300px;"></div>
+							</div>
+						</div>
+						<!-- /.nav-tabs-custom -->		
+					</div>
+				</div>	
+			</div>
+			<!-- /.box -->
+			
+			<div class="col-md-6" ng-show="entradaSalidaDeposito">
+				<div class="box box-danger" style="height: 385px !important;">
+					<div class="box-header with-border">
+						<h3 class="box-title text-center">Entradas y Salidas en Depósito</h3>   
+					
+						<div class="box-tools pull-right">
+							<button type="button" class="btn btn-box-tool" data-widget="collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+						</div>
+					</div>
+					<!-- /.box-header -->
+					<div class="box-body">
+						<div class="row">  
+<!-- 							<div class="col-xs-6"></div> -->
+<!-- 							<div class="col-xs-6"> -->
+<!-- 								<div class="input-group"> -->
+<!-- 									<span class="input-group-addon">Depósito</span> -->
+<!-- 									<select class="form-control"> -->
+<!-- 										<option selected="selected">Todos</option> -->
+<!-- 										<option>Deposito 1</option> -->
+<!-- 										<option>Depósito 2</option> -->
+<!-- 										<option>Depósito 3 </option> -->
+<!-- 										<option>Depósito 4 </option> -->
+<!-- 										<option>Depósito 5</option> -->
+<!-- 										<option>Depósito 6</option> -->
+<!-- 									</select> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+							<div class="col-md-12">                  
+								<div class="chart" id="containerCanvas">
+									<!-- Sales Chart Canvas -->
+									<canvas id="salesChart" style="height: 100%; margin-top: 30px !important;"></canvas>
+								</div>
+								<!-- /.chart-responsive -->
+							</div>
+							<div class="cont-infoGrpah text-center">
+								<span>Entradas: <i class="fa fa-square colorEntrada"></i></span>
+								<span>Salidas: <i class="fa fa-square colorSalida"></i></span>
+							</div>
+							<!-- /.col -->
+						</div>
+						<!-- /.row -->
+					</div>
+					<!-- ./box-body -->
+				</div>
+			</div>
+		</article>	
+		<!-- /.Left col -->
+			
+		<!-- right col (We are only adding the ID to make the widgets sortable)-->
+		<article class="row" ng-show="vehiculosDeposito">
+			<div class="col-md-12">
+	 			<div class="box box-danger">
+					<div class="box-header with-border">
+						<h3 class="box-title text-center">Total de Vehículos en Depósito</h3>
+						<div class="box-tools pull-right">
+							<button type="button" class="btn btn-box-tool" data-widget="collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+						</div>
+					</div>
+	            	<!-- /.box-header -->
+	            	<div class="box-body">
+	            		<div class="box-body">
+	            			<div class="row">
+	            				<div class="col-md-12">
+	            					<div class="cont-infoGrpah text-center">
+										<span>Capacidad: <i class="fa fa-square colorCapacidad"></i></span>
+										<span>Inventario actual: <i class="fa fa-square colorInvenActual"></i></span>
+									</div>
+									<div class="box-body">
+										<canvas id="chartVehiculosDeposito" style="width: 100%; height: 500px; background-color: #fff !important;" class="well"></canvas>
+									</div>
+	            					<!-- /.col -->
+	            				</div>
+	            				<!-- /.row -->
+	            			</div>
+	            			<!-- ./box-body -->
+	            		</div>
+	            		<!-- /.box -->
+	            	</div>
+	            	<!-- /.col -->
+	            </div>
+			</div>
+		</article>
+		<!-- right col -->
+		<!-- /.row (main row) -->
+      
+		<div class="row" style="display: none !important;">
+			<div class="col-md-12">
+			<!-- AREA CHART -->
+				<div class="box box-danger">
+					<div class="box-header with-border">
+						<h3 class="box-title">Total de Infracciones en la Ciudad de México</h3>
+						<div class="box-tools pull-right">
+							<button type="button" class="btn btn-box-tool" data-widget="collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+						</div>
+					</div>
+					<div class="box-body">
+						<div class="chart">
+							<iframe width="100%" height="520" frameborder="0" src="https://kegpz.carto.com/viz/e3da9022-4949-11e6-992d-0e3a376473ab/embed_map" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+						</div>
+						<!-- /.box-body -->
+					</div>
+					<!-- /.box -->
+				</div>  
+			</div>
+			<!-- /.row -->
+		</div>
+    </section>
+</body>
+<script type="text/javascript">
+
+	/* var timer = setTimeout('temporizador()', 14000);
+	
+	function temporizador(){
+		$(document).ready(function(){
+			$('.optionBar').on('click', function(e){
+				e.preventDefault();
+			});
+			
+			$('.toClick').trigger('click');
+		});
+	} */
+	
+	$(function () {
+	$('.optionBar').on('click', function(e){
+				e.preventDefault();
+			});
+	
+		    $("#fInicio").datepicker({             
+				format: 'dd/mm/yyyy',
+				//language: 'es',
+				todayHighlight : true,
+				endDate : '0d',
+				autoclose : true
+			}).on('changeDate', function (selected) {
+	        	var minDate = new Date(selected.date.valueOf());
+	        	$('#fFin').datepicker('setStartDate', minDate);
+	    	});
+			
+			$("#fFin").datepicker({             
+				format: 'dd/mm/yyyy',
+				//language: 'es',
+				todayHighlight : true,
+				endDate : '0d',
+				autoclose : true
+			}).on('changeDate', function (selected) {
+	        	var maxDate = new Date(selected.date.valueOf());
+	        	$('#fInicio').datepicker('setEndDate', maxDate);
+	    	});
+		});
+
+</script>
+</html>
