@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Recibir Masiva</title>
+	<style>
+		fieldset {
+			border-radius: 0.4rem;
+			border: 1px solid #ccc;
+			padding: 0;
+			margin: 0 0 1.4rem 0 !important;
+			width: 100%;
+		}
+
+		fieldset.scheduler-border {
+			border-radius: 0.5rem;
+			border: 1px solid #ccc !important;
+			padding: 0 !important;
+			margin: 0 0 1.4rem 0 !important;
+		}
+
+		.radio,
+		.checkbox {
+			position: unset;
+			/* display: block; */
+			min-height: 0 !important;
+			margin: 0 !important;
+
+		}
+		
+		/*---- Inicia estilo para checkbox ---*/
+		/* Contenedor de chek y marca */
+		.contenedorCB {
+			display: block;
+			position: relative;
+			padding-left: 35px;
+			margin-bottom: 12px;
+			cursor: pointer;
+			/*font-size: 22px;*/
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+			min-height: 20px;
+		}
+		
+		/* Oculta en checkbox default */
+		.contenedorCB input {
+			position: absolute;
+			opacity: 0;
+			cursor: pointer;
+			height: 0;
+			width: 0;
+		}
+		
+		/* Crea el checkbox personalizado */
+		.chekGaran {
+			position: absolute;
+			top: 3px;
+			left: 61px;
+			height: 24px;
+			width: 24px;
+			background-color: #eee;
+			border-radius: 10%;
+			border: 3px solid #d4d4d4;
+		}
+		
+		/* Se establece fondo gris cuando esta encima el cursor */
+		.contenedorCB:hover input ~ .chekGaran {
+			background-color: #ccc;
+		}
+		
+		/* Cuando el check esta marcado, se marca de color gris obscuro */
+		.contenedorCB input:checked ~ .chekGaran {
+			background-color: #dedede;
+			border: 3px solid #bfbfbf;
+		}
+		
+		/* Crea la marca/indicator (cuando el chek esta desmarcado) */
+		.chekGaran:after {
+			content: "";
+			position: absolute;
+			display: none;
+		}
+		
+		/* Muestra la marca cuando cuando esta marcado */
+		.contenedorCB input:checked ~ .chekGaran:after {
+			display: block;
+		}
+		
+		/* estilo de la marca/indicator */
+		.contenedorCB .chekGaran:after {  
+			left: 6px;
+			top: 2px;
+			width: 7px;
+			height: 11px;
+			border: 1px solid #22cc03;
+			border-width: 0px 3px 3px 0;
+			-webkit-transform: rotate(45deg);
+			-ms-transform: rotate(45deg);
+			transform: rotate(45deg);
+		}
+		/*---- Inicia estilo para checkbox ---*/
+		
+		#uno {
+ 			position: absolute;
+ 			background-color: blue;
+ 			opacity:0.4; /* Opacidad 60% */
+ 			z-index: 4;
+			}
+	</style>
+</head>
+
+<body>
+
+	<section class="content-header">
+		<h1>Recepción de Garantías</h1>
+		<ol class="breadcrumb">
+			<li><a href=""><i class="fa fa-book"></i>Garantías</a></li>
+			<li class="active">Recepción</li>
+		</ol>
+	</section>
+
+	<section class="content ngIfAnimate">
+		<form role="form" name="forms.garantiaRecepcionMasiva" novalidate class="row centerCol">
+			<div class="col-xs-12" ng-class="{'col-md-7':banderaInput, 'col-md-5':!banderaInput}">
+				<div class="box box-danger">
+
+					<div class="box-header with-border text-center">
+						<h3 class="box-title">Búsqueda</h3>
+					</div>
+
+						<div class="box-body">
+							<div class="row">
+								<div ng-class="{'col-md-6':!banderaInput, 'col-md-4':banderaInput}">
+									<div class="form-group"
+										ng-class="{'has-error': forms.garantiaRecepcionMasiva.placaOficial.$invalid && forms.garantiaRecepcionMasiva.placaOficial.$dirty}">
+										<label for="placaOficial">*Placa Oficial:</label>
+										<div class="input-group date">
+											<div class="input-group-addon">
+												<i class="fa fa-font"></i>
+											</div>
+											<input maxlength="10" type="text" id="placaOficial" class="form-control"
+												name="placaOficial" ng-model="parametroBusq.placaOficial" autocomplete="off"
+												ng-required="true">
+										</div>
+
+										<div>
+											<div ng-show="forms.garantiaRecepcionMasiva.placaOficial.$error.required &&  forms.garantiaRecepcionMasiva.placaOficial.$dirty "
+												ng-style="{color:'red'}">El valor es requerido
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-6" ng-if="!switchRangoFecha">
+									<div class="form-group">
+										<label for="fechaConsulta">Fecha de Infracción:</label>
+										<div class="input-group date">
+											<div class="input-group-addon">
+												<i class="fa fa-calendar-check-o"></i>
+											</div>
+											
+											<select class="form-control select2" name="fechaConsulta" id="fechaConsulta"
+												ng-model="tipoFech.idTipoFecha" ng-disabled="switchRangoFecha"
+												ng-options='tipoFecha.idTipoFecha as tipoFecha.nbTipoFecha for tipoFecha in tipoFechas'>
+											</select>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-4" ng-if="switchRangoFecha">
+									<div class="form-group"
+										ng-class="{'has-error': switchRangoFecha && form.fInicio.$invalid && form.fInicio.$dirty}">
+										<label for="fInicio">Fecha Inicio:</label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-calendar"></i>
+											</div>
+											<input class="form-control inputFecha" id="fInicio" name="fInicio" readonly
+												date-picker idioma-dp="{{currentLanguage}}" ng-disabled="!switchRangoFecha"
+												ng-model="parametroBusq.startDate" elemento="'fFin'"
+												mindate="parametroBusq.startDate" ng-required="parametroBusq.endDate" />
+										</div>
+										<span ng-if="switchRangoFecha && forms.garantiaRecepcionMasiva.fInicio.$invalid "
+											ng-style="{color:'red'}"> La fecha de inicio es
+											requerida </span>
+									</div>
+								</div>
+
+								<div class="col-md-4" ng-if="switchRangoFecha">
+									<div class="form-group">
+										<label for="fFin">Fecha Fin:</label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-calendar"></i>
+											</div>
+											<input class="form-control inputFecha" id="fFin" name="fFin" readonly
+												date-picker idioma-dp="{{currentLanguage}}" ng-disabled="!switchRangoFecha"
+												ng-model="parametroBusq.endDate" elemento="'fInicio'"
+												maxdate="parametroBusq.endDate" ng-required="parametroBusq.startDate" />
+										</div>
+										<span ng-if="switchRangoFecha && forms.garantiaRecepcionMasiva.fFin.$invalid"
+											ng-style="{color:'red'}"> La fecha de fin es
+											requerida </span>
+									</div>
+								</div>
+							</div>
+						
+							<div class="row centerCol">
+								<div class="form-group">
+									<div class="input-group">
+										<switcher class="swTeclo" id-check="switchRangoFecha" ng-model="switchRangoFecha"
+											ng-change="cambioSwitch(newValue, oldValue)" true-label="Rango de Fechas"
+											true-value="true" false-label="Tipo de Fecha" false-value="false"> </switcher>
+									</div>
+								</div>
+
+							</div>
+						</div>
+
+						<div class="box-footer">
+							<div class="row centerCol">
+								<button type="button" id="buscarGarantias"
+									ng-click="buscarGarantiasRecepcionMasiva(parametroBusq, false, tipoFech, 1)"
+									class="btn btn-danger btn-flat">Buscar</button>
+							</div>
+						</div>
+				</div>
+			</div>
+		</form>
+		<!-- div id="uno" style="display: none"></div-->
+		
+		<div class="row ngIfAnimate" ng-show="abrirGarantias" id="garantiasMasivas">
+			<div class="col-xs-12" block-ui="myBlockUI">
+				<div class="box box-danger">
+
+						<div class="box-header">
+							<div class="col-md-12">
+								<div class="col-md-6 col-xs-12">
+									<h3 class="box-title">
+										Registros Encontrados: <span ng-model="NoTam">{{
+										(garantias | filter:view.searchSomething).length | number:0 }}
+									</h3>&nbsp; &nbsp;&nbsp; &nbsp;
+								
+									<h3 class="box-title">Seleccionados: <span ng_model="NoTam">{{cantId | number:0}}</h3>
+								</div >
+								<div class="col-md-2 col-xs-6">
+									<div class="row centerRow" ng-if="garantias.length > 0">
+										<switcher class="swTeclo pull-right"
+											ng-disabled = "disabledSwitcherPromesas"
+											id-check="checkFiltroGar"
+											false-label="Sin Promesas"
+											false-value="false"
+											true-label="Todos"
+											true-value="true"
+											ng-change="cambiarFiltro(!checkFiltroGar)"
+											ng-model="checkFiltroGar">
+										</switcher>
+									</div>
+								</div>
+								<div class="col-md-offset-1 col-md-2 col-xs-5">
+									<div class="input-group">
+										<input id="searchsomething" type="text" class="form-control"
+											placeholder="Buscar por filtro" ng-model="view.searchSomething">
+										<span class="input-group-addon"><i class="fa fa-search"></i></span>
+									</div>
+								</div>
+								<div ng-show="garantias.length > 0" class="col-md-1 col-xs-1">
+									<a ng-click="generarExcelMasiva(false)"> <span class="pull-right "><img
+												src="static/dist/img/excel.png"></span>
+									</a>
+								</div>
+							</div>
+						</div>
+
+						<div class="box-body table-responsive no-padding">
+							<table class="table table-hover header-fixed">
+								<thead>
+									<tr>
+									
+										<th>
+											<switcher class="swTeclo" id-check="switchSelectAll" ng-model="switchSelectAll"
+												ng-change="checkAll(newValue, oldValue, garantia.documentoNombre)"
+												true-label="TODO" true-value="true" false-value="false">
+											</switcher>
+										</th>
+										<th sort order="'infraccionFolio'" by="order" reverse="reverse">INFRACCIÓN</th>
+										<th sort order="'fechaInfraccionOrder'" by="order" reverse="reverse">FECHA
+											INFRACCIÓN</th>
+										<th sort order="'garantiaId'" by="order" reverse="reverse">GARANTÍA</th>
+										<th sort order="'documentoNombre'" by="order" reverse="reverse">TIPO
+											DOCUMENTO</th>
+										<th sort order="'documentoFolio'" by="order" reverse="reverse">FOLIO
+											DOCUMENTO</th>
+										<th sort order="'empleadoNombre'" by="order" reverse="reverse">OFICIAL
+											NOMBRE</th>
+										<th sort order="'empleadoPlaca'" by="order" reverse="reverse">OFICIAL
+											PLACA</th>
+
+									</tr>
+								</thead>
+								<tbody>
+									<tr
+										dir-paginate="garantia in garantias | orderBy:order:reverse | filter:view.searchSomething | itemsPerPage: view.rowsPerPage">
+										<td class="center">
+											<label class="contenedorCB">
+												<input type="checkbox" name="checkkk" id="checkkk"
+													ng-model="garantia.cheked"
+													ng-change="listaRecepcionValue(garantia.cheked, garantia.garantiaId, garantia.documentoNombre, garantia)">
+												<span class="chekGaran"></span>
+											</label>
+<!-- 											<input class="chekGaran"  -->
+<!-- 												type="checkbox" name="checkkk" id="checkkk" -->
+<!-- 												ng-model="garantia.cheked" -->
+<!-- 												ng-change="listaRecepcionValue(garantia.cheked, garantia.garantiaId, garantia.documentoNombre, garantia)"> -->
+										</td>
+										<td class="center">{{garantia.infraccionFolio}}</td>
+										<td class="center">{{garantia.fechaInfraccion}}</td>
+										<td class="center">{{garantia.garantiaId}}</td>
+										<td class="center">{{garantia.documentoNombre}}</td>
+										<td class="center">{{garantia.documentoFolio}}</td>
+										<td class="center">{{garantia.empleadoNombre}}</td>
+										<td class="center">{{garantia.empleadoPlaca}}</td>
+									</tr>
+
+									<tr ng-if="(garantias | filter:view.searchSomething).length < 1">
+										<td colspan="5" class="text-center">
+											<h4>No se encontraron coincidencias</h4>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<br>
+						<div class="row centerCol">
+							<div class="form-group">
+								<div class="input-group">
+									<span data-toggle="tooltip" data-placement="left" title="Recibir Garantías"> <a
+											class="btn btn-danger" data-toggle="modal" data-target="#modalRecepcionDatos"
+											ng-click="buscarGarantiasRecepcionId()"> <i class="fa fa-inbox"></i>&nbsp;
+											&nbsp;Recibir
+										</a>
+									</span>
+								</div>
+							</div>
+						</div>
+						<div class="container-fluid">
+							<div class="fixed-table-pagination" style="display: block;">
+								<rows-per-page-gar rows="view.rowsPerPage" filtro="view.searchSomething" array="garantias">
+								</rows-per-page-gar>
+
+								<div class="pull-right pagination">
+									<dir-pagination-controls class="pagination"></dir-pagination-controls>
+								</div>
+							</div>
+						</div>
+				</div>
+			</div>
+		</div>
+
+	<form name="formObservaciones" novalidate>
+		<div class="modal fade" id="modalRecepcionDatos" role="dialog" data-keyboard="false" data-backdrop="static">
+				<div class="modal-dialog" role="document">
+					<div style="width: 90%">
+						
+						<div class="modal-header bg-red-active">
+							<button type="button" class="close" data-dismiss="modal"
+							ng-click="close(parametroBusq, false, tipoFech)" >&times;</button>
+							<h3 class="modal-title">Recepción de Garantías</h3>
+						</div>
+
+						<div class="modal-body">
+								<div class="row">
+										<div class="col-md-12">
+
+											<div class="col-md-6">
+													<label class="row text-center"><strong class="col-md-12 text-center">Total Garantías:</strong></label>
+														<div class="col-md-7 text-center">
+															{{vcantId | number:0}}
+														</div>
+											</div>
+				
+											<div class="col-md-6">
+												<label class="col-md-12 text-center" ng-hide="banderaView"><strong class="col-md-12 text-center">Recibida</strong></label>
+													<div class="col-md-3"></div>
+													<div class="radio col-md-3" ng-hide="banderaView">
+														<label><input type="radio" ng-model="opcionRecp" ng-value="true">SÍ</label>
+													</div>
+													<div class="radio col-md-3" ng-hide="banderaView">
+														<label><input type="radio" ng-model="opcionRecp" ng-value="false">NO</label>
+													</div>	
+											</div>
+										
+										</div>
+									</div>
+							<div class=row>
+								<div class="col-md-12">
+									<fieldset class="scheduler-border">
+										<legend class="scheduler-border">Garantías</legend>
+
+										<div class="row">
+											<div class="col-md-4 text-center">
+												<label class="row text-center"><strong class="col-md-12 text-center">Placa Vehícular:</strong></label>
+												<div class="col-md-12 text-center">
+													{{vCpv | number: 0}}
+												</div>
+											</div>
+																	
+									
+											<div class="col-md-3 text-center">
+												<label class="row text-center"><strong class="col-md-12 text-center">Licencia:</strong></label>
+												<div class="col-md-12 text-center">
+													{{vCl | number: 0}}
+												</div>
+											</div>
+
+											<div class="col-md-5 text-center">
+												<label class="row text-center"><strong class="col-md-12 text-center">Tarjeta Circulación:</strong></label>
+												<div class="col-md-12 text-center">
+													{{vCtj | number: 0}}
+												</div>
+											</div>
+
+										</div>
+									</fieldset>	
+								</div>
+							</div>
+							
+							<!-- JLGD -->
+							<div class=row ng-show="showFieldsetPromesas">
+								<div class="col-md-12">
+									<fieldset class="scheduler-border">
+										<legend class="scheduler-border">Promesas de Pago</legend>
+										<div class="row">
+											<div class="col-md-4 text-center">
+												<label class="row text-center"><strong class="col-md-12 text-center">Promesa pago, Placa Vehícular:</strong></label>
+												<div class="col-md-12 text-center">
+													{{vCpppv}}
+												</div>
+											</div>
+
+											<div class="col-md-3 text-center">
+												<label class="row text-center"><strong class="col-md-12 text-center">Promesa pago, Licencia:</strong></label>
+												<div class="col-md-12 text-center">
+													{{vCppl}}
+												</div>
+											</div>
+								
+											<div class="col-md-5 text-center">
+												<label class="row text-center"><strong class="col-md-12 text-center">Promesa pago, Tarjeta de Circulación:</strong></label>
+												<div class="col-md-12 text-center">
+													{{vCpptc}}
+												</div>
+											</div>
+
+										</div>
+									</fieldset>
+								</div>
+							</div>	
+
+							<div class="row">
+								<div class="col-md-12">
+									<label class="col-md-12 text-center" ng-hide="banderaView" style="width: 100%"><strong>*Observaciones:</label>
+
+										<div ng-hide="banderaView">
+											<div class="form-group" ng-class="{'has-error': formObservaciones.observaciones.$invalid && formObservaciones.observaciones.$dirty}">
+												<textarea required="true" maxlength="200" id="txtObserv" name="observaciones" placeholder="Escriba sus observaciones" ng-model="modalForm.observacion" class="form-control" rows="5" style="resize:none;"></textarea>
+												  <div ng-show="formObservaciones.observaciones.$error.required && formObservaciones.observaciones.$dirty" ng-style="{color:'red'}">La observacion es requerida</div>
+												<div ng-show="modalForm.observacion.length== 200" 
+													ng-style="{color:'red'}">Ha sobrepasado el limite de 200 caracteres	
+													
+												</div> 
+											</div>
+										</div>
+								</div>
+							</div>
+
+							<div class="box-footer" ng-hide="banderaView">
+								<div class="row centerCol">
+								<button type="button" class="btn btn-danger btn-flat" id="btnAceptar" ng-show="bloquearBotonEnviar"
+									ng-click="GuardarGarantiasRecepcionId(valoresInventario, opcionRecp, infoGarantias, formObservaciones, cantId)">
+									<span>Guardar</span>
+								</button>
+								</div>
+							</div>
+
+							<div class="modal-footer center" ng-show="mostrarDescarga">
+								<button  data-dismiss="modal"  class="btn btn-link"  type="button" data-dismiss="modal" ng-click="buscarPDFMasiva(valoresInventarioRecibidas,opcionRecp, infoGarantias, parametroBusq, false, tipoFech, cantidadRecibidas, idLote)">
+									<img height="65" width="65" src="{{fileNameImg}}">
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+	</form> 
+	</section>
+</body>

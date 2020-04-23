@@ -1,0 +1,171 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>Pago de Infracción</title>
+</head>
+<body>
+	<section class="content-header">
+		<h1>Expediente de Pago</h1>
+		<ol class="breadcrumb">
+			<li><a><i class="fa fa-paypal"></i> Pagos</a></li>
+			<li class="active">Expediente de Pago</li>
+		</ol>
+	</section>
+
+	<!-- Main content -->
+	<section class="content" ng-init="initController()">
+
+		<!-- /.row -->
+		<div class="row col-md-8 col-md-offset-2 ngMessageValidAnimate" ng-if="isCajero == false">
+			<div class="alert alert-teclo alert-dismissable center">
+				<strong class="mensajeAutorizacion">{{messagePerfil}}</strong>
+			</div>
+		</div>
+		
+		<div class="row col-md-8 col-md-offset-2 ngMessageValidAnimate" ng-if="navegador =='chrome' || navegador =='ms-edge'">
+
+			<div class="alert alert-teclo alert-dismissable center">
+				<strong class="mensajeAutorizacion">{{mensajeNavegador}}</strong>
+			</div>
+
+		</div>
+		
+		<div ng-show="isCajero == true && (navegador !='chrome' && navegador !='ms-edge')" class="ngShowAnimate">
+			<div class="row">
+				<div class="col-md-3 "></div>
+				<div class="col-md-6 ">
+					<!-- Datos Del Infractor -->
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Búsqueda</h3>
+						</div>
+						<!-- /.box-header -->
+						<div class="box-body">
+							<div class="row">
+								<form role="form" name="infraccionesDeposito">
+									<div class="col-md-6">
+										<div class="form-group">
+											<div class="input-group">
+												<span class="input-group-addon"><i class="fa fa-map"></i></span>
+												<select class="form-control" id="catBusqueda"
+													ng-options="tipoBusqueda.codigoString as tipoBusqueda.descripcion for tipoBusqueda in catTiposBusqueda"
+													ng-model="infraccionDepositoVO.tipoParametro" ng-change="limpiarVista()"
+													name="tipoBusqueda">
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group"
+											ng-class="{'has-error': (infraccionesDeposito.infraccionDepositoCampo.$error.required && infraccionesDeposito.infraccionDepositoCampo.$dirty) }">
+											<div class="input-group">
+												<span class="input-group-addon">
+													<i class="fa  fa-credit-card"></i>
+												</span>
+												<input type="text" capitalize class="form-control" id="infraccionDepositoCampo" ng-change="limpiarVista()"
+													ng-model="infraccionDepositoVO.valorParametro" required="true" name="infraccionDepositoCampo">
+												<span class="input-group-btn">
+													<button type="button" class="btn btn-danger btn-flat center-block" id="btnBuscarInfraccion"
+														ng-click="consultaInfraccionesDeposito(infraccionDepositoVO)">
+															Buscar
+													</button>
+												</span>
+											</div>
+											<div ng-show="infraccionesDeposito.infraccionDepositoCampo.$error.required && infraccionesDeposito.infraccionDepositoCampo.$dirty" class="ngShowAnimate"
+												ng-style="{color:'red'}">El valor es requerido</div>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>			
+			</div>
+<!-- 			ngIfAnimate -->
+			<div class="row " ng-if="catalogoExp.length > 0">
+				<div class="col-md-8 col-md-offset-2">
+					<form>
+						<div class="box box-danger">
+							<div class="box-header with-border">
+								<div class="row ngIfAnimate" ng-if="infraccionDeposito">
+									<div class="col-xs-6 col-md-6">
+										<h5>
+											<label>
+												Digitalización de Expediente: <span class="badgeInf">{{infraccionDeposito}}</span>
+											</label>
+										</h5>
+									</div>
+									<div class="col-xs-6 col-md-6 conteoArchivos">
+										<h5 style="margin-right: 5px;">
+											<label class="label label-default ngOnlyEnter" ng-if="(catalogoExp|filter:registro = false).length > 0">
+												<span class="badgeExp ngOnlyEnter">{{(catalogoExp|filter:registro = false).length}}</span>
+												Faltante(s)
+											</label>
+											<label class="label label-success" ng-if="(catalogoExp|filter:registro = false).length == 0">
+												Expediente completo
+											</label>
+										</h5>
+										<h5 >
+											<label class="label label-primary ngOnlyEnter" ng-if="(catalogoExp|filter:registro = true).length > 0 && (catalogoExp|filter:registro = true).length != 12">
+												<span class="badgeExp">{{(catalogoExp|filter:registro = true).length}}</span>
+												Capturado(s)
+											</label>
+											<label ng-if="(catalogoExp|filter:registro = true).length == 12" class="ngIfAnimate2"></label>
+											<label class="label label-default ngOnlyEnter" ng-if="(catalogoExp|filter:registro = true).length == 0">
+												<span class="badgeExp">{{(catalogoExp|filter:registro = true).length}}</span>
+												Capturado(s)
+											</label>
+										</h5>
+									</div>
+								</div>
+							</div>
+							<div class="box-body contExpediente">
+								<div class="row ngIfAnimate" ng-repeat="cat in catalogoExp" style="margin:0;">
+									<div class="col-md-12 status-ready-group center ngIfAnimate" ng-if="cat.registrado == true">
+										<div class="expedienteLabel">
+											<i class="fa fa-check"></i>
+											<label>{{ cat.descripcion }}</label>
+										</div>
+										<div class="option">
+											<input id="{{ cat.tipo }}" type="file" accept='image/*' />
+<!-- 											<label style="visibility: hidden;" for="{{ cat.tipo }}" class="btn btn-danger btn-flat text-right">Cargar</label> -->
+											<a class="download-Link" data-toggle="tooltip" data-placement="left" title="Descargar" href="#" 
+												ng-click="descargarExpediente($event, cat.tipo)">
+												<i class="fa fa-download"></i>
+											</a>
+<!-- 											<a class="view-Link" data-toggle="tooltip" data-placement="left" title="Visualizar" href="#"  -->
+<!-- 												ng-click="verExpediente($event, cat.tipo)"> -->
+<!-- 												<i class="fa fa-binoculars"></i> -->
+<!-- 											</a> -->
+											<a class="delete-Link" data-toggle="tooltip" data-placement="left" title="Eliminar" href="#" 
+												ng-click="eliminarExpediente($event, cat.tipo)" >
+												<i class="fa fa-remove"></i>
+											</a>
+										</div>
+									</div>
+									<div class="col-md-12 status-standBy-group center" ng-if="cat.registrado == false">
+										<div class="expedienteLabel">
+											<label>{{ cat.descripcion }}</label>
+										</div>
+										<div class="option">
+											
+											<input ng-if="cat.tipo != 'TODO'"
+												id="{{ cat.tipo }}" type="file" ng-model="file" accept='image/*, application/pdf' on-change="onChange" base-sixty-four-input >
+											<input ng-if="cat.tipo == 'TODO'"
+												id="{{ cat.tipo }}" type="file" ng-model="file" accept='application/pdf' on-change="onChange" base-sixty-four-input >
+											
+											<label for="{{ cat.tipo }}" class="btn btn-danger btn-flat" data-toggle="tooltip" data-placement="left" title="Cargar documento">
+												<i class="fa fa-upload"></i>
+											</label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</section>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>saicdmx-app</artifactId>
+	<packaging>war</packaging>
+	<name>ssccdmxsai_app</name>
+	<description>SAI modulo de aplicacion</description>
+
+	<parent>
+		<groupId>mx.com.teclo</groupId>
+		<artifactId>saicdmx-build</artifactId>
+		<version>${revision}</version>
+	</parent>
+
+	<build>
+		<!-- finalName>${project.name}_${project.version}</finalName-->
+		<finalName>sspcdmxsai_${project.version}_pro_app</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+
+</project>

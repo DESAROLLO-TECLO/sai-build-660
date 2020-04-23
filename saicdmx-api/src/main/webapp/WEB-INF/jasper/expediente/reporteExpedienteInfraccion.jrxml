@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version last-->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b0f7d17d-789f-496c-a703-8c684b8f467a">
+	<property name="ireport.zoom" value="1.1000000000000063"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="285"/>
+	<subDataset name="DataSetListaImagenesInfrac" uuid="7563f405-25a5-41d5-a5cf-32e2f73b3375">
+		<field name="fileBase64toBlob" class="java.io.InputStream"/>
+	</subDataset>
+	<subDataset name="DataSetListaImagenesHandhe" uuid="30957e0f-1a4a-4130-a659-638ae04a4f72">
+		<field name="fileBase64toBlob" class="java.io.InputStream"/>
+	</subDataset>
+	<subDataset name="DataSetListaImagenesExpPago" uuid="fe234e2e-40a2-4b04-8c09-6dbe27a0e67b">
+		<field name="fileBase64toBlob" class="java.io.InputStream"/>
+		<field name="fileNombreCatDocumento" class="java.lang.String"/>
+	</subDataset>
+	<subDataset name="DataSetListaImagenesExpAR" uuid="ba8e1810-f6e4-423d-9ca7-0b283d55611b">
+		<field name="fileBase64toBlob" class="java.io.InputStream"/>
+	</subDataset>
+	<parameter name="listaImagenes" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
+	<parameter name="expediente" class="java.lang.String"/>
+	<parameter name="articulo" class="java.lang.String"/>
+	<parameter name="motivacion" class="java.lang.String"/>
+	<parameter name="logotipoTeclo" class="java.io.InputStream"/>
+	<parameter name="logotipoCdmxSsp" class="java.io.InputStream"/>
+	<parameter name="listaImagenesInfrac" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
+	<parameter name="listaImagenesHandhe" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
+	<parameter name="listaImagenesExpPago" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
+	<parameter name="listaImagenesExpAR" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="177" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="5" y="112" width="545" height="55" uuid="49b7119c-034b-49c0-aa9e-849536fc05ac"/>
+			</rectangle>
+			<textField>
+				<reportElement x="258" y="80" width="100" height="20" uuid="b720afe2-1cf2-40f9-b54e-9d93decf22ab"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{expediente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="12" y="119" width="338" height="20" uuid="622acf6d-61c8-40b6-8903-b6488ed17aec"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{articulo}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="12" y="139" width="519" height="20" uuid="00a8aea4-d01a-4e61-970e-50f777ed3aa4"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{motivacion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="12" y="104" width="91" height="15" uuid="cd6c8158-5be9-482d-9619-f8dd4fdbb6e4"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fundamentación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="182" y="80" width="76" height="20" uuid="7e530eef-a578-424e-afcf-eca32312b5f6"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Expediente: ]]></text>
+			</staticText>
+			<line>
+				<reportElement x="5" y="70" width="545" height="1" forecolor="#FF0000" uuid="5628398b-c65c-49e6-b4db-686f0f9aa446"/>
+				<graphicElement>
+					<pen lineWidth="3.0"/>
+				</graphicElement>
+			</line>
+			<image isUsingCache="true">
+				<reportElement x="67" y="5" width="480" height="60" uuid="34e82948-8b4c-4b72-9c3c-cdf549d17128"/>
+				<imageExpression><![CDATA[$P{logotipoCdmxSsp}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="64" splitType="Stretch">
+			<printWhenExpression><![CDATA[$V{PAGE_NUMBER}.intValue() != 1 ? new Boolean(true) : new Boolean(false)]]></printWhenExpression>
+			<image isUsingCache="true">
+				<reportElement x="69" y="2" width="480" height="60" uuid="4a583108-b63d-4933-a16a-23459a76f70c"/>
+				<imageExpression><![CDATA[$P{logotipoCdmxSsp}]]></imageExpression>
+			</image>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="60" splitType="Stretch">
+			<componentElement>
+				<reportElement key="table" x="5" y="5" width="545" height="50" uuid="e93ab3dc-0819-4ada-bd19-8529773669f0"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="DataSetListaImagenesInfrac" uuid="db43c23a-182b-4c20-a0bc-ede37afc7922">
+						<dataSourceExpression><![CDATA[$P{listaImagenesInfrac}]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="540" uuid="79f999b5-596c-4eca-ba07-344916676ffc">
+						<property name="local_mesure_unitwidth" value="pixel"/>
+						<property name="local_mesure_unitheight" value="pixel"/>
+						<jr:tableHeader height="45" rowSpan="1">
+							<rectangle radius="0">
+								<reportElement positionType="Float" x="7" y="5" width="533" height="30" backcolor="#F1F1F1" uuid="6f17ddbd-913b-4a9b-9dd5-752096ee1710"/>
+								<graphicElement>
+									<pen lineWidth="0.0"/>
+								</graphicElement>
+							</rectangle>
+							<staticText>
+								<reportElement x="140" y="8" width="267" height="25" uuid="8cdce66a-b039-47c6-9564-70657e547724"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="15" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Infracción]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell height="340" rowSpan="1">
+							<image hAlign="Center" vAlign="Middle">
+								<reportElement x="70" y="5" width="400" height="330" uuid="eba651ba-857e-4cf7-8376-41ea20c4fde8">
+									<property name="local_mesure_unitwidth" value="pixel"/>
+									<property name="com.jaspersoft.studio.unit.width" value="px"/>
+									<property name="local_mesure_unitheight" value="pixel"/>
+									<property name="com.jaspersoft.studio.unit.height" value="px"/>
+								</reportElement>
+								<imageExpression><![CDATA[$F{fileBase64toBlob}]]></imageExpression>
+							</image>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+		<band height="62">
+			<componentElement>
+				<reportElement key="table" x="5" y="5" width="545" height="50" uuid="23ae7c20-21e9-448f-baa9-9b900df0366d"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="DataSetListaImagenesHandhe" uuid="03f7bd67-088d-49d4-8a37-caf243b2fa39">
+						<dataSourceExpression><![CDATA[$P{listaImagenesHandhe}]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="540" uuid="808b13ef-f108-49ee-9612-efb2431273ed">
+						<property name="local_mesure_unitwidth" value="pixel"/>
+						<property name="local_mesure_unitheight" value="pixel"/>
+						<jr:tableHeader height="45" rowSpan="1">
+							<rectangle radius="0">
+								<reportElement positionType="Float" x="2" y="5" width="538" height="30" backcolor="#F1F1F1" uuid="8d0bd959-6f72-4a71-8006-6fc89426b080"/>
+								<graphicElement>
+									<pen lineWidth="0.0"/>
+								</graphicElement>
+							</rectangle>
+							<staticText>
+								<reportElement x="139" y="7" width="267" height="25" uuid="0667dca6-12c8-47dd-ac02-05a3d40891dc"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="15" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Handheld]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell height="340" rowSpan="1">
+							<image hAlign="Center" vAlign="Middle">
+								<reportElement x="72" y="5" width="400" height="330" uuid="c551a674-6940-4cba-895a-a3525adeabd8">
+									<property name="local_mesure_unitwidth" value="pixel"/>
+									<property name="com.jaspersoft.studio.unit.width" value="px"/>
+									<property name="local_mesure_unitheight" value="pixel"/>
+									<property name="com.jaspersoft.studio.unit.height" value="px"/>
+								</reportElement>
+								<imageExpression><![CDATA[$F{fileBase64toBlob}]]></imageExpression>
+							</image>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+		<band height="62">
+			<componentElement>
+				<reportElement key="table" x="5" y="5" width="545" height="50" uuid="5276ed56-ccc1-45b8-9db6-49a4ffe60713"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="DataSetListaImagenesExpPago" uuid="3ab91581-a33c-4c0b-9c28-8ea2bd23d020">
+						<dataSourceExpression><![CDATA[$P{listaImagenesExpPago}]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="540" uuid="83040cdb-50a2-4ee5-98ca-4088d2ed42d7">
+						<property name="local_mesure_unitwidth" value="pixel"/>
+						<property name="local_mesure_unitheight" value="pixel"/>
+						<jr:tableHeader height="45" rowSpan="1">
+							<rectangle radius="0">
+								<reportElement positionType="Float" x="2" y="5" width="538" height="30" backcolor="#F1F1F1" uuid="6af6df8e-463b-4b64-a299-69c62ddebb37"/>
+								<graphicElement>
+									<pen lineWidth="0.0"/>
+								</graphicElement>
+							</rectangle>
+							<staticText>
+								<reportElement x="139" y="5" width="267" height="25" uuid="49fe03e7-c167-4346-aeb5-0d8acf79e9f4"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="15" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Expediente de Pago]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell height="360" rowSpan="1">
+							<image hAlign="Center" vAlign="Middle">
+								<reportElement x="70" y="20" width="400" height="330" uuid="29a4f317-fa94-45de-a9dc-27f5dce221f3">
+									<property name="local_mesure_unitwidth" value="pixel"/>
+									<property name="com.jaspersoft.studio.unit.width" value="px"/>
+									<property name="local_mesure_unitheight" value="pixel"/>
+									<property name="com.jaspersoft.studio.unit.height" value="px"/>
+								</reportElement>
+								<imageExpression><![CDATA[$F{fileBase64toBlob}]]></imageExpression>
+							</image>
+							<textField>
+								<reportElement x="0" y="0" width="540" height="20" uuid="c2fcd58c-ec1e-4c68-ab04-b3914697e04b"/>
+								<textElement textAlignment="Center">
+									<font isBold="true"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{fileNombreCatDocumento}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+		<band height="62">
+			<componentElement>
+				<reportElement key="table" x="5" y="5" width="545" height="50" uuid="0ada41aa-ba07-4156-8d65-2fdb68684c50"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="DataSetListaImagenesExpAR" uuid="3d43ce92-0171-4e59-a2f1-8454c4632fce">
+						<dataSourceExpression><![CDATA[$P{listaImagenesExpAR}]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="540" uuid="9ad81da2-4d77-4e38-9b05-d879deb7ebaa">
+						<property name="local_mesure_unitwidth" value="pixel"/>
+						<property name="local_mesure_unitheight" value="pixel"/>
+						<jr:tableHeader height="45" rowSpan="1">
+							<rectangle radius="0">
+								<reportElement positionType="Float" x="2" y="5" width="538" height="30" backcolor="#F1F1F1" uuid="8ab7b755-6781-4d6f-9c6a-063a2218e0b6"/>
+								<graphicElement>
+									<pen lineWidth="0.0"/>
+								</graphicElement>
+							</rectangle>
+							<staticText>
+								<reportElement x="139" y="7" width="267" height="25" uuid="decea101-e772-46c1-9e4d-d0369d2c2dbd"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="15" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Expediente Digitalizacion]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell height="340" rowSpan="1">
+							<image hAlign="Center" vAlign="Middle">
+								<reportElement x="72" y="5" width="400" height="330" uuid="b3b7fc02-6ab3-4ef7-b50a-ba10f2777013">
+									<property name="local_mesure_unitwidth" value="pixel"/>
+									<property name="com.jaspersoft.studio.unit.width" value="px"/>
+									<property name="local_mesure_unitheight" value="pixel"/>
+									<property name="com.jaspersoft.studio.unit.height" value="px"/>
+								</reportElement>
+								<imageExpression><![CDATA[$F{fileBase64toBlob}]]></imageExpression>
+							</image>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="5" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="26" splitType="Stretch">
+			<textField>
+				<reportElement x="374" y="5" width="70" height="15" uuid="827aec99-dfba-4d7e-ae14-5b2034717bef"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Página " + $V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="447" y="5" width="40" height="15" uuid="56b9152f-dcaf-4035-a524-d516b683b7f9"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="5" y="6" width="61" height="15" uuid="d87e6e1d-564d-4f38-a804-2ee1d83e17cf"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Expediente: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="66" y="6" width="100" height="15" uuid="a4101f61-7843-48e6-b3f8-f42489bceff1"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{expediente}]]></textFieldExpression>
+			</textField>
+			<image isUsingCache="true">
+				<reportElement mode="Transparent" x="488" y="3" width="60" height="20" forecolor="#CCCCCC" uuid="473548d5-1cf2-4929-b58e-858cf6da9ff7"/>
+				<imageExpression><![CDATA[$P{logotipoTeclo}]]></imageExpression>
+			</image>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="5" splitType="Stretch"/>
+	</summary>
+</jasperReport>

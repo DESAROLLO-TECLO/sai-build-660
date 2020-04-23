@@ -1,0 +1,227 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>Suministro de Áreas</title>
+</head>
+<body>
+	<section class="content-header">
+		<h1>Suministro a Áreas</h1>
+		<ol class="breadcrumb">
+			<li><a><i class="fa fa-safari"></i>Control de Suministro</a></li>
+			<li class="active">Suministro a Áreas</li>
+		</ol>
+	</section>
+
+	<section class="content">           
+    	<form name="formAltaSuministro" role="form" novalidate>
+    		<div class="row">
+    			<section class="col-lg-6 connectedSortable">
+    				<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Datos Generales</h3>
+						</div>
+						<div class="box-body">
+							<div class="row">
+								<div class="col-lg-6 col-lg-offset-3 col-md-12 col-xs-12">
+									<div class="form-group" ng-class="{'has-error': formAltaSuministro.tipoSum.$invalid && formAltaSuministro.tipoSum.$dirty}">
+									    <label>*Tipo de Suministro:</label>
+										<div class="input-group">
+											<span class="input-group-addon">
+												<i class="fa fa-list-ul" aria-hidden="true"></i>
+											</span>
+										    <select class="form-control" name="tipoSum" id="tipoSum" style="width: 100%;"
+													ng-options="tiposum.id_tipo as tiposum.descripcion for tiposum in suministroVO.tiposuministro"
+													ng-model="suministroVO.ltipo_sum" ng-required="true">
+												<option value="" selected="selected">Seleccione</option>
+										    </select>
+									    </div>	
+							  			<div ng-if="formAltaSuministro.tipoSum.$error.required && formAltaSuministro.tipoSum.$dirty" 
+											ng-style="{color:'red'}">El tipo de suministro es requerido</div>			
+									</div>	
+								</div>
+								
+								<div class="col-lg-6 col-md-12 col-xs-12">
+									<div class="form-group" ng-class="{'has-error': formAltaSuministro.regional.$invalid && formAltaSuministro.regional.$dirty}">
+                      					<label>*Regional:</label>
+                      					<div class="input-group">
+											<span class="input-group-addon">
+												<i class="fa fa-list-ul" aria-hidden="true"></i>
+											</span>
+					                        <select class="form-control" name="regional" id="regional" style="width: 100%;"
+													ng-options="regional.reg_id as regional.reg_nombre for regional in suministroVO.regionales"
+													ng-model="suministroVO.lstRegional" ng-change="actualizarAreaOpe()" ng-required="true">
+													<option value="" selected="selected">Seleccione</option>
+											</select>
+										</div>	
+                       					<div ng-if="formAltaSuministro.regional.$error.required && formAltaSuministro.regional.$dirty"
+											ng-style="{color:'red'}">Este campo es requerido</div>
+                   					</div>
+								</div>
+								
+								<div class="col-lg-6 col-md-12 col-xs-12">
+									<div class="form-group" ng-class="{'has-error': formAltaSuministro.areaOpe.$invalid && formAltaSuministro.areaOpe.$dirty}">
+			                      		<label>*Área Operativa:</label> 
+			                      		<div class="input-group">
+											<span class="input-group-addon">
+												<i class="fa fa-list-ul" aria-hidden="true"></i>
+											</span>
+				                          	<select ng-disabled="suministroVO.areaOperativa.length < 1" class="form-control" name="areaOpe" id="areaOpe" style="width: 100%;"
+												ng-options="areaOpe.upc_id as areaOpe.upc_nombre for areaOpe in suministroVO.areaOperativa"
+												ng-model="suministroVO.lstAreaOpe" ng-change="actualizarOficial()" ng-required="true">
+												<option value="" selected="selected">Seleccione</option>
+											</select>	
+										</div>
+	                       				<div ng-if="formAltaSuministro.areaOpe.$error.required && formAltaSuministro.areaOpe.$dirty"
+											ng-style="{color:'red'}">El área operativa es requerida</div>
+                    				</div>
+								</div>
+							
+								</div>
+								
+								<div class="row">
+									<div class="col-lg-8 col-md-12 col-xs-12">
+										<div class="form-group" ng-class="{'has-error': formAltaSuministro.idOficial.$invalid && formAltaSuministro.idOficial.$dirty}">
+											<label>*Oficial:</label> 
+				                      		<div class="input-group">
+												<span class="input-group-addon">
+													<i class="fa fa-list-ul" aria-hidden="true"></i>
+												</span>
+										       <select ng-disabled="suministroVO.oficiales.length < 1" class="form-control" name="idOficial" id="idOficial" style="width: 100%;"
+														ng-options="oficial.emp_id as oficial.descripcion for oficial in suministroVO.oficiales"
+														ng-model="suministroVO.lstRecibe" ng-required="true">
+														<option value="" selected="selected">Seleccione</option>
+											   </select>
+										   </div>	
+							  				<div ng-if="formAltaSuministro.idOficial.$error.required && formAltaSuministro.idOficial.$dirty" 
+												ng-style="{color:'red'}">El oficial es requerido</div>			
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+    			</section>
+    			
+    			<section class="col-lg-6 connectedSortable">
+    				<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Información General</h3>
+						</div>
+						<div class="box-body">
+							<div class="row">
+						    	<div class="col-lg-6 col-md-12 col-xs-12">
+				                    <div class="form-group" ng-class="{'has-error': formAltaSuministro.txt_num_recibo.$invalid && formAltaSuministro.txt_num_recibo.$dirty}">
+				                      <label>*Número de Recibo:</label>
+			                      		<div class="input-group">
+											<span class="input-group-addon">
+												<i class="fa fa-hashtag" aria-hidden="true"></i>
+											</span>
+	                       					<input type="text" name="txt_num_recibo" integer-number ng-model="suministroVO.txt_num_recibo" ng-required="true" maxlength="20" class="form-control text-uppercase">
+                    					</div>
+				                        <div ng-if="formAltaSuministro.txt_num_recibo.$error.required && formAltaSuministro.txt_num_recibo.$dirty"
+											ng-style="{color:'red'}">El número de recibo es requerido</div>	
+				                    	</div>
+               					</div>
+
+			                  	<div class="col-lg-6 col-md-12 col-xs-12">
+		                    		<div class="form-group" ng-class="{'has-error': formAltaSuministro.fecha.$invalid && formAltaSuministro.fecha.$dirty}">
+			                      		<label>*Fecha:</label>
+			                      		<div class="input-group date" 
+			                      		datetimepicker options="dateTimePickerOptions"
+											on-hide="updateFIFecha()" show-button-bar="true"
+											ng-model="suministroVO.txt_fecha" 
+											name="fecha"
+											ng-required="true" 
+			                      		>
+											<span class="input-group-addon">
+												<i class="fa fa-calendar" aria-hidden="true"></i>
+											</span>
+			                      			<input type="text"  readonly 			                      			
+			                      			class="form-control inputFecha input-append" >
+		                      			</div>
+			                      		<div ng-if="formAltaSuministro.fecha.$error.required && formAltaSuministro.fecha.$dirty"
+								  			ng-style="{color:'red'}">La fecha es requerida</div>		
+			                    	</div>
+			                  	</div>
+			                  </div>
+			                  
+			                  <div class="row">	
+				                  	<div class="col-lg-6 col-md-12 col-xs-12">
+					                    <div class="form-group" ng-class="{'has-error': formAltaSuministro.folioIni.$invalid && formAltaSuministro.folioIni.$dirty}">
+					                      	<label>*Folio Inicial:</label>
+					                      	<div class="input-group">
+												<span class="input-group-addon">
+													<i class="fa fa-sort-numeric-asc" aria-hidden="true"></i>
+												</span> 
+					                      		<input type="text" name="folioIni"  integer-number ng-model="suministroVO.txt_folio_ini" ng-required="true || suministroVO.validFolios" class="form-control" maxlength="10" ng-change="changeFolios()">
+				                      		</div>
+					                      	<div ng-if="formAltaSuministro.folioIni.$error.required && formAltaSuministro.folioIni.$dirty"
+										  		ng-style="{color:'red'}">El folio inicial es requerido</div>	
+					                    </div>
+	                  				</div>
+
+			                  	<div class="col-lg-6 col-md-12 col-xs-12">
+				                    <div class="form-group" ng-class="{'has-error': formAltaSuministro.folioFin.$invalid && formAltaSuministro.folioFin.$dirty}">
+				                     	<label>*Folio Final:</label> 
+				                      	<div class="input-group">
+											<span class="input-group-addon">
+												<i class="fa fa-sort-numeric-desc" aria-hidden="true"></i>
+											</span> 
+				                      		<input type="text" name="folioFin" integer-number ng-model="suministroVO.txt_folio_fin" ng-required="true" class="form-control" maxlength="10" ng-change="changeFolios()">
+			                      		</div>
+				                     	<div ng-if="formAltaSuministro.folioFin.$error.required && formAltaSuministro.folioFin.$dirty"
+									  	ng-style="{color:'red'}">El folio final es requerido</div>	
+				                    </div>
+			                  	</div>
+		                  	</div>
+		                  	<div class= "row" ng-if="suministroVO.validFolios">
+		                  	<div class="col-xs-12 text-center">
+                 					<span  ng-style="{color:'red'}">El folio inicial debe ser menor al folio final</span>
+                 				</div>
+		                  	</div>
+			                <div class="row">
+			                  	<div class="col-lg-6 col-md-12 col-xs-12">
+				                    <div class="form-group" ng-class="{'has-error': formAltaSuministro.total.$invalid && formAltaSuministro.total.$dirty}">
+				                      	<label>*Total de Folios:</label>
+				                      	<div class="input-group">
+											<span class="input-group-addon">
+												<i class="fa fa-calculator" aria-hidden="true"></i>
+											</span> 	
+				                      		<input type="text" name="total"  integer-number ng-model="suministroVO.txt_tot_folios" ng-required="true" class="form-control" maxlength="10">
+		                      			</div>
+				                      	<div ng-show="formAltaSuministro.total.$error.required && formAltaSuministro.total.$dirty"
+											ng-style="{color:'red'}">El total es requerido</div>
+				                    </div>
+                  				</div>
+                  				
+                  				
+                  				
+							</div>
+						</div>
+					</div>
+				</section>
+				
+				
+    		</div>
+    		
+    		<div class="row">
+				<div class="col-md-12 text-center">
+					<button type="button" ng-click="altaSuministro(suministroVO)" class="btn btn-danger">Guardar</button>
+				</div>
+			</div>
+       
+  		</form>
+  	</section>
+	<script type="text/javascript">
+// 	  $(function(){
+// 	    $('#datepicker').datepicker({
+// 	        format: 'dd/mm/yyyy',
+// 	        endDate: '+0d',
+// 	        autoclose: true,
+// 	        todayHighlight : true
+// 	    });
+// 	});
+	 </script>
+
+
+<body>
+</html>

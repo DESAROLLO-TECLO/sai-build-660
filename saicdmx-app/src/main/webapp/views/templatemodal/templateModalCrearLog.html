@@ -1,0 +1,84 @@
+<div id="modalCrearLog" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+<meta charset="utf-8" />
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header bg-red-active">
+<!--         	<a class="close" data-dismiss="modal" aria-label="Close"><span style="color:#FFF !important;" aria-hidden="true">&times;</span></a> -->
+        	<h4 class="modal-title">Nuevo Log</h4>
+        </div>
+        <div class="modal-body">
+	  		<form name="form" novalidate>
+	  			<div class="row">
+	  				<div class="col-xs-12 col-md-4">
+		  				<div class="form-group" ng-class="{ 'has-error' : form.logNombre.$invalid && !form.logNombre.$pristine }">
+	           				<label >*Nombre Log:</label>
+	            			<div class="input-group">
+								<span class="input-group-addon">
+									<i class="fa fa-file-text-o"></i>
+								</span> 
+	            				<input maxlength="100" type="text" name="logNombre" class="form-control" ng-model="log.logNombre" required>
+	            			</div>
+	            			<span ng-if="form.logNombre.$invalid && !form.logNombre.$pristine" class="help-block">El nombre log es requerido</span>
+	        			</div>
+        			</div>
+        			
+        			<div class="col-xs-12 col-md-4">
+       					<div class="form-group" ng-class="{ 'has-error' : form.rutaArchivos.$invalid && !form.rutaArchivos.$pristine }">
+            				<label>*Ruta del Archivo:</label>
+            				<div class="input-group">
+			 					<span class="input-group-addon">
+									<i class="fa fa-folder-open"></i>
+			  					</span> 
+            					<input type="text" name="rutaArchivos" class="form-control" ng-model="log.rutaArchivo" required maxlength="500">
+            				</div>
+            				<span ng-if="form.rutaArchivos.$invalid && !form.rutaArchivos.$pristine" class="help-block">La ruta del archivo es requerida</span>
+        				</div>
+        			</div>
+        			
+        			<div class="col-xs-12 col-md-4">
+	  					<div class="form-group" ng-class="{ 'has-error' : form.tipoExtensiones.$invalid && !form.tipoExtensiones.$pristine }">
+	            			<label>*Tipo de Extensiones:</label>
+	            			<div class="input-group">
+				 				<span class="input-group-addon">
+									<i class="fa fa-ellipsis-v"></i>
+				  				</span> 
+	           					<span >
+	            					<input   data-toggle="tooltip" data-placement="bottom" title="Separadas por pipes ( | )" type="text" name="tipoExtensiones" class="form-control" ng-model="log.tipoExtensiones" required>
+	           					</span>
+	           				</div>
+	            			<span ng-if="form.tipoExtensiones.$invalid && !form.tipoExtensiones.$pristine" class="help-block">El tipo de extensión es requerido</span>
+	       			 	</div>
+       			 	</div>
+	  			</div>
+	  			
+	  			<div class="row">
+       			 	<div class="col-xs-12 col-md-12">
+   			 			<div class="form-group" ng-class="{ 'has-error' : form.logDescripcion.$invalid && !form.logDescripcion.$pristine }">
+           					<label>*Descripcion:</label>
+           					<div class="input-group">
+           						<span class="input-group-addon">
+									<i class="fa fa-comment"></i>
+				  				</span> 
+	           					<textarea style="overflow:auto;resize:none; overflow-x:hidden;" type="text" name="logDescripcion" class="form-control" ng-model="log.logDescripcion" required maxlength="500"></textarea>
+           					</div>
+            				<span ng-if="form.logDescripcion.$invalid && !form.logDescripcion.$pristine" class="help-block">La descripción es requerida</span>
+        				</div>
+       			 	</div>
+	  			</div>
+  			</form>
+  			
+        </div>
+        <div class="modal-footer">
+        	<div class="row">
+        		<div class="col-xs-12">    
+        			<button class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+        			<button class="btn btn-danger" ng-click="altaLog(log)">Guardar</button>
+        		</div>
+        	</div>
+        </div>
+    </div>
+  </div>
+  
+</div>
+
+

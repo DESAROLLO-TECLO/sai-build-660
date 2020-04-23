@@ -1,0 +1,265 @@
+<div class="modal fade" id="modalReasignacionFMCP" role="dialog"
+	data-keyboard="false" data-backdrop="static">
+	<meta charset="utf-8" />
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header bg-red-active">
+				<div class="box-header text-center" style="color: white;">
+					<button type="button" class="close" data-dismiss="modal"
+						ng-click="updateFront()" style="color: blue;">&times;</button>
+					<h3 class="box-title" id="idtl">Reasignar Código Postal</h3>
+				</div>
+			</div>
+			<div class="modal-body">
+				<ul class="nav nav-tabs gibul">
+					<li class="columna6"><a data-toggle="tab" ng-click="cambiarAccion(1)">Reasignar
+							Detecciones Válidas </a></li>
+					<li class="columna6"><a data-toggle="tab"
+						ng-click="cambiarAccion(2)">Reasignar Detecciones Inválidas </a></li>
+				</ul>
+
+			<h3 class="box-title text-center" style="margin-top:6px;" id="AllValid" ng-if='showIndex.titleInicio'>Total de detecciones válidas: {{globalData.totalValid}} / {{globalData.totalDetect}}</h3>
+			
+			<div class="container col-xs-12">
+				<div class="box-header text-center">
+					<h3 class="box-title" id="labelValid" ng-if='showIndex.titleValidas'>
+					Detecciones	con Centro de Reparto Válidos: {{globalData.totalValid}}
+					</h3>
+					<h3 class="box-title" id="labelInvalid" ng-if='showIndex.titleInvalidas'>
+					Detecciones	Deshabilitadas o con Centro de Reparto Inválido: {{globalData.totalInvalid}}
+					</h3>
+					<h3 class="box-title" id="labelInvalid" ng-if='globalData.totalReasignacion>=1&&showIndex.titleReasignadas'>
+					<br />
+					Detecciones	con Código Postal Reasignado: {{globalData.totalReasignacion}}
+					</h3>
+					<h3 class="box-title" ng-if='menuState.recomplementar'>Se
+						verificarán los Códigos Postales nuevamente comparándolos contra
+						el catálogo de Centros de Reparto.</h3>
+					<h3 class="box-title" ng-if='menuState.deteccionesValidas'>
+						Proceso de reasignación de Códigos Postales terminado. Se continua
+						con el proceso.</h3>
+					<h3 class="box-title" ng-if='menuState.noDeteccionesValidas'>
+						No hay registros para procesar. Por lo que se cancelará el
+						proceso.</h3>
+				</div>
+			</div>
+
+
+				<div class="row" id="form">
+					<div class="col-xs-14 col-md-12">
+						<button ng-show='menuState.recomplementar' type="button"
+							class="btn btn-danger center-block" ng-click="updateFront()" data-dismiss="modal">Cerrar</button>
+						<button ng-show='menuState.noDeteccionesValidas' type="button"
+							class="btn btn-danger center-block" data-dismiss="modal"
+							ng-click="consultaLotes()">Cerrar</button>
+						<button ng-show='menuState.deteccionesValidas' type="button"
+							class="btn btn-danger center-block" data-dismiss="modal" ng-click="updateFront()">Cerrar</button>
+
+					</div>
+					
+<!-- Tablas validas -->
+					<div class="row" ng-show="globalData.totalValid>0&&showIndex.muestraTablaValidas">
+						<div class="col-md-2"></div>
+						<div class="col-md-12">
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="box">
+										<div class="box-body table-responsive no-padding">
+											<table class="table table-hover">
+												<thead>
+													<tr>
+<!-- 														<th>#</th> -->
+														<th>Cantidad</th>
+														<th>CP</th>
+														<th>CENTRO DE REPARTO</th>
+														<th>DELEGACIÓN/MUNICIPIO</th>
+														<th>ENTIDAD FEDERATIVA</th>
+														<th>ACCIÓN</th>
+														<!-- Version vieja antes de solicitarme el requerimiento de agrupacion:
+														<th>PLACA</th>
+														<th>FECHA</th>
+														<th>HORA</th>
+														<th>NOMBRE</th>
+														<th>DOMICILIO</th>
+														<th>CP</th>
+														<th>CENTRO DE REPARTO</th>
+														<th>DELEGACIÓN/MUNICIPIO</th>
+														<th>ENTIDAD FEDERATIVA</th>
+														<th>ACCIÓN</th>
+														 -->
+													</tr>
+												</thead>
+												<tbody>
+													<tr
+														dir-paginate="detecciones in globalData.deteccionesValid | itemsPerPage: 5 track by globalData.deteccionesValid.indexOf(detecciones)+1">
+<!-- 														<td>{{listaDeteccionValidaVO.indexOf(detecciones) + 1 -->
+<!-- 															+ 1}}</td> -->
+														<td class="center" >{{detecciones.idDeteccion}}</td>
+														<td class="center" >{{detecciones.codigoPostal}}</td>
+														<td class="center" >{{detecciones.centroReparto}}</td>
+<!-- 														<td class="center" ng-if="menuState.Invalid">00000</td> -->
+														<td class="center" >{{detecciones.municipio}}</td>
+														<td class="center" >{{detecciones.entidadFederativa}}</td>
+														<td class="center" ><a
+															class="glyphicon glyphicon-minus-sign"
+															data-toggle="tooltip" title="Ver detecciones"
+															ng-click="loadObjdet(detecciones.codigoPostal, globalData.deteccionesValid.indexOf(detecciones), detecciones.detecciones, false)"></a>
+<!-- 															<span ng-if="menuState.Invalid"><a -->
+<!-- 																class="glyphicon glyphicon-edit" -->
+<!-- 																data-toggle="tooltip" title="Cambiar Codigo Postal" -->
+<!-- 																ng-click="radarCambiarCP(listaDeteccionValidaVO.indexOf(detecciones) + 1 , detecciones, 'habilitar')"></a></span> -->
+																
+														</td>
+														<!-- 
+														<td class="center"><a ng-if="menuState.Valid"
+															class="glyphicon glyphicon-minus-sign"
+															data-toggle="tooltip" title="Deshabilitar registro"
+															ng-click="radarCambiarCP(listaDeteccionValidaVO.indexOf(detecciones) + 1 , detecciones, 'deshabilitar')"></a>
+															<span ng-if="menuState.Invalid"><a
+																class="glyphicon glyphicon-edit"
+																data-toggle="tooltip" title="Cambiar Codigo Postal"
+																ng-click="radarCambiarCP(listaDeteccionValidaVO.indexOf(detecciones) + 1 , detecciones, 'habilitar')"></a></span>
+														</td>
+														<td ng-hide="true">{{detecciones.idDeteccion}}</td>
+														<td class="center">{{detecciones.placa}}</td>
+														<td class="center">{{detecciones.fecha }}</td>
+														<td class="center">{{detecciones.hora }}</td>
+														<td class="center">{{detecciones.nombre}}</td>
+														<td class="center">{{detecciones.domicilio}}</td>
+														<td class="center">{{detecciones.codigoPostal}}</td>
+														<td class="center">{{detecciones.centroReparto}}</td>
+														<td class="center">{{detecciones.municipio}}</td>
+														<td class="center">{{detecciones.entidadFederativa}}</td>
+														<td class="center"><a ng-if="menuState.Valid"
+															class="glyphicon glyphicon-minus-sign"
+															data-toggle="tooltip" title="Deshabilitar registro"
+															ng-click="radarCambiarCP(listaDeteccionValidaVO.indexOf(detecciones) + 1 , detecciones, 'deshabilitar')"></a>
+															<span ng-if="menuState.Invalid"><a
+																class="glyphicon glyphicon-edit"
+																data-toggle="tooltip" title="Cambiar Codigo Postal"
+																ng-click="radarCambiarCP(listaDeteccionValidaVO.indexOf(detecciones) + 1 , detecciones, 'habilitar')"></a></span>
+														</td>
+														 -->
+													</tr>
+												</tbody>
+											</table>
+											<dir-pagination-controls></dir-pagination-controls>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+<!-- Fin de Tablas validas -->
+					
+<!-- Tablas Invalidas -->		
+					<div class="row" ng-show="globalData.totalInvalid>0&&showIndex.muestraTablaInvalidas">
+						<div class="col-md-2"></div>
+						<div class="col-md-12">
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="box">
+										<div class="box-body table-responsive no-padding">
+											<table class="table table-hover">
+												<thead>
+													<tr>
+<!-- 														<th>#</th> -->
+														<th>Cantidad</th>
+														<th>CP</th>
+														<th>CENTRO DE REPARTO</th>
+														<th>DELEGACIÓN/MUNICIPIO</th>
+														<th>ENTIDAD FEDERATIVA</th>
+														<th>ACCIÓN</th>
+														<!-- Version vieja antes de solicitarme el requerimiento de agrupacion:
+														<th>PLACA</th>
+														<th>FECHA</th>
+														<th>HORA</th>
+														<th>NOMBRE</th>
+														<th>DOMICILIO</th>
+														<th>CP</th>
+														<th>CENTRO DE REPARTO</th>
+														<th>DELEGACIÓN/MUNICIPIO</th>
+														<th>ENTIDAD FEDERATIVA</th>
+														<th>ACCIÓN</th>
+														 -->
+													</tr>
+												</thead>
+												<tbody>
+													<tr
+														dir-paginate="detecciones in globalData.deteccionesInvalid | itemsPerPage: 5 track by globalData.deteccionesInvalid.indexOf(detecciones)+1">
+<!-- 														<td>{{listaDeteccionValidaVO.indexOf(detecciones) + 1 -->
+<!-- 															+ 1}}</td> -->
+														<td class="center" >{{detecciones.totalDisabled}}</td>
+														<td class="center" >{{detecciones.codigoPostal}}</td>
+														<td class="center" >{{detecciones.centroReparto}}</td>
+<!-- 														<td class="center" ng-if="menuState.Invalid">00000</td> -->
+														<td class="center" >{{detecciones.municipio}}</td>
+														<td class="center" >{{detecciones.entidadFederativa}}</td>
+														<td class="center" ><a
+															class="glyphicon glyphicon-minus-sign"
+															data-toggle="tooltip" title="Ver detecciones"
+															ng-click="loadObjdet(detecciones.codigoPostal, globalData.deteccionesInvalid.indexOf(detecciones), detecciones.detecciones, true)"></a>
+<!-- 															<span ng-if="menuState.Invalid"><a -->
+<!-- 																class="glyphicon glyphicon-edit" -->
+<!-- 																data-toggle="tooltip" title="Cambiar Codigo Postal" -->
+<!-- 																ng-click="radarCambiarCP(listaDeteccionValidaVO.indexOf(detecciones) + 1 , detecciones, 'habilitar')"></a></span> -->
+																
+														</td>
+														<!-- 
+														<td class="center"><a ng-if="menuState.Valid"
+															class="glyphicon glyphicon-minus-sign"
+															data-toggle="tooltip" title="Deshabilitar registro"
+															ng-click="radarCambiarCP(listaDeteccionValidaVO.indexOf(detecciones) + 1 , detecciones, 'deshabilitar')"></a>
+															<span ng-if="menuState.Invalid"><a
+																class="glyphicon glyphicon-edit"
+																data-toggle="tooltip" title="Cambiar Codigo Postal"
+																ng-click="radarCambiarCP(listaDeteccionValidaVO.indexOf(detecciones) + 1 , detecciones, 'habilitar')"></a></span>
+														</td>
+														<td ng-hide="true">{{detecciones.idDeteccion}}</td>
+														<td class="center">{{detecciones.placa}}</td>
+														<td class="center">{{detecciones.fecha }}</td>
+														<td class="center">{{detecciones.hora }}</td>
+														<td class="center">{{detecciones.nombre}}</td>
+														<td class="center">{{detecciones.domicilio}}</td>
+														<td class="center">{{detecciones.codigoPostal}}</td>
+														<td class="center">{{detecciones.centroReparto}}</td>
+														<td class="center">{{detecciones.municipio}}</td>
+														<td class="center">{{detecciones.entidadFederativa}}</td>
+														<td class="center"><a ng-if="menuState.Valid"
+															class="glyphicon glyphicon-minus-sign"
+															data-toggle="tooltip" title="Deshabilitar registro"
+															ng-click="radarCambiarCP(listaDeteccionValidaVO.indexOf(detecciones) + 1 , detecciones, 'deshabilitar')"></a>
+															<span ng-if="menuState.Invalid"><a
+																class="glyphicon glyphicon-edit"
+																data-toggle="tooltip" title="Cambiar Codigo Postal"
+																ng-click="radarCambiarCP(listaDeteccionValidaVO.indexOf(detecciones) + 1 , detecciones, 'habilitar')"></a></span>
+														</td>
+														 -->
+													</tr>
+												</tbody>
+											</table>
+											<dir-pagination-controls></dir-pagination-controls>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>					
+<!-- Fin tablas invalidas -->
+
+<div class="col-md-12 text-center">
+					<button type="button" ng-show="globalData.totalReasignacion>0"
+								 class="btn btn-secondary btngib" data-dismiss="modal"
+								 ng-click="cambiarAccion(3)">Complementar Centros de Reparto</button>
+					<button type="button" ng-show="showIndex.butnDown"
+								 class="btn btn-secondary btngib" data-dismiss="modal"
+								 ng-click="cambiarAccion(4)">Finalizar Reasignación</button>
+				</div>
+				
+				</div>
+					  
+			</div>
+			
+		</div>
+	</div>
+</div>

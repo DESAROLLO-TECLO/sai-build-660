@@ -1,0 +1,396 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>Reportes</title>
+</head>
+<body>
+	<section class="content-header">
+		<h1>Reportes</h1>
+		<ol class="breadcrumb">
+			<li><a><i class="fa fa-book"></i>Administración</a></li>
+			<li class="active">Reportes</li>
+		</ol>
+	</section>
+
+	<section class="content">
+		<div class="row">
+			<div class="col-md-8 col-md-offset-2">
+				<div class="box box-danger">
+					<div class="box-header with-border">
+						<div align="center">
+							<h3 class="box-title">Datos del Reporte</h3>
+						</div>
+					</div>
+					<div class="box-body">
+						<div class="col-md-12">
+							<form name="userForm" novalidate>
+								<div class="row">
+									<div class="col-md-3 ">
+										<div class="form-group"
+											ng-class="{ 'has-error' : userForm.impugnacionJuicio.$invalid && !userForm.impugnacionJuicio.$pristine }">
+											<div align="left">
+												<label>*Nombre del Reporte</label>
+											</div>
+											<div class="input-group">
+												<span class="input-group-addon"><i
+													class="fa fa-gavel"></i></span> <input type="text"
+													ng-model="reporteVO.nbReporte" name="nombreReporte"
+													class="form-control" required maxlength="40">
+											</div>
+											<div
+												ng-show="userForm.impugnacionJuicio.$invalid && !userForm.impugnacionJuicio.$pristine"
+												class="help-block text-left">El nombre del reporte es
+												requerido. requerido</div>
+
+										</div>
+									</div>
+
+									<div class="col-md-3 ">
+										<div class="form-group"
+											ng-class="{ 'has-error' : userForm.impugnacionJuicio.$invalid && !userForm.impugnacionJuicio.$pristine }">
+											<div align="left">
+												<label>*Url</label>
+											</div>
+											<div class="input-group">
+												<span class="input-group-addon"><i
+													class="fa fa-gavel"></i></span> <input type="text"
+													ng-model="reporteVO.txUrl" name="nombreReporte"
+													class="form-control" required maxlength="40">
+											</div>
+											<div
+												ng-show="userForm.impugnacionJuicio.$invalid && !userForm.impugnacionJuicio.$pristine"
+												class="help-block text-left">El nombre del reporte es
+												requerido. requerido</div>
+
+										</div>
+									</div>
+
+									<div class="col-md-3 ">
+										<div class="form-group"
+											ng-class="{ 'has-error' : userForm.impugnacionJuicio.$invalid && !userForm.impugnacionJuicio.$pristine }">
+											<div align="left">
+												<label>*Descripcion del Reporte</label>
+											</div>
+											<div class="input-group">
+												<span class="input-group-addon"><i
+													class="fa fa-gavel"></i></span>
+												<textarea ng-model="reporteVO.txReporte"
+													name="nombreReporte" class="form-control" required
+													maxlength="4000"></textarea>
+											</div>
+											<div
+												ng-show="userForm.impugnacionJuicio.$invalid && !userForm.impugnacionJuicio.$pristine"
+												class="help-block text-left">El nombre del reporte es
+												requerido. requerido</div>
+
+										</div>
+									</div>
+
+									<div class="col-sm-3">
+										<div class="form-group"
+											ng-class="{'has-error': altaInfraccion.DGSector.$invalid && altaInfraccion.DGSector.$dirty}">
+											<label>*Tipo de Reporte: </label>
+											<div class="input-group">
+												<span class="input-group-addon"><i
+													class="fa fa-pie-chart"></i></span> <select class="form-control"
+													id="tipoReporte" select2
+													data-minimum-results-for-search="-1" ng-required="true"
+													name="reporte"
+													ng-options="tr as tr.nbTipoReporte for tr in tiposReportes track by tr.idTipoReporte"
+													ng-model="reporteVO.idTipoReporte">
+													<option value="" selected="selected">Seleccione</option>
+												</select>
+											</div>
+											<div
+												ng-show="altaInfraccion.DGSector.$error.required && altaInfraccion.DGSector.$dirty"
+												ng-style="{color:'red'}">El sector es requerido</div>
+
+										</div>
+									</div>
+
+									<div class="col-md-6 ">
+										<!-- USERNAME -->
+										<div class="form-group"
+											ng-class="{ 'has-error' : userForm.fechaRecepcion.$invalid && !userForm.fechaRecepcion.$pristine }">
+											<div align="left">
+												<label>*Script Select</label>
+											</div>
+
+											<div class="input-group">
+												<span class="input-group-addon"><i
+													class="fa fa-gavel"></i></span>
+												<textarea name="scriptSelect" class="form-control"
+													ng-model="reporteVO.scriptSelect" required maxlength="40"></textarea>
+											</div>
+											<div
+												ng-show="userForm.fechaRecepcion.$invalid && !userForm.fechaRecepcion.$pristine"
+												class="help-block text-left">La fecha de emisión es
+												requerida</div>
+										</div>
+									</div>
+									<div class="col-md-6 ">
+										<!-- USERNAME -->
+										<div class="form-group"
+											ng-class="{ 'has-error' : userForm.fechaRecepcion.$invalid && !userForm.fechaRecepcion.$pristine }">
+											<div align="left">
+												<label>*Script From</label>
+											</div>
+
+											<div class="input-group">
+												<span class="input-group-addon"><i
+													class="fa fa-gavel"></i></span>
+												<textarea name="scriptFrom" class="form-control"
+													ng-model="reporteVO.scriptFrom" required maxlength="40"></textarea>
+											</div>
+											<div
+												ng-show="userForm.fechaRecepcion.$invalid && !userForm.fechaRecepcion.$pristine"
+												class="help-block text-left">La fecha de emisión es
+												requerida</div>
+										</div>
+									</div>
+
+									<div class="col-md-6 ">
+										<!-- USERNAME -->
+										<div class="form-group"
+											ng-class="{ 'has-error' : userForm.fechaRecepcion.$invalid && !userForm.fechaRecepcion.$pristine }">
+											<div align="left">
+												<label>*Script Where</label>
+											</div>
+
+											<div class="input-group">
+												<span class="input-group-addon"><i
+													class="fa fa-gavel"></i></span>
+												<textarea name="scriptwhere" class="form-control"
+													ng-model="reporteVO.scriptWhere" required maxlength="4000"></textarea>
+											</div>
+											<div
+												ng-show="userForm.fechaRecepcion.$invalid && !userForm.fechaRecepcion.$pristine"
+												class="help-block text-left">La fecha de emisión es
+												requerida</div>
+										</div>
+									</div>
+
+
+									<div class="col-sm-3">
+										<div class="form-group"
+											ng-class="{'has-error': altaInfraccion.DGSector.$invalid && altaInfraccion.DGSector.$dirty}">
+											<label>*Tipo de Formato: </label>
+											<div class="input-group">
+												<span class="input-group-addon"><i
+													class="fa fa-pie-chart"></i></span> <select class="form-control"
+													id="Componente" select2
+													data-minimum-results-for-search="-1" ng-required="true"
+													name="formato"
+													ng-options="tf as tf.nbFormato for tf in formatos track by tf.idFormatoDescarga"
+													ng-model="reporteVO.tipoFormatoDescarga">
+													<option value="" selected="selected">Seleccione</option>
+												</select>
+											</div>
+											<div
+												ng-show="altaInfraccion.DGSector.$error.required && altaInfraccion.DGSector.$dirty"
+												ng-style="{color:'red'}">El sector es requerido</div>
+										</div>
+										
+										
+													<div class="form-group"
+											ng-class="{'has-error': altaInfraccion.DGSector.$invalid && altaInfraccion.DGSector.$dirty}">
+											<label>*Tipo de Titulo: </label>
+											<div class="input-group">
+												<span class="input-group-addon"><i
+													class="fa fa-pie-chart"></i></span> <select class="form-control"
+													id="Componente" select2
+													data-minimum-results-for-search="-1" ng-required="true"
+													name="tipoTitulo"
+													ng-options="tt as tt.nbTipoTitulo for tt in tipoTitulo track by tt.idTipoTitulo"
+													ng-model="reporteVO.idTipoTitulo">
+													<option value="" selected="selected">Seleccione</option>
+												</select>
+											</div>
+											<div
+												ng-show="altaInfraccion.DGSector.$error.required && altaInfraccion.DGSector.$dirty"
+												ng-style="{color:'red'}">El sector es requerido</div>
+										</div>
+										<div class="row">
+											<div class="col-md-12 text-center">
+												<button type="submit" class="btn btn-danger"
+													ng-click="validarScript(reporteVO, userForm)"
+													open-modal="modalEjecutarScript">Validar Script</button>
+											</div>
+										</div>
+
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</section>
+
+
+	<section class="content ngIfAnimate" ng-if="paramConfig">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="box box-danger">
+					<div class="box-header with-border">
+						<div align="center">
+							<h3 class="box-title">Configuración de Parámetros</h3>
+						</div>
+					</div>
+					<div class="box-body">
+						<div class="col-md-12">
+							<form name="userFormP" novalidate>
+								<table id="tableArrayParam"
+									class="table table-striped table-hover header-fixed">
+									<thead>
+										<tr>
+											<th sort order="'param'" by="order" reverse="reverse">*Parámetro</th>
+											<th>*Nombre de Etiqueta</th>
+											<th sort order="'value'" by="order" reverse="reverse">*Tipo
+												de Parámetro</th>
+											<th sort order="''" by="order" reverse="reverse">*Propiedades</th>
+											<th sort order="''" by="order" reverse="reverse">*Valor</th>
+											<th sort order="''" by="order" reverse="reverse">*Tipo
+												de Componente</th>
+										</tr>
+									</thead>
+									<tbody>
+
+										<tr ng-repeat="param in params">
+											<td>{{param.nbParametro}}</td>
+
+											<td>
+												<div>
+													<input type="text" ng-model="param.nbEtiquetaParam"
+														class="form-control" required maxlength="40">
+												</div>
+<!-- 												{{param}} -->
+												<div
+													ng-show="userForm.impugnacionJuicio.$invalid && !userForm.impugnacionJuicio.$pristine"
+													class="help-block text-left">El nombre de la etiqueta
+													es requerido. requerido</div>
+
+											</td>
+
+											<td>
+												<div class="input-group">
+													<span class="input-group-addon"><i
+														class="fa fa-pie-chart"></i></span> <select class="form-control"
+														select2 data-minimum-results-for-search="-1"
+														ng-required="true" name="parametro"
+														ng-options="tp as tp.nbTipoParametro for tp in parametros track by tp.idTipoParametro"
+														ng-model="param.tipoParametroVO">
+														<option value="" selected="selected">Seleccione</option>
+													</select>
+												</div>
+												<div
+													ng-show="altaInfraccion.DGSector.$error.required && altaInfraccion.DGSector.$dirty"
+													ng-style="{color:'red'}">El tipo de parámetro es
+													requerido</div>
+
+											</td>
+
+											<td>
+												<div class="input-group">
+													<span class="input-group-addon"> <i
+														class="fa fa-pie-chart"></i>
+													</span> <select class="form-control" select-picker multiple
+														data-minimum-results-for-search="-1" ng-required="true"
+														ng-model="param.propiedades"
+														ng-options="p as p.nbPropiedad for p in param.catalogoPropiedades">
+													</select>
+													<!-- 													ng-change="selectPropiedad(paramVO.propiedad[$index], $index)" -->
+												</div>
+
+												<div
+													ng-show="altaInfraccion.DGSector.$error.required && altaInfraccion.DGSector.$dirty"
+													ng-style="{color:'red'}">El tipo de propiedad es
+													requerido</div>
+
+											</td>
+
+											<td>
+
+												<div
+													ng-repeat="inp in params[$index].propiedades track by inp.idPropiedad+param.nbParametro">
+													<input type="text"
+														ng-model="param[$parent.$index].propiedades[$index].valor"
+														class="form-control" />
+												</div>
+											</td>
+											<td>
+												<div class="input-group">
+													<span class="input-group-addon"><i
+														class="fa fa-pie-chart"></i></span> <select class="form-control"
+														id="Componente" select2 ng-required="true"
+														name="componente"
+														ng-options="tc as tc.nbComponente for tc in componentes track by tc.idComponente"
+														ng-model="param.componenteVO">
+														<option value="" selected="selected">Seleccione</option>
+													</select>
+
+												</div>
+												<div
+													ng-show="altaInfraccion.DGSector.$error.required && altaInfraccion.DGSector.$dirty"
+													ng-style="{color:'red'}">El tipo de componente es
+													requerido</div>
+											</td>
+										</tr>
+
+									</tbody>
+								</table>
+								<div class="row">
+									<div class="col-md-12 text-center">
+										<button type="submit" class="btn btn-danger"
+											ng-click="saveConfParam(reporteVO, userForm)">Guardar</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	{{params}}
+	<form name="formTemplateModal" novalidate>
+		<modal open="modalEjecutarScript" size-modal="md" noescape modalstatic
+			on-shown="funcionAbrir()" on-hide="funcionCerrar()"> <modal-header
+			title="EJECUTAR SCRIPT"></modal-header> <modal-body>
+		<div class="row">
+			<div class="col-md-x">
+				<table id="tableArrayParam"
+					class="table table-striped table-hover header-fixed">
+					<thead>
+						<tr>
+							<th sort order="'param'" by="order" reverse="reverse">Parámetro</th>
+							<th sort order="'value'" by="order" reverse="reverse">Valor</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="arrayParam in arrayParametros track by $index">
+							<td class="center">{{arrayParam.nbParametro}}</td>
+							<td>
+								<div class="input-group">
+									<span class="input-group-addon"><i class="fa fa-gavel"></i></span>
+									<input type="text" ng-model="paramValue[$index]"
+										name="nombreReporte" class="form-control" required
+										maxlength="40">
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		</modal-body> <modal-footer btn-close="Cerrar">
+		<button class="btn btn-danger"
+			ng-click="guardarParam(arrayParametros, paramValue)">
+			{{'APP.Base.boton.guardar' | translate}}</button>
+		{{paramValue}} {{array}} {{respuesta}} </modal-footer> </modal>
+	</form>
+	{{arrayParam}}
+</body>
+</html>

@@ -1,0 +1,370 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>Consulta Lotes Foto-Multa</title>
+</head>
+<body>
+
+	<section class="content-header">
+		<h1>Consulta Lotes Foto-Multa</h1>
+		<ol class="breadcrumb">
+			<li><a><i class="fa fa-book"></i> Foto-Multa</a></li>
+			<li class="active">Consulta Lotes</li>
+		</ol>
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<form role="form" name="form" novalidate>
+			<div class="row centerCol">
+				<div class="col-xs-12 col-sm-7">
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Búsqueda</h3>
+						</div>
+						<div class="box-body">
+							<div class="row">
+								<div class="col-xs-4 col-md-5">
+									<label>
+						      			Filtrar por:
+								    </label>
+								</div>
+								<div class="col-xs-8 col-md-7">
+									<label class="radio-inline">
+						      			<input type="radio" name="optradio" value="1" ng-change="changeFilter()"
+						      				ng-model="parametroBusqueda.tipoBusqueda">Todos
+								    </label>
+								   	
+<!-- 								   	<label class="radio-inline"></label> -->
+								    
+								    <label class="radio-inline pull-right">
+							      		<input type="radio" name="optradio" value="2" ng-change="changeFilter()" 
+							      			ng-model="parametroBusqueda.tipoBusqueda">Avanzada
+								    </label>
+								</div>
+							</div><br>
+			
+							<div class="row" ng-if="viewFilters">
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="radar">Tipo Radar:</label>
+										<div class="input-group date">
+											<div class="input-group-addon">
+												<i class="fa fa-tachometer"></i>
+											</div>
+											<select class="form-control select2" name="radar" id="radar"
+												ng-model="parametroBusqueda.tipoRadar" ng-options='option.tipoRadarId as option.nombre for option in filterRadares'>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="fechaConsulta">Tipo Fecha:</label>
+										<div class="input-group date">
+											<div class="input-group-addon">
+												<i class="fa fa-calendar-check-o"></i>
+											</div>
+											<select class="form-control select2" name="fechaConsulta" id="fechaConsulta"
+												ng-model="parametroBusqueda.tipoFecha" ng-options='option.codigo as option.descripcion for option in filterTiposFecha'>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="Eprocesados">Estatus Proceso:</label>
+										<div class="input-group date">
+											<div class="input-group-addon">
+												<i class="fa fa-cog"></i>
+											</div>
+											<select class="form-control select2" name="Eprocesados" id="Eprocesados"
+												ng-model="parametroBusqueda.estatusproceso" ng-options='option.codigo as option.descripcion for option in filterEstatusProceso'>
+											</select>
+										</div>
+									</div>
+								</div>
+	
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="fInicio">Fecha Inicio:</label>
+										<div class="input-group date">
+											<div class="input-group-addon">
+												<i class="fa fa-calendar"></i>
+											</div>
+											<input type="text" readonly id="fInicio" calendar-element="initial" cfinal="fFin" class="form-control pull-right inputFecha" name="fInicio" ng-model="parametroBusqueda.startDate"  autocomplete="off">
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="fFin">Fecha Fin:</label>
+										<div class="input-group date">
+											<div class="input-group-addon">
+												<i class="fa fa-calendar"></i>
+											</div>
+											<input type="text" readonly id="fFin" calendar-element="final" cinicial="fInicio" class="form-control pull-right inputFecha" name="fFin" ng-model="parametroBusqueda.endDate"  autocomplete="off">
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="fFin">Tipo de Placa:</label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-car"></i>
+											</div>
+											<select class="form-control select2" name="origenplaca" id="origenplaca"
+												ng-model="parametroBusqueda.origenPlaca" ng-options='option.codigo as option.descripcion for option in filterOrigenPlaca'>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<br>
+							
+							<div class="row">
+								<div class="col-md-12 text-center">
+									<button class="btn btn-danger" ng-click="consultaLotes()">Buscar</button>	
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+
+			<div class="row" ng-if="viewInformation">
+				<div class="col-xs-12">
+					<div class="box box-danger">
+						<div class="box-header row">
+							<div class="col-md-6 col-xs-12">
+								<h3 class="box-title">Registros Encontrados: {{ (results | filter:view.searchSomething).length }}</h3>
+							</div>
+							
+							<div class="col-md-offset-3 col-md-3 col-xs-10">
+								<div class="input-group">
+									<input id="searchsomething" type="text" class="form-control" placeholder="Buscar por filtro" ng-model="view.searchSomething">
+									<span class="input-group-addon"><i class="fa fa-search"></i></span>
+								</div>
+							</div>
+						</div>
+						<div class="box-body table-responsive no-padding">
+							<div style="display: block; overflow: auto;">
+								<table id="tabla_informacion" class="table table-striped table-hover">
+									<thead>
+										<tr>
+											<th sort order="'loteId'" by="order" reverse="reverse" class="text-center">ID</th>
+			                                <th sort order="'nombre'" by="order" reverse="reverse" class="text-center">NOMBRE</th>
+			                                <th sort order="'nombreArchivoTipo'" by="order" reverse="reverse" class="text-center">TIPO ARCHIVO</th>
+			                                <th sort order="'nombreTipoRadar'" by="order" reverse="reverse" class="text-center">RADAR</th>
+			                                <th sort order="'fechaComplementadoOrder'" by="order" reverse="reverse" class="center wrap-text">COMPLEMENTACIÓN</th> 
+			                                <th sort order="'fechaEmisionOrder'" by="order" reverse="reverse" class="text-center">EMISIÓN</th>
+			                                <th sort order="'fechaImposicionOrder'" by="order" reverse="reverse" class="text-center">IMPOSICIÓN</th>
+			                                <th sort order="'diaLiberacion'" by="order" reverse="reverse" class="text-center">LIBERACIÓN</th>
+			                                <th sort order="'cantidadProcesados'" by="order" reverse="reverse" class="text-center">REGISTROS PROCESADOS</th>
+			                                <th sort order="'estatusProcesoId'" by="order" reverse="reverse" class="text-center">PROCESO</th>
+			                                <th  class="text-center">PERIODO DETECCIONES</th>
+			                                <th  class="text-center">RANGO DE FOLIOS</th>
+			                                <th ng-show="perfilValid" sort order="'enProcesoWsLiberacion'" by="order" reverse="reverse" class="text-center">NOTIFICAR LIBERACIÓN</th>
+			                                <th ng-show="perfilValid" sort order="'enProcesoWsAsignacion'" by="order" reverse="reverse" class="wrap-text">NOTIFICAR COMPLEMENTACIÓN</th>
+			                                <th ng-show="perfilValid" sort order="'fechaEnviadoCROrder'" by="order" reverse="reverse" class="text-center">FECHA ENVIO CR</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-if="(results | filter:view.searchSomething).length < 1"><td colspan="{{view.colspan}}" class="text-center"><h4>No se encontraron coincidencias</h4></td></tr>
+										<tr dir-paginate="result in results | orderBy:order:reverse | filter:view.searchSomething | itemsPerPage: view.rowsPerPage" ng-init="stopUpdate(result.loteId)">
+											<td class="text-center">{{result.loteId}}</td>
+											<td class="center wrap-text">{{result.nombre}}</td>
+											<td class="text-center">{{result.nombreArchivoTipo == 'FOTO-MULTA FORANEA' ? 'Foráneo' : 'CDMX'}}</td>
+											<td class="text-center">{{result.nombreTipoRadar}}</td>
+											<td class="text-center">{{result.fechaComplementado}}</td>
+											<td class="text-center">{{result.fechaEmision}}</td>
+											<td class="text-center">{{result.fechaImposicion}}</td>
+											
+											<!-- Inicia Mensaje Liberacion -->
+											<td ng-if="result.estatusProcesoId != 33 && validValues(result.fechaLiberacion, 0, 1)" class="text-center">
+												<span ng-if="result.fechaLiberacion != ' '">{{result.fechaLiberacion}}</span>
+											
+												<span ng-if="result.fechaLiberacion == ' ' && (result.diaLiberacion != 'NA' && result.diaLiberacion == 0)" class="label label-success center-block">Día de Liberación</span>
+												
+												<span ng-if="result.fechaLiberacion == ' ' && (result.diaLiberacion != 'NA' && result.diaLiberacion < 0 && result.diaLiberacion == -1)" class="label label-danger center-block">
+													{{result.diaLiberacion}} día
+												</span>
+												
+												<span ng-if="result.fechaLiberacion == ' ' && (result.diaLiberacion != 'NA' && result.diaLiberacion < 0 &&  -1 > result.diaLiberacion)" class="label label-danger center-block">
+													{{result.diaLiberacion}} días
+												</span>
+												
+												<span ng-if="result.fechaLiberacion == ' ' && (result.diaLiberacion != 'NA' && result.diaLiberacion > 0 && result.diaLiberacion < 8 && result.diaLiberacion == 1)" class="label label-warning center-block">
+													{{result.diaLiberacion}} día
+												</span>
+												
+												<span ng-if="result.fechaLiberacion == ' ' && (result.diaLiberacion != 'NA' && result.diaLiberacion > 0 && result.diaLiberacion < 8 && result.diaLiberacion > 1)" class="label label-warning center-block">
+													{{result.diaLiberacion}} días
+												</span>
+												
+												<span ng-if="result.fechaLiberacion == ' ' && (result.diaLiberacion != 'NA' && result.diaLiberacion > 0 && result.diaLiberacion > 7)" class="center-block">
+													{{result.diaLiberacion}} días
+												</span>
+											</td>
+											<td ng-if="result.estatusProcesoId == 33"></td>
+											<!-- Termina Mensaje Liberacion -->
+											
+											<!-- Inicia Procesados -->
+											<td class="text-center">
+												<span class="badge center-block">{{result.cantidadProcesados | number:0}}</span>
+											</td>
+											<!-- Termina Procesados -->
+											
+											<!-- Inicia Botón Mensaje -->
+											<td class="text-center">
+												<span ng-if="result.estatusProcesoId == 1">
+													<a ng-click="realizarComplementacion(result.loteId, result.complementado, result.nombre)" class="img-rounded" title="Complementar Archivo"> 
+														<span><img width="25px" height="25px" src="static/dist/img/complementar_archivo.png"></span>
+													</a>
+													<a ng-click="cancelarArchivoComplementado(result.loteId)" class="img-rounded" title="Cancelar Archivo"> 
+														<span><img width="25px" height="25px" src="static/dist/img/cancelar_archivo.png"></span>
+													</a>
+												</span>
+												
+												<span ng-if="result.estatusProcesoId > 1 && result.estatusProcesoId < 29">
+													<span class='label label-info'>En Complementación</span>
+													<a ng-click="cancelarArchivoComplementado(result.loteId)" class="img-rounded" title="Cancelar Archivo"> 
+														<span><img width="25px" height="25px" src="static/dist/img/cancelar_archivo.png"></span>
+													</a>
+												</span>
+												
+												<span ng-if="result.estatusProcesoId == 29 && result.diaLiberacion <= 0">
+													<a ng-click="liberarArchivo(result.loteId)" class="img-rounded" title="Liberar Archivo"> 
+														<span><img width="25px" height="25px" src="static/dist/img/liberar_archivo.png"></span>
+													</a>
+													<a ng-click="cancelarArchivoComplementado(result.loteId)" class="img-rounded" title="Cancelar Archivo"> 
+														<span><img width="25px" height="25px" src="static/dist/img/cancelar_archivo.png"></span>
+													</a>
+												</span>
+												
+												<span ng-if="result.estatusProcesoId == 29 && result.diaLiberacion > 0">
+													<a ng-click="cancelarArchivoComplementado(result.loteId)" class="img-rounded" title="Cancelar Archivo"> 
+														<span><img width="25px" height="25px" src="static/dist/img/cancelar_archivo.png"></span>
+													</a>
+												</span>
+												
+												<span>
+													<span ng-if="result.estatusProcesoId == 30 || result.estatusProcesoId == 31" class='label label-warning center-block'>En Liberación</span>
+												
+													<span ng-if="result.estatusProcesoId == 32" class='label label-primary'>
+														Liberado
+													</span>
+												
+													<span ng-if="result.estatusProcesoId == 33" class='label label-danger'>Cancelado</span>
+													
+													<a ng-if="result.estatusProcesoId > 26 && result.estatusProcesoId < 33 && result.estatusProcesoId != 30 && result.estatusProcesoId != 31 && result.cantidadProcesados > 0"
+													class="img-rounded" title="Descarga Detecciones Aceptadas" ng-click="generaDescargaArchivoZIP(result.loteId, 1, result.archivoComplementadas)"> 
+														<span><img width="25px" height="25px" src="static/dist/img/descarga_correctas.png"></span>
+													</a>
+													<a ng-if="result.estatusProcesoId > 26 && result.estatusProcesoId < 33 && result.estatusProcesoId != 30 && result.estatusProcesoId != 31 && result.cantidadCancelados > 0
+													 "
+													class="img-rounded" title="Descarga Detecciones Rechazadas" ng-click="generaDescargaArchivoZIP(result.loteId, 2, result.archivoRechazadas)"> 
+														<span><img width="25px" height="25px" src="static/dist/img/descarga_incorrectas.png"></span>
+													</a>
+												</span>
+											</td>
+											<!-- Termina Botón Mensaje -->
+											
+											<!-- Periodo Detecciones -->
+											<td class="text-center">
+												<span>{{foliosRango(result.infracNumInicial, result.infracNumFinal, result.fechaProcInicial, result.fechaProcFinal, result.estatusProcesoId)}}</span>
+											</td>
+											<!-- Termina Periodo Detecciones -->
+											
+											<!-- Inicia Rango Folios -->
+											<td class="text-left">
+<!-- 												<span>{{foliosRango(result.infracNumInicial, result.infracNumFinal, result.fechaProcInicial, result.fechaProcFinal, result.estatusProcesoId)}}</span> -->
+													<span ng-if="result.infracNumInicial!=null && result.infracNumFinal != null">{{result.infracNumInicial}} - {{result.infracNumFinal}}</span>
+											</td>
+											<!-- Termina Rango Folios -->
+											
+											<!-- Inicia Notificacion Liberacion -->
+											<td ng-if="perfilValid" class="text-center">
+												<span ng-if="result.enProcesoWsLiberacion != 1 && result.estatusWsLiberacion == 0">
+													<img border='0' src='static/dist/img/correcto.png' width='20px' height='20px' class="center-block"/>
+												</span>
+												
+												<span ng-if="result.enProcesoWsLiberacion != 1 && validValues(result.estatusWsLiberacion,0,1)">
+													<!-- <img border='0' src='static/dist/img/incorrecto.png' width='20px' height='20px'/> -->
+													<button class="btn btn-danger" ng-click="notificarLiberacionArchivo(result.loteId)">Notificar</button>
+												</span>
+												
+												<span ng-if="result.enProcesoWsLiberacion == 1">Notificando Lote</span>
+											</td>
+											<!-- Termina Notificacion Liberacion -->
+											
+											<!-- Inicia Notificacion Complementacion -->
+											<td ng-if="perfilValid" class="text-center">
+												<span ng-if="result.enProcesoWsAsignacion != 1 && result.estatusWsAsignacion == 0">
+													<img border='0' src='static/dist/img/correcto.png' width='20px' height='20px' class="center-block"/>
+												</span>
+												
+												<span ng-if="result.enProcesoWsAsignacion != 1 && validValues(result.estatusWsAsignacion,0,1)">
+													<!-- <img border='0' src='static/dist/img/incorrecto.png' width='20px' height='20px'/> -->
+													<button class="btn btn-danger" ng-click="notificarAsignacionArchivo(result.loteId, result.nombre)">Notificar</button>
+												</span>
+												
+												<span ng-if="result.enProcesoWsAsignacion == 1">Notificando Lote</span>
+											</td>
+											<!-- Inicia Notificacion Complementacion -->
+											
+											<!-- Inicia Fecha Envio CR -->
+											<td ng-if="perfilValid" class="text-center">
+												<span>{{result.fechaEnviadoCR}}</span>
+											</td>
+											<!-- Termina Fecha Envio CR -->									
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						
+						<div class="container-fluid paginationFixed">
+							<div class="fixed-table-pagination" style="display:block;">
+								<rows-per-page rows="view.rowsPerPage" filtro="view.searchSomething" array="results"></rows-per-page>
+								
+								<div class="pull-right pagination">
+									<dir-pagination-controls class="pagination"></dir-pagination-controls>
+								</div>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+			</div>		
+		</form>
+	</section>
+	
+	<script type="text/javascript" ng-if="viewFilters">
+		$(function () {
+// 		    $("#fInicio").datepicker({             
+// 				format: 'dd/mm/yyyy',
+// 				//language: 'es',
+// 				todayHighlight : true,
+// 				autoclose : true
+// 			}).on('changeDate', function (selected) {
+// 	        	var minDate = new Date(selected.date.valueOf());
+// 	        	$('#fFin').datepicker('setStartDate', minDate);
+// 	    	});
+			
+// 			$("#fFin").datepicker({             
+// 				format: 'dd/mm/yyyy',
+// 				//language: 'es',
+// 				todayHighlight : true,
+// 				autoclose : true
+// 			}).on('changeDate', function (selected) {
+// 	        	var maxDate = new Date(selected.date.valueOf());
+// 	        	$('#fInicio').datepicker('setEndDate', maxDate);
+// 	    	});
+		});
+    </script>  
+<body>
+</html>

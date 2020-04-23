@@ -1,0 +1,209 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+ <style type="text/css">
+
+ #div1 {
+     overflow-x:auto;
+     overflow-y:auto;
+   }
+ #div1 table {
+     width:2300px; 
+  
+}
+</style>
+
+	</head>
+	<body>
+		<div ng-controller="infraccionesGralController">
+		 <form role="form" name="form" novalidate>
+				<div class="box box-danger">
+					<div class="row centerBox">
+						<div class="col-md-7">
+						     <div class="box-header with-border text-center">
+								<h3 class="box-title">Infracciones Generales</h3>
+							 </div>
+							<fieldset>
+								<legend class="legendStyle">
+									<a data-toggle="collapse" data-target="#divBusqueda" href="" style="color: black">Parámetros de Búsqueda</a>
+								</legend>
+							
+							<div class="row">	
+						       <div class="col-md-6">
+										<div class="form-group" ng-class="{'has-error': form.fechaInicio.$invalid && form.fechaInicio.$dirty}">
+											<label for="fechaInicio">*Fecha Inicio:</label>
+											<div class="input-group">
+												<div class="input-group-addon">
+													<i class="fa fa-calendar"></i>
+												</div>
+												<input 
+													class="form-control inputFecha" id="fechaInicio" name="fechaInicio" readonly 
+													date-picker idioma-dp="{{currentLanguage}}" 
+													ng-model="parametroBusqueda.fechaInicio" 
+                                                    elemento="'fechaFin'" 
+													mindate="parametroBusqueda.fechaInicio" ng-required="true"
+													/>
+											</div>
+											<span ng-if="form.fechaInicio.$invalid && form.fechaInicio.$dirty" ng-style="{color:'red'}">
+												La fecha es requerida
+											</span>
+										</div>
+									</div>
+									
+									<div class="col-md-6">
+										<div class="form-group" ng-class="{'has-error': form.fechaFin.$invalid && form.fechaFin.$dirty}">
+											<label for="fechaFin">*Fecha FIn:</label>
+											<div class="input-group">
+												<div class="input-group-addon">
+													<i class="fa fa-calendar"></i>
+												</div>
+												<input 
+													class="form-control inputFecha" id="fechaFin" name="fechaFin" readonly 
+													date-picker idioma-dp="{{currentLanguage}}" 
+													ng-model="parametroBusqueda.fechaFin" elemento="'fechaInicio'"
+                                                    maxdate="parametroBusqueda.fechaFin" ng-required="true"
+													/>
+											</div>
+											<span ng-if="form.fechaFin.$invalid && form.fechaFin.$dirty" ng-style="{color:'red'}">
+												La fecha es requerida
+											</span>
+										</div>
+									</div>	
+								
+							
+							   <div class="col-md-12 text-center">
+								  <button class="btn btn-danger" ng-click="consultaInfraccionesGral(parametroBusqueda.fechaInicio,
+								                                                                    parametroBusqueda.fechaFin)">Buscar</button>
+						       </div>		
+						
+							</div>		
+						   </fieldset>
+						</div>
+					</div>
+				</div>
+				
+				<!-- Tabla para mostrar los campos resultados de la consulta  -->
+				
+					<div class="col-xs-12" ng-if="ResultadoConsulta.length>0">
+						<div class="box box-danger">
+							<div class="box-header with-border">
+								<div class="row">
+									<div class="col-md-6 col-xs-12">
+										<h3 class="box-title">Registros Encontrados: {{(ResultadoConsulta| filter:view.searchSomething).length }}</h3>
+	
+									</div>
+									<div class="col-md-6 form-group">
+										<div class="row">
+											<div class="col-md-offset-4 col-md-7 col-xs-8">
+												<div class="input-group">
+													<input id="searchsomething" type="text" class="form-control"
+														placeholder="Buscar por filtro"
+														ng-model="view.searchSomething"> 
+														<span class="input-group-addon">
+														    <i class="fa fa-search"></i>
+													   </span>
+												</div>
+											</div>
+											<div class="col-md-1 col-xs-1">
+												<a ng-click="descargaExcel()" title="Descargar Reporte">
+													<span class="pull-right ">
+													   <img	src="static/dist/img/excel.png" class="img-rounded" width="30px">
+												   </span>
+												</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<div align="center" ><strong><FONT COLOR="navy">{{mensaje}}</FONT></strong></div>
+							<div class="box-body">
+								<div class="row">
+									<div class="col-md-12">
+										<div class="table-responsive" id="div1">
+											<table class="table table-striped table-hover">
+												<thead>
+													<tr>
+														<th sort order="'infrac_FECHA_CORTA'" by="order" reverse="reverse">FECHA</th>
+														<th class="center wrap-text  " sort order="'infrac_SECTOR'" by="order" reverse="reverse">SECTOR</th>
+														<th class="center wrap-text  " sort order="'oficial_PLACA'" by="order" reverse="reverse">PLACA DEL OFICIAL</th>
+														<th class="center wrap-text  " sort order="'oficial_NOMBRE'" by="order" reverse="reverse">NOMBRE DEL OFICIAL</th>
+														<th class="center wrap-text  " sort order="'infraccion'" by="order" reverse="reverse">INFRACCIÓN</th>
+														<th class="center wrap-text  " sort order="'impresa'" by="order" reverse="reverse">FOLIO PREIMPRESA</th>
+														<th class="center wrap-text  " sort order="'vehiculo_PLACA'" by="order" reverse="reverse">PLACA DE VEHÍCULO</th>
+														<th class="center wrap-text  " sort order="'placa_EXPEDIDA'" by="order" reverse="reverse">PLACA EXPEDIDA EN</th>
+														<th class="center wrap-text  " sort order="'licencia_TIPO'" by="order" reverse="reverse">TIPO DE LICENCIA</th>
+			                                            <th class="center wrap-text  " sort order="'infractor_LICENCIA'" by="order" reverse="reverse">LICENCIA</th>
+														<th class="center wrap-text  " sort order="'tarjeta_CIRCULACION'" by="order" reverse="reverse">TARJETA DE CIRCULACIÓN</th>
+														<th class="center wrap-text  " sort order="'infrac_FECHA'" by="order" reverse="reverse">DÍA/HORA INFRACCIÓN</th>
+													    <th class="center wrap-text  " sort order="'infrac_ARTICULO'" by="order" reverse="reverse">ARTÍCULO</th>
+													    <th class="center wrap-text  " sort order="'infrac_FRACCION'" by="order" reverse="reverse">FRACCIÓN</th>
+			                                            <th class="center wrap-text  " sort order="'infrac_PARRAFO'" by="order" reverse="reverse">PÁRRAFO</th>
+			                                            <th class="center wrap-text  " sort order="'infrac_INCISO'" by="order" reverse="reverse">INCISO</th>
+			                                            <th class="center wrap-text  " sort order="'vehiculo_MARCA'" by="order" reverse="reverse">MARCA DE VEHÍCULO</th>
+			                                            <th class="center wrap-text  " sort order="'vehiculo_MODELO'" by="order" reverse="reverse">MODELO DE VEHÍCULO</th>
+			                                            <th class="center wrap-text  " sort order="'vehiculo_COLOR'" by="order" reverse="reverse">COLOR DE VEHÍCULO</th>
+			                                            <th class="center wrap-text  " sort order="'vehiculo_TIPO'" by="order" reverse="reverse">TIPO DE VEHÍCULO</th>
+			                                            <th class="center wrap-text  " sort order="'infrac_CALLE'" by="order" reverse="reverse">CALLE</th>
+			                                            <th class="center wrap-text  " sort order="'infrac_ENTRE_CALLE'" by="order" reverse="reverse">ENTRE CALLE</th>
+			                                            <th class="center wrap-text  " sort order="'infrac_Y_CALLE'" by="order" reverse="reverse">Y CALLE</th>
+			                                            <th class="center wrap-text  " sort order="'infrac_COLONIA'" by="order" reverse="reverse">COLONIA</th>
+			                                            <th class="center wrap-text  " sort order="'infrac_DELEGACION'" by="order" reverse="reverse">DELEGACIÓN</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr
+														ng-if="(ResultadoConsulta | filter:view.searchSomething).length < 1">
+														<td colspan="9" class="text-center">
+														    <label>No se encontraron coincidencias </label>
+														</td>
+													</tr>
+													<tr dir-paginate="datos in ResultadoConsulta | orderBy:order:reverse | filter:view.searchSomething | itemsPerPage: view.rowsPerPage">
+														<td   class="center wrap-text ">{{datos.infrac_FECHA_CORTA}}</td>
+														<td   class="center wrap-text ">{{datos.infrac_SECTOR}}</td>
+														<td   class="center wrap-text ">{{datos.oficial_PLACA}}</td>
+														<td   class="center wrap-text ">{{datos.oficial_NOMBRE}}</td>
+														<td   class="center wrap-text ">{{datos.infraccion}}</td>
+														<td   class="center wrap-text " >{{datos.impresa}}</td>
+														<td   class="center wrap-text ">{{datos.vehiculo_PLACA}}</td>
+														<td   class="center wrap-text ">{{datos.placa_EXPEDIDA}}</td>
+														<td   class="center wrap-text ">{{datos.licencia_TIPO}}</td>
+														<td   class="center wrap-text ">{{infractor_LICENCIA}}</td>
+														<td   class="center wrap-text ">{{datos.tarjeta_CIRCULACION}}</td>
+														<td   class="center wrap-text ">{{datos.infrac_FECHA}}</td>
+														<td   class="center wrap-text ">{{datos.infrac_ARTICULO}}</td>
+														<td   class="center wrap-text ">{{datos.infrac_FRACCION}}</td>
+														<td   class="center wrap-text ">{{datos.infrac_PARRAFO}}</td>
+														<td   class="center wrap-text ">{{datos.infrac_INCISO}}</td>
+														<td   class="center wrap-text ">{{datos.vehiculo_MARCA}}</td>
+														<td   class="center wrap-text ">{{datos.vehiculo_MODELO}}</td>
+														<td   class="center wrap-text ">{{datos.vehiculo_COLOR}}</td>
+														<td   class="center wrap-text ">{{datos.vehiculo_TIPO}}</td>
+														<td   class="center wrap-text ">{{datos.infrac_CALLE}}</td>
+														<td   class="center wrap-text ">{{datos.infrac_entre__CALLE}}</td>
+														<td   class="center wrap-text ">{{datos.infrac_Y_CALLE}}</td>
+														<td   class="center wrap-text ">{{datos.infrac_COLONIA}}</td>
+														<td   class="center wrap-text ">{{datos.infrac_DELEGACION}}</td>
+										         	</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="container-fluid">
+								<div class="fixed-table-pagination" style="display: block;">
+									<rows-per-page rows="view.rowsPerPage" filtro="view.searchSomething" array="ResultadoConsulta"></rows-per-page>
+									<div class="pull-right pagination">
+										<dir-pagination-controls class="pagination"></dir-pagination-controls>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div><!-- fin tabla de resultados -->
+	
+		  </form>
+		</div>
+	</body>
+</html>

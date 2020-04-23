@@ -1,0 +1,1101 @@
+<html>
+
+<head>
+<meta charset="utf-8">
+<title>Atención Ciudadana</title>
+</head>
+
+<body>
+	<section class="content-header">
+		<h1>Atención Ciudadana</h1>
+		<ol class="breadcrumb">
+			<li><a><i class="fa fa-book"></i>Atención Ciudadana</a></li>
+			<li class="active">Alta</li>
+		</ol>
+	</section>
+
+	
+	<section class="content">
+		<form id="form1" role="form" name="altaTramite">
+			<div class="row">
+				<section class="col-lg-12 connectedSortable">
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Datos Generales</h3>
+							<div class="box-tools col-md-1 pull-right">
+								<button type="button" class="btn btn-box-tool btn-danger" ng-click="refrescarpag()" style="font-size: 1.1rem;"
+									data-toggle="tooltip" data-placement="left" title="Recargar">
+									<i class="fa fa-refresh" ></i>
+								</button>
+							</div>
+						</div>
+						<div class="box-body">
+							<div class="form-group">
+	                                <div class="row">
+									<div class="col-sm-4">
+									<div class="form-group" 
+									ng-class="{'has-error': altaTramite.DGFecha.$invalid && altaTramite.DGFecha.$dirty}">
+                                     <label for="example1" ng-if="listaCamposRequeridos.fhAlta">*Fecha de Trámite:</label>
+                                     <label for="example1" ng-if="!listaCamposRequeridos.fhAlta">Fecha de Trámite:</label>
+										<div class="input-group date" datetimepicker
+											options="dateTimePickerOptions" ng-required="listaCamposRequeridos.fhAlta"
+											name="DGFecha" ng-model="DG.fecha"  show-button-bar="true">
+											<div class="input-group-addon">
+												<i class="fa fa-calendar"></i>
+											</div>
+											<input type="text"
+												class="form-control inputFecha input-append"
+												name="txtDGFecha" readonly >
+										</div>
+										<div 
+										ng-show="altaTramite.DGFecha.$error.required && altaTramite.DGFecha.$dirty"
+											ng-style="{color:'red'}">La fecha del trámite es
+											requerida</div>
+									</div>
+								</div>
+								
+									<div class="col-md-4">
+										<div class="form-group">
+											<label for="tipoTramite">Folio de Trámite:</label>
+											<div class="input-group">
+												<div class="input-group-addon">
+													<i class="fa fa-list-alt"></i>
+												</div>
+												<input type="text" class="form-control" capitalize
+													disabled="true" id="folioTramite" ng-model="folioTramite"
+													ng-value="folioTramite">
+											</div>
+										</div>
+									</div>
+								
+							<div class="col-md-4">
+									<div class="form-group"
+										ng-class="{'has-error': altaTramite.tipoTramite.$invalid && altaTramite.tipoTramite.$dirty}">
+										<label for="tipoTramite" ng-if="listaCamposRequeridos.idTipoTramite">*Tipo de Trámite:</label>
+										<label for="tipoTramite" ng-if="!listaCamposRequeridos.idTipoTramite">Tipo de Trámite:</label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-list-alt"></i>
+											</div>
+											<select class="form-control" select-picker multiple
+												ng-required="listaCamposRequeridos.idTipoTramite" name="tipoTramite" id="tipoTramite"
+												data-actions-box="true"
+												multiple="multiple" 
+												ng-change="changeTipoTramite()"
+												data-selected-text-format="count > 1" data-max-options="6"
+												ng-model="DG.tipoTramite"
+												ng-options="tt.idTramite as tt.nbTramite for tt in comboTipoTramite">
+											</select>
+
+										</div>
+										<span
+											ng-if="altaTramite.tipoTramite.$invalid && altaTramite.tipoTramite.$dirty"
+											ng-style="{color:'red'}"> El tipo de trámite es
+											requerido </span>
+									</div>
+								</div>
+                          
+                                 </div>
+                            <div class="row">
+							<div class="col-sm-4">
+									<div class="form-group"
+										ng-class="{'has-error': (altaTramite.DGEmpleado.$invalid && altaTramite.DGEmpleado.$dirty) || (DG.empleado.placaColor=='red') }">
+										<label>*Placa Oficial:</label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-shield"></i>
+											</div>
+											<input type="text" class="form-control" 
+												ng-model="DG.empleado.empPlaca" ng-required="true"
+												name="DGEmpleado" ng-change="typePlacaDeEmpleado()">
+												 <span class="input-group-btn">
+													<button type ="button" class="btn btn-danger btn-flat"
+														ng-click="buscarEmpleadoPorPlaca(DG.empleado.empPlaca)">Buscar
+													</button>
+												</span>
+										</div>
+										<div
+											ng-show="altaTramite.DGEmpleado.$error.required && altaTramite.DGEmpleado.$dirty"
+											ng-style="{color:'red'}">La placa oficial es requerida</div>
+										<div ng-show="DG.empleado.placaColor=='red'"
+											ng-style="{color:'red'}">Se requiere de una placa
+											válida</div>
+										<div ng-show="DG.empleado.placaColor=='green'">{{DG.empleado.empNombre+' '+DG.empleado.empApePaterno+' '+DG.empleado.empApeMaterno}}</div>
+									</div>
+								</div>
+
+
+
+
+
+								<div class="col-sm-4">
+									<div class="form-group" ng-class="{'has-error': altaTramite.medioSolicitud.$invalid && altaTramite.medioSolicitud.$dirty}">
+										<label for="medioSolicitud" ng-if="listaCamposRequeridos.medioSolicitud">*Origen de Solicitud:</label>
+										<label for="medioSolicitud" ng-if="!listaCamposRequeridos.medioSolicitud">Origen de Solicitud:</label>
+										<div class="input-group">
+											<span class="input-group-addon"><i class="fa fa-list-alt"></i></span>
+											<select class="form-control" 
+												ng-required="listaCamposRequeridos.medioSolicitud" name="medioSolicitud" id="medioSolicitud"
+												ng-model="DG.medioSolicitud"
+												ng-options="cs.idMedioSolicitud as cs.nbMedioSolicitud for cs in comboOrigenSolicitud">
+											</select>
+										</div>
+										<div
+											ng-show="altaTramite.medioSolicitud.$error.required && altaTramite.medioSolicitud.$dirty"
+											ng-style="{color:'red'}">El origen de solicitud es requerido</div>
+									</div>
+								</div>
+								
+								<div class="col-sm-4 center">
+								<label fo="checkTipoPersona">¿Solicitante?</label>
+									<div class="form-grouo">
+										<div class="row centerRow">
+											<switcher class="swTeclo pull-right"
+												id-check="checkTipoPersona"
+												true-label="Empresa"
+												true-value="true"
+												false-label="Ciudadano"
+												false-value="false"
+												ng-model="tipoPersona"
+												ng-change="changeTipoPersona()">
+											</switcher>
+										</div>
+									</div>
+								</div>
+							</div>
+							 <div class="row col-md-offset-1">
+							 	<span  ng-if="altaTramite.tipoTramite.$valid"><strong> Trámites Seleccionados:</strong> {{DG.nbTramite+""}} </span>
+							 </div>
+							
+						</div>
+						</div>
+					</div>
+				</section>
+				
+			<!-- SECCION DE DATOS DE CIUDADANO - -->
+			
+		<section class="col-lg-6 connectedSortable">
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title" ng-if="!tipoPersona">Datos del Ciudadano</h3>
+							<h3 class="box-title" ng-if="tipoPersona">Datos del Representante</h3>
+						</div>
+						<div class="box-body">
+							<div class="row">
+								<div class="col-sm-6">
+									<div class="form-group" ng-class="{'has-error': (altaTramite.DVApellidoP.$invalid && altaTramite.DVApellidoP.$dirty) }">
+										<label for="DCAPaterno" ng-if="!tipoPersona">*Apellido Paterno:</label>
+										<label for="DCAPaterno" ng-if="tipoPersona">Apellido Paterno:</label>
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-user-plus"></i></span> 
+												<input  type="text" ng-required="listaCamposRequeridos.nbCPaterno" class="form-control"  
+													 id="apellidoPaterno"
+												name="DVApellidoP" ng-model="DC.apellidoPaterno"
+												maxlength="30" ng-change="DC.apellidoPaterno=convertirNombresMayusYminus(DC.apellidoPaterno,true)" autofocus>
+										</div>
+											<div
+											ng-show="altaTramite.DVApellidoP.$error.required && altaTramite.DVApellidoP.$dirty"
+											ng-style="{color:'red'}">El apellido paterno es
+											requerido</div>
+									</div>
+								</div>
+								
+								<div class="col-sm-6">
+									<div class="form-group"
+										ng-class="{'has-error': (altaTramite.DVApellidoM.$invalid && altaTramite.DVApellidoM.$dirty) }">
+										<label for="DCAMatenro" ng-if="!tipoPersona">*Apellido Materno:</label>
+										<label for="DCAMatenro" ng-if="tipoPersona">Apellido Materno:</label>
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-user-plus"></i></span> 
+												<input type="text" ng-required="listaCamposRequeridos.nbMaterno" class="form-control "
+												 	id="apellidoMaterno" name="DVApellidoM"
+												ng-model="DC.apellidoMaterno" maxlength="30" ng-change="DC.apellidoMaterno=convertirNombresMayusYminus(DC.apellidoMaterno,true)">
+										</div>
+										<div
+											ng-show="altaTramite.DVApellidoM.$error.required && altaTramite.DVApellidoM.$dirty"
+											ng-style="{color:'red'}">El apellido materno es
+											requerido</div>
+									</div>
+								</div>
+								</div>
+								<div class="row">
+								<div class="col-sm-6">
+									<div class="form-group"
+										ng-class="{'has-error': (altaTramite.DVNombre.$invalid && altaTramite.DVNombre.$dirty) }">
+										<label for="DCNombre" ng-if="!tipoPersona">*Nombre:</label>
+										<label for="DCNombre" ng-if="tipoPersona">Nombre:</label>
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-user-plus"></i></span> 
+												<input type="text" ng-required="listaCamposRequeridos.nbCiudadano" class="form-control "
+												 id="DCNombre" ng-model="DC.nombre" name="DVNombre"
+												maxlength="30"  ng-change="DC.nombre=convertirNombresMayusYminus(DC.nombre,false)">
+										</div>
+											<div
+											ng-show="altaTramite.DVNombre.$error.required && altaTramite.DVNombre.$dirty"
+											ng-style="{color:'red'}">El nombre es requerido</div>
+									</div>
+								</div>
+                                
+                                <div class="col-sm-6">
+									<div class="form-group"
+										ng-class="{'has-error': (altaTramite.DVTelefono.$invalid && altaTramite.DVTelefono.$dirty) }">
+										<label for="DCTelefono" ng-if="listaCamposRequeridos.nuCTelefono">*Teléfono:</label>
+										<label for="DCTelefono" ng-if="!listaCamposRequeridos.nuCTelefono">Teléfono:</label>
+										<div class="input-group">
+											<span class="input-group-addon"><i class="fa fa-phone"></i></span>
+											<input type="text" class="form-control" id="tel" mask="(999) 999-9999"
+												ng-model="DC.numTelefono"  name="DVTelefono"
+												ng-required="listaCamposRequeridos.nuCTelefono">
+										</div>
+											<div
+											ng-show="altaTramite.DVTelefono.$error.required && altaTramite.DVTelefono.$dirty"
+											ng-style="{color:'red'}">El teléfono es requerido</div>
+											<div ng-show="altaTramite.DVTelefono.$error.mask"
+											ng-style="{color:'red'}">Formato incorrecto</div>
+									</div>
+								</div>
+							</div>
+								
+							<div class="row">
+								<div class="col-sm-6">
+									<div class="form-group"
+										ng-class="{'has-error': (altaTramite.empresa.$invalid && altaTramite.empresa.$dirty) }">
+										<label for="DCEmpresa" ng-if="tipoPersona">*Empresa:</label>
+										<label for="DCEmpresa" ng-if="!tipoPersona">Empresa:</label>
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-user-plus"></i></span> 
+												<input ng-required="listaCamposRequeridos.nbEmpresa" type="text"
+												class="form-control" capitalize  id="emp" ng-model="DC.emp"
+												name="empresa" maxlength="40" />
+										</div>
+										<div
+											ng-show="altaTramite.empresa.$error.required && altaTramite.empresa.$dirty"
+											ng-style="{color:'red'}">El nombre de la empresa es requerido</div>
+									</div>
+								</div>
+								
+								
+								<div class="col-sm-6">
+									<div class="form-group"
+										ng-class="{'has-error': (altaTramite.DVCorreo.$invalid && altaTramite.DVCorreo.$dirty) }">
+										<label for="DCCorreo" ng-if="listaCamposRequeridos.txCCorreo">*Correo:</label>
+										<label for="DCCorreo" ng-if="!listaCamposRequeridos.txCCorreo">Correo:</label>
+										<div class="input-group">
+											<span class="input-group-addon"><i class="fa fa-at"></i></span>
+											<input type="email" class="form-control text-lowercase" 
+											  id="mail" ng-model="DC.correo" maxlength="30"
+												name="DVCorreo" ng-required="listaCamposRequeridos.txCCorreo"  >
+										</div>
+										<div
+											ng-show="altaTramite.DVCorreo.$error.required && altaTramite.DVCorreo.$dirty"
+											ng-style="{color:'red'}">El correo es requerido</div>
+										<div ng-show="altaTramite.DVCorreo.$error.email"
+											ng-style="{color:'red'}">Formato incorrecto</div>
+									</div>
+								</div>
+							</div>
+							
+							<br/>
+							<h4 class="box-title">Dirección</h4>
+							<hr/>
+
+							<div class="row">
+								<div class="col-sm-6">
+									<div class="form-group"
+										ng-class="{'has-error': altaTramite.calle.$invalid && altaTramite.calle.$dirty}">
+										<label for="DCCalle" ng-if="listaCamposRequeridos.txCCalle">*Calle: </label>
+										<label for="DCCalle" ng-if="!listaCamposRequeridos.txCCalle">Calle: </label>
+										<div class="input-group">
+											<span class="input-group-addon"><i class="fa fa-long-arrow-up"></i></span>
+												<input type="text"ng-required="listaCamposRequeridos.txCCalle" class="form-control " 
+													capitalize id="DCcalle"
+													ng-model="DC.calle" maxlength="30"
+												    name="calle">
+										</div>
+									
+									<div
+											ng-show="altaTramite.calle.$error.required && altaTramite.calle.$dirty"
+											ng-style="{color:'red'}">La calle es requerida</div>
+								 </div>
+								</div>
+                                  
+                                  		
+								<div class="col-sm-6">
+									<div class="form-group"
+										ng-class="{'has-error': altaTramite.colonia.$invalid && altaTramite.colonia.$dirty}">
+										<label for="DCColonia" ng-if="listaCamposRequeridos.txCColonia">*Colonia:</label>
+										<label for="DCColonia" ng-if="!listaCamposRequeridos.txCColonia">Colonia:</label>
+										<div class="input-group">
+											<span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
+											<input type="text" class="form-control " capitalize   id="DCcolonia" name="colonia"
+												ng-required="listaCamposRequeridos.txCColonia" ng-model="DC.colonia" maxlength="30">
+										</div>
+										<div
+											ng-show="altaTramite.colonia.$error.required && altaTramite.colonia.$dirty"
+											ng-style="{color:'red'}">La colonia es requerida</div>
+									</div>
+									
+								</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-6">
+									<div class="form-group"
+										ng-class="{'has-error': altaTramite.noExt.$invalid && altaTramite.noExt.$dirty}">
+										<label for="DCNumExt" ng-if="listaCamposRequeridos.nuCExt">*No. Ext: </label>
+										<label for="DCNumExt" ng-if="!listaCamposRequeridos.nuCExt">No. Ext: </label>
+										<div class="input-group">
+											<span class="input-group-addon"><i class="fa fa-sort-numeric-asc"></i></span> 
+												<input type="text"
+													class="form-control " capitalize id="DCNumExt" name="noExt"
+													ng-model="DC.numeroExterior" maxlength="7"
+												ng-required="listaCamposRequeridos.nuCExt">
+										</div>
+											<div
+											ng-show="altaTramite.noExt.$error.required && altaTramite.noExt.$dirty"
+											ng-style="{color:'red'}">El número ext. es requerido</div>
+									</div>
+								</div>
+								
+								<div class="col-sm-6">
+									<div class="form-group"  ng-class="{'has-error': altaTramite.noInt.$invalid && altaTramite.noInt.$dirty}">
+										<label for="DCNumInt" ng-if="listaCamposRequeridos.nuCInt">*No. Int: </label>
+										<label for="DCNumInt" ng-if="!listaCamposRequeridos.nuCInt">No. Int: </label>
+										<div class="input-group">
+											<span class="input-group-addon"><i class="fa fa-sort-numeric-asc"></i></span>
+												<input type="text"
+													class="form-control" capitalize id="DCNumInt"
+													ng-model="DC.numeroInterior" maxlength="7"
+												ng-required="listaCamposRequeridos.nuCInt" name="noInt">
+										</div>
+										
+										<div
+											ng-show="altaTramite.noInt.$error.required && altaTramite.noInt.$dirty"
+											ng-style="{color:'red'}">El número int. es requerido</div>
+									</div>
+								</div>
+								</div>
+									<div class="row">
+								<div class="col-sm-6">
+									<div class="form-group"
+											ng-class="{'has-error': altaTramite.estado.$invalid && altaTramite.estado.$dirty}">
+										<label for="DCEstado" ng-if="listaCamposRequeridos.idCEDO">*Estado: </label>
+										<label for="DCEstado" ng-if="!listaCamposRequeridos.idCEDO">Estado: </label>
+										<div class="input-group">
+											<span class="input-group-addon"><i class="fa fa-map"></i></span>
+											
+											<select id="DCEstado" class="form-control"
+												ng-options="estado as estado.edoNombre for estado in DC.catalogoEstados | orderBy:'edoNombre'"
+												ng-model="DC.direccionEstado" ng-required="listaCamposRequeridos.idCEDO"
+												ng-change="actualizarDelegacionPorEstado()"  name="estado">
+												<option value="">Seleccione</option>
+											</select>
+										</div>
+								      <div
+											ng-show="altaTramite.estado.$error.required && altaTramite.estado.$dirty"
+											ng-style="{color:'red'}">El estado es requerido</div>
+									</div>
+								</div>
+								
+								<div class="col-sm-6">
+									<div class="form-group"
+											ng-class="{'has-error': altaTramite.DCMun.$invalid && altaTramite.DCMun.$dirty}">
+										<label for="DCDelegacion" ng-if="listaCamposRequeridos.idCDelegacion">*Alcaldía / Municipio:</label>
+										<label for="DCDelegacion" ng-if="!listaCamposRequeridos.idCDelegacion">Alcaldía / Municipio:</label>
+										<div class="input-group">
+											<span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
+												<select name="DCMun" id="DCDelegacion" ng-required="listaCamposRequeridos.idCDelegacion"
+													class="form-control" ng-model="DC.delegacion"  ng-disabled="!DC.direccionEstado"
+				                                  ng-options="del as del.delNombre for del in DC.catalogoDelegaciones | orderBy:'delNombre'">
+													<option value="">Seleccione</option>
+												</select>
+										</div>
+								       <div
+											ng-show="altaTramite.DCMun.$error.required && altaTramite.DCMun.$dirty"
+											ng-style="{color:'red'}">Alcaldía/Municipio requerido</div>
+									
+								
+									</div>		
+								</div>
+							</div>
+						</div>
+					</div>
+				</section> 
+				
+				
+					<section class="col-lg-6 connectedSortable">
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Datos del Vehículo</h3>
+						</div>
+
+
+						<div class="box-body">
+							<div class="row">
+								<div class="col-sm-6">
+									<div class="form-group"
+										ng-class="{'has-error': (altaTramite.DVPlaca.$invalid && altaTramite.DVPlaca.$dirty) }">
+										<label for="DVPlaca" ng-if="listaCamposRequeridos.cdCPlaca">*Placa Vehículo:</label>
+										<label for="DVPlaca" ng-if="!listaCamposRequeridos.cdCPlaca">Placa Vehículo:</label>
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-automobile"></i></span> <input type="text"
+												class="form-control "
+												capitalize id="DVPlaca" ng-model="DV.placa" ng-required="listaCamposRequeridos.cdCPlaca"
+											 name="DVPlaca" maxlength="9" />
+										</div>
+										<div
+											ng-show="altaTramite.DVPlaca.$error.required && altaTramite.DVPlaca.$dirty"
+											ng-style="{color:'red'}">La placa del vehículo es requerida</div>
+									</div>
+								</div>
+								
+								<div class="col-sm-6">
+									<div class="form-group"
+										ng-class="{'has-error': altaTramite.DVTipoVehiculo.$invalid && altaTramite.DVTipoVehiculo.$dirty }">
+										<label ng-if="listaCamposRequeridos.idTipoVehiculo">*Tipo:</label>
+										<label ng-if="!listaCamposRequeridos.idTipoVehiculo">Tipo:</label>
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-ellipsis-v "></i></span> <select class="form-control"
+												ng-options="tipoV as tipoV.vTipoNombre for tipoV in DV.catalogoTiposVehiculo | orderBy:'vTipoNombre'"
+												ng-model="DV.tipoVehiculo" name="DVTipoVehiculo"
+												ng-required="listaCamposRequeridos.idTipoVehiculo">
+												<option value="" selected="selected">Seleccione</option>
+											</select>
+										</div>
+
+										<div
+											ng-show="altaTramite.DVTipoVehiculo.$error.required && altaTramite.DVTipoVehiculo.$dirty"
+											ng-style="{color:'red'}">El tipo del vehículo es
+											requerido</div>
+
+									</div>
+								</div>
+								</div>
+								
+								<div class="row">
+								<div class="col-sm-6">
+								<div class="form-group" ng-class="{'has-error': altaTramite.vMarca.$invalid && altaTramite.vMarca.$dirty}">
+									<label ng-if="listaCamposRequeridos.idMarca">*Marca: </label>
+									<label ng-if="!listaCamposRequeridos.idMarca">Marca: </label>
+									<div class="input-group" >
+										<span class="input-group-addon"><i
+											class="fa fa-registered"></i></span> <select name="vMarca"
+											class="form-control"
+											ng-options="marca as marca.vMarNombre for marca in DV.catalogoVehiculosMarcas"
+											ng-model="DV.vehiculoMarca"
+											ng-change="actualizarVehiculosModeloPorMarca()" ng-required="listaCamposRequeridos.idMarca">
+											<option value="" selected="selected">Seleccione</option>
+										</select>
+									</div>
+									<div
+											ng-show="altaTramite.vMarca.$error.required && altaTramite.vMarca.$dirty"
+											ng-style="{color:'red'}">La marca es
+											requerida</div>
+
+								</div>
+								</div>
+								
+									<div class="col-sm-6">
+									<div class="form-group"
+										ng-class="{'has-error': altaTramite.DVMarcaOtro.$invalid && altaTramite.DVMarcaOtro.$dirty }">
+										<label for="DVMarcaOtro" ng-if="listaCamposRequeridos.nbMarcaOtro">*Marca Otro:</label>
+										<label for="DVMarcaOtro" ng-if="!listaCamposRequeridos.nbMarcaOtro">Marca Otro:</label>
+										<div class="input-group">
+											<span class="input-group-addon"><i class="fa fa-registered"></i></span>
+												<input type="text" ng-required="listaCamposRequeridos.nbMarcaOtro" ng-disabled="!listaCamposRequeridos.nbMarcaOtro"
+													class="form-control " capitalize id="DVMarcaOtro" ng-model="DV.MarcaOtro"
+													name="DVMarcaOtro" maxlength="30" />
+										</div>
+										<div ng-show="altaTramite.DVMarcaOtro.$error.required && altaTramite.DVMarcaOtro.$dirty"
+											ng-style="{color:'red'}">La marca del vehículo es requerida</div>
+									</div>
+								</div>
+								</div>
+								
+								<div class="row">
+								<div class="col-sm-6">
+								<div class="form-group" ng-class="{'has-error': altaTramite.vModelo.$invalid && altaTramite.vModelo.$dirty}">
+									<label  ng-if="listaCamposRequeridos.idModelo">*Modelo: </label>
+									<label  ng-if="!listaCamposRequeridos.idModelo">Modelo: </label>
+									<div class="input-group" >
+										<span class="input-group-addon"><i
+											class="fa fa-barcode"></i></span> <select name="vModelo"
+											class="form-control"  ng-disabled="!DV.vehiculoMarca"
+											ng-options="modelo as modelo.vModNombre for modelo in DV.catalogoVehiculosModelo"
+											ng-model="DV.vehiculoModelo" ng-required="listaCamposRequeridos.idModelo" ng-change = "changeModeloVehiculo(DV.vehiculoModelo)">
+											<option value="">Seleccione</option>
+										</select>
+									</div>
+								<div
+											ng-show="altaTramite.vModelo.$error.required && altaTramite.vModelo.$dirty"
+											ng-style="{color:'red'}">El modelo es
+											requerido</div>
+								</div>
+                              </div>
+                              
+                              		<div class="col-sm-6">
+									<div class="form-group"
+										ng-class="{'has-error': altaTramite.DVModeloOtro.$invalid && altaTramite.DVModeloOtro.$dirty }">
+										<label for="DVModeloOtro" ng-if="listaCamposRequeridos.nbModeloOtro">*Modelo Otro:</label>
+										<label for="DVModeloOtro" ng-if="!listaCamposRequeridos.nbModeloOtro">Modelo Otro:</label>
+										<div class="input-group">
+											<span class="input-group-addon"><i class="fa fa-registered"></i></span>
+												<input type="text" ng-required="listaCamposRequeridos.nbModeloOtro" ng-disabled="!listaCamposRequeridos.nbModeloOtro"
+													class="form-control " capitalize id="DVModeloOtro" ng-model="DV.ModeloOtro"
+													name="DVModeloOtro" maxlength="30" />
+										</div>
+										<div ng-show="altaTramite.DVModeloOtro.$error.required && altaTramite.DVModeloOtro.$dirty"
+											ng-style="{color:'red'}">El modelo del vehículo es requerida</div>
+									</div>
+								</div>
+								</div>
+								    
+								    <div class="row">
+									<div class="col-sm-6">
+									<div class="form-group" ng-class="{'has-error': altaTramite.vColor.$invalid && altaTramite.vColor.$dirty}">
+									<label ng-if="listaCamposRequeridos.idColor">*Color: </label>
+									<label ng-if="!listaCamposRequeridos.idColor">Color: </label>
+									<div class="input-group" >
+										<span class="input-group-addon"><i
+											class="fa fa-paint-brush"></i></span> <select name="vColor"
+											class="form-control"
+											ng-options="color as color.vColorNombre for color in DV.catalogoVehiculosColor"
+											ng-model="DV.vehiculoColor" ng-required="listaCamposRequeridos.idColor">
+											<option value="">Seleccione</option>
+										</select>
+									</div>
+                                   <div
+											ng-show="altaTramite.vColor.$error.required && altaTramite.vColor.$dirty"
+											ng-style="{color:'red'}">El color es
+											requerido</div>
+							
+								</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group" ng-class="{'has-error': altaTramite.DVcc.$invalid && altaTramite.DVcc.$dirty}">
+										<label for="DVcc" ng-if="listaCamposRequeridos.txCC">*Con Copia A:</label>			
+                                         <label for="DVcc" ng-if="!listaCamposRequeridos.txCC">Con Copia A:</label>
+
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-user-plus"></i></span> 
+												<input type="email" class="form-control text-lowercase" 
+													 id="DVcc" ng-model="DV.cc" maxlength="30"
+													rows="9" name="DVcc" ng-required="listaCamposRequeridos.txCC"
+													placeholder="C.C.">
+													<span class="input-group-btn">
+													<button type ="button" class="btn btn-danger btn-flat"
+														ng-click="validarcc()">Agregar
+													</button>
+												</span>
+											
+                                        </div>
+                                        <div
+											ng-show="altaTramite.DVcc.$error.required && altaTramite.DVcc.$dirty"
+											ng-style="{color:'red'}">La CC es requerida</div>
+											<div ng-show="altaTramite.DVcc.$error.email"
+											ng-style="{color:'red'}">Formato incorrecto</div>
+											
+									
+                                           	 <span class="col-md-offset-5" data-toggle="tooltip" data-placement="top"
+									data-html="true"
+									data-original-title="{{tituloSug}}
+         					{{descripcion}}
+         					<!--{{descripcion2}}-->
+         					{{formato}}
+         					{{tituloEjemplo}}
+         					{{ejemplo}}">
+									<i class="fa fa-question-circle"></i> Ayuda
+								</span>
+                                       	
+								</div>
+								</div>
+								</div>
+								
+	
+								
+                                <div class="row">
+							     <div class="col-sm-6">
+									<div class="form-group">
+										<label for="DVcc">Correos Agregados:</label>			
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-user-plus"></i></span> 
+												<div  class="divTextArea" >
+											    <div  ng-class="clasesCss" id="correos1" ng-click="borrarDiv($event)"> </div>
+								                <br id="br1">
+												</div>
+                                        </div>	
+									</div>
+								</div>	
+								
+						</div>
+						
+						
+						</div>
+				</section>
+				
+			<section class="col-lg-6 connectedSortable">
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Documentos</h3>
+						</div>
+						<div class="box-body">
+							<div class="row">
+								<div class="col-md-5">
+									<div class="row">
+										<div class="col-sm-12">
+											<div class="form-group"
+												ng-class="{'has-error': altaTramite.tipoDocumento.$invalid && altaTramite.tipoDocumento.$dirty}">
+											<label for="DTDocumento" ng-if="listaCamposRequeridos.idTipoDoc">*Documentos a Entregar:</label>
+											<label for="DTDocumento" ng-if="!listaCamposRequeridos.idTipoDoc">Documentos a Entregar:</label>
+												<div class="input-group">
+													<div class="input-group-addon">
+														<i class="fa fa-list-alt"></i>
+													</div>
+															<select class="form-control" select-picker multiple
+												ng-required="listaCamposRequeridos.idTipoDoc" name="tipoDocumento" id="tipoDocumento"
+												data-actions-box="true"
+											data-selected-text-format="count > 1" data-max-options="8"
+												ng-model="DD.tipoDocumento"  multiple="multiple"
+												ng-options="td.idDocumento as td.nbDocumento for td in comboTipoDocumento| orderBy:td.cdOrden"
+												ng-change="getVal()">
+
+											</select>
+												</div>
+												
+										<span
+											ng-if="altaTramite.tipoDocumento.$invalid && altaTramite.tipoDocumento.$dirty"
+											ng-style="{color:'red'}">Favor de indicár el/los documentos </span>
+											
+											</div>
+										</div>
+										
+
+										<div class="col-sm-12" >
+											<div class="form-group"
+												ng-class="{'has-error': altaTramite.DVDocOtro.$invalid && altaTramite.DVDocOtro.$dirty}">
+											   <label for="DTDocumentoOtro" ng-if="listaCamposRequeridos.nbDocOtro">*Documento Otro:</label>
+												<label for="DTDocumentoOtro" ng-if="!listaCamposRequeridos.nbDocOtro"">Documento Otro:</label>
+												<div class="input-group">
+													<span class="input-group-addon"><i class="fa fa-registered"></i></span>
+														<input type="text" ng-required="listaCamposRequeridos.nbDocOtro"" ng-disabled="!listaCamposRequeridos.nbDocOtro"
+															class="form-control " capitalize id="DVdotro" ng-model="DD.docOtro"
+															 name="DVDocOtro" maxlength="30"/>
+												</div>
+												<span
+												ng-if="altaTramite.DVDocOtro.$invalid && altaTramite.DVDocOtro.$dirty"
+												ng-style="{color:'red'}"> Es necesario ingresar el
+												nombre del documento a entregar</span>
+											</div>
+										</div>
+				               	</div>
+								</div>
+
+								<div class="col-sm-7">
+									<div class="form-group"
+										ng-class="{'has-error': altaTramite.hechos.$invalid && altaTramite.hechos.$dirty}">
+										<label for="DTHechos" ng-if="listaCamposRequeridos.txHechos">*Hechos (máximo 200 caracteres): </label>
+										<label for="DTHechos" ng-if="!listaCamposRequeridos.txHechos">Hechos (máximo 200 caracteres): </label>
+										<div class="input-group">
+											<span class="input-group-addon"><i class="fa fa-user-plus"></i></span>
+											<textarea type="text" class="form-control " 
+												 id="hechos" ng-model="DD.hechos" maxlength="199"
+												rows="11" name="hechos" ng-required="listaCamposRequeridos.txHechos"
+												placeholder="Descripción" style="resize: none;">
+											</textarea>
+										</div>
+										<span
+											ng-if="altaTramite.hechos.$invalid && altaTramite.hechos.$dirty"
+											ng-style="{color:'red'}"> Es necesario describir los
+											hechos </span>
+									</div>
+								</div>
+								
+									<!--  <div class="col-sm-4">
+									<div class="form-group">
+										<label for="DTMCambio">Motivo de Cambio: </label>
+										<div class="input-group">
+											<span class="input-group-addon"><i class="fa fa-user-plus"></i></span>
+											<textarea type="text" class="form-control " capitalize
+												capitalize id="hechos" ng-model="DTMCambio" maxlength="180"
+												rows="4" name="DTMCambio" id="DTMCambio" ng-required="false" disabled="true">
+											</textarea>
+										</div>
+									</div>
+								</div>-->
+								
+								
+							</div>
+							 <div class="row col-md-offset-1">
+							 <span ng-if="altaTramite.tipoDocumento.$valid"><strong> Documentos a Entregar:</strong> {{DD.nbDocumento+" "+DD.docOtro}} </span>
+							 </div>
+					
+							
+						</div>
+					</div>
+				</section>
+
+				
+				
+				<section class="col-lg-6 connectedSortable" >
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Cambio Tipo de Persona</h3>
+						</div>
+						<div class="box-body">
+							<div class="row">
+							  <div class="col-md-6">
+									<div class="col-sm-12">
+									<div class="form-group" ng-class="{'has-error': altaTramite.infracciones.$invalid && altaTramite.infracciones.$dirty}">
+										<label for="infracciones" ng-if="listaCamposRequeridos.folioInfrac">*Folio de Infracción:</label>			
+                                         <label for="infracciones" ng-if="!listaCamposRequeridos.folioInfrac">Folio de Infracción:</label>
+
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-user-plus"></i></span> 
+												<input type="input" class="form-control text-lowercase" ng-disabled="tipoPersonaFotocivicas"
+													 id="infracciones" ng-model="DV.listaInfracciones"  name="infracciones" maxlength="11">
+													<span class="input-group-btn">
+													<button type ="button" class="btn btn-danger btn-flat"
+														ng-click="validarFolios()" ng-disabled="tipoPersonaFotocivicas">Agregar
+													</button>
+												</span>
+											
+                                        </div>
+                                        <div
+											ng-show="errorLongitud"
+											ng-style="{color:'red'}">Longitud incorrecta (11 dígitos)</div>
+										<div
+											ng-show="errorTipoDeFolio"
+											ng-style="{color:'red'}">El folio de infracción no es Fotocívica</div>
+
+								</div>
+								</div>
+					
+						
+						     <div class="col-sm-12">
+									<div class="form-group">
+										<label for="infracAgregadas">Infracciones Agregadas:</label>			
+										<div style="overflow-y: scroll; min-height: 150px; height: 150px;">
+											<span class="input-group-addon"><i
+												class="fa fa-user-plus"></i></span> 
+												<div  class="divTextArea" >
+											    <div  ng-class="clasesCss2" id="infrac1" ng-click="borrarDivInfrac($event)"> </div>
+								                <br id="bi1">
+												</div>
+                                        </div>	
+									</div>
+								</div>
+									</div>	
+									
+									<div class="col-md-6">
+									<div class="row">
+									<div class="col-sm-12">
+									<div class="form-group" ng-class="{'has-error': altaTramite.origenPlaca.$invalid && altaTramite.origenPlaca.$dirty}">
+										<label for="origenPlaca" ng-if="listaCamposRequeridos.folioInfrac">*Nuevo Origen Placa: </label>
+										<label for="origenPlaca" ng-if="!listaCamposRequeridos.folioInfrac">Nuevo Origen Placa: </label>
+										 <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="radio">
+                                                    <label>
+                                                        <input type="radio" ng-model="DV.origenPlaca" value="1" ng-change="validarOrigenPlaca()" ng-required="listaCamposRequeridos.folioInfrac"
+                                                        ng-disabled="tipoPersonaFotocivicas" name='origenPlaca'> Foráneo
+                                                    </label>
+                                                </div>
+                                            </div>
+                                           
+                                            <div class="col-md-6">
+                                                <div class="radio">
+                                                    <label>
+                                                        <input type="radio" ng-model="DV.origenPlaca" value="0" ng-change="validarOrigenPlaca()" ng-disabled="tipoPersonaFotocivicas"
+                                                        ng-required="listaCamposRequeridos.folioInfrac" name='origenPlaca'> CDMX
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <span
+											ng-if="altaTramite.origenPlaca.$invalid && altaTramite.origenPlaca.$dirty"
+											ng-style="{color:'red'}"> Es necesario seleccionar el origen de la placa </span>
+									</div>
+								</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12">
+									<div class="form-group" ng-class="{'has-error': altaTramite.tipoPersona.$invalid && altaTramite.tipoPersona.$dirty}">
+										<label for="tipoPersona" ng-if="listaCamposRequeridos.folioInfrac">*Nuevo Tipo de Persona: </label>
+										<label for="tipoPersona" ng-if="!listaCamposRequeridos.folioInfrac">Nuevo Tipo de Persona: </label>
+										 <div class="row">
+                                            <div class="col-md-5">
+                                                <div class="radio">
+                                                    <label>
+                                                        <input type="radio" ng-model="DV.tipoPersona" value="1" ng-change="" ng-required="listaCamposRequeridos.folioInfrac"
+                                                        ng-disabled="bloquearDesconocido" name='tipoPersona'> Desconocido
+                                                    </label>
+                                                </div>
+                                            </div>
+                                           
+                                            <div class="col-md-3">
+                                                <div class="radio">
+                                                   <label>
+                                                        <input type="radio" ng-model="DV.tipoPersona" value="2" ng-change="" ng-required="listaCamposRequeridos.folioInfrac"
+                                                        ng-disabled="bloquearFisicaYMoral" name='tipoPersona'> Física
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            
+                                              <div class="col-md-3">
+                                                <div class="radio">
+                                                   <label>
+                                                        <input type="radio" ng-model="DV.tipoPersona" value="3" ng-change="" ng-required="listaCamposRequeridos.folioInfrac"
+                                                        ng-disabled="bloquearFisicaYMoral" name='tipoPersona'> Moral
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <span
+											ng-if="altaTramite.tipoPersona.$invalid && altaTramite.tipoPersona.$dirty"
+											ng-style="{color:'red'}"> Es necesario ingresar el tipo de persona </span>
+									</div>
+								</div>
+								</div>
+								
+								<div class="row">
+								<div class="col-sm-12">
+									<div class="form-group"
+											ng-class="{'has-error': altaTramite.DCEstadotipoPersona.$invalid && altaTramite.DCEstadotipoPersona.$dirty}">
+										<label for="DCEstadotipoPersona" ng-if="DV.origenPlaca=='1'">*Nuevo Estado: </label>
+										<label for="DCEstadotipoPersona" ng-if="DV.origenPlaca!='1'">Nuevo Estado: </label>
+										<div class="input-group">
+											<span class="input-group-addon"><i class="fa fa-map"></i></span>
+											
+											<select id="DCEstadotipoPersona" class="form-control"
+												ng-options="estado.edoId as estado.edoNombre for estado in DC.catalogoEstados | orderBy:'edoNombre'"
+												ng-model="DV.nuevoEstadoTipoPersona" ng-required="DV.origenPlaca=='1'"
+												name="DCEstadotipoPersona" ng-disabled="bloquearDesconocido">
+												<option value="">Seleccione</option>
+											</select>
+										</div>
+								      <div
+											ng-show="altaTramite.DCEstadotipoPersona.$error.required && altaTramite.DCEstadotipoPersona.$dirty"
+											ng-style="{color:'red'}">El estado es requerido</div>
+									</div>
+								</div>
+								</div>
+								
+								
+									</div>
+						
+					</div>
+					</div>
+				</section>
+
+				
+					<section class="col-lg-12 connectedSortable">
+				<div class="box-body">
+					<div class="row itemsBox">
+					<button class="btn btn-danger" id="btnGuardarDatos" type="button"
+							ng-click="DoNuevoTramiteVO()">Guardar</button>
+                        
+                           
+						<button class="btn btn-danger " id="btnVistaPrevia" type="button"
+							ng-click="vistaPrevia()">Vista Previa</button>
+					</div>
+				</div>
+			</section>
+
+         </div>
+		</form>
+		
+						<!--MODAL VISTA PREVIA-->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static"
+			aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">×</button>
+						<h4 class="modal-title" id="myModalLabel">Vista Previa Alta Trámite</h4>
+					</div>
+					<div class="modal-body">
+						<div style="text-align: center;">
+					<iframe  id="blob-src-test" style="width: 750px; height: 500px;" frameborder="0"></iframe>
+							
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+						<button type="button" class="btn btn-primary" ng-click="DoNuevoTramiteVO()" data-dismiss="modal">Guardar</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+		<!--  SECCION DE MODAL DE DESCARGA DOCUMENTO  -->
+		  
+		  <div class="modal fade" id="myModalConfirmacion" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static"
+			aria-labelledby="myModalLabelConfirmacion" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"  ng-click="resetForm()"
+							aria-hidden="true">×</button>
+						<h4 class="modal-title" id="myModalLabelConfirmacion">Detalle de Alta Trámite</h4>
+					</div>
+					<div class="modal-body">
+						
+			<div class="row">
+				<div class="col-md-12">
+
+					<div class="col-md-12" align="center">
+						<div class="form-group">
+
+							<div>
+
+								<label>Folio de Trámite: </label><span>
+									{{viewModal.idNexTramit}}</span>
+							</div>
+						</div>
+					</div>
+
+					<div ng-if="!tipoPersona" class="col-md-12" align="center">
+
+						<div class="form-group">
+
+							<div>
+                             <label>Nombre del Ciudadano: </label><span> {{DC.nombre+' '+DC.apellidoPaterno+' '+DC.apellidoMaterno}}</span> 
+							</div>
+						</div>
+					</div>
+					
+					<div ng-if="tipoPersona" class="col-md-12" align="center">
+
+						<div class="form-group">
+
+							<div>
+                             <label>Nombre de la Empresa: </label><span> {{DC.emp}}</span> 
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-12" align="center">
+						<div class="form-group">
+
+							<div>
+								<label for="example1">Nombre del Oficial: </label><span>
+									{{DG.empleado.empNombre+' '+DG.empleado.empApePaterno+'
+									'+DG.empleado.empApeMaterno}}</span>
+
+							</div>
+						</div>
+					</div>
+					<div class="col-md-12" align="center">
+						<div class="form-group">
+
+							<div>
+								<label for="example1">Tipo de Trámite: </label> <span>
+									{{tipoTramiteTitulo}}</span>
+							</div>
+						</div>
+					</div>
+
+
+					<div class="col-md-12" align="center">
+						<a ng-click="generaReporteTramite(viewModal.idNexTramit)"> <span><img
+								width="50px" src="static/dist/img/pdf_logo.png"></span>
+						</a>
+					</div>
+				</div>
+
+
+				</div>
+					</div>
+					<div class="modal-footer">
+					<div class="col-md-12">
+                   <button class="btn btn-danger" type="button" data-dismiss="modal"  ng-click="resetForm()">Cerrar</button>
+		           </div>
+					</div>
+				</div>
+			</div>
+		</div>
+		   
+
+		
+			
+		
+	
+		
+		
+
+
+
+
+	</section>
+
+
+
+
+	<!-- Page script -->
+	<script>
+		$(function() {
+
+			//Datemask dd/mm/yyyy
+			$("#datemask").inputmask("dd/mm/yyyy", {
+				"placeholder" : "dd/mm/yyyy"
+			});
+			//Datemask2 mm/dd/yyyy
+			$("#datemask2").inputmask("mm/dd/yyyy", {
+				"placeholder" : "mm/dd/yyyy"
+			});
+			//Money Euro
+			$("[data-mask]").inputmask();
+
+			$('#datepicker').datepicker({
+				autoclose : true,
+				endDate : '+0d',
+				todayHighlight : true
+			});
+			// 			$('#datetimepicker1').datetimepicker({
+			// 				format: 'DD/MM/YYYY HH:mm:ss',
+			// 				maxDate: moment().endOf('d'),
+			// 				stepping: 1,
+			// 				useCurrent: false,
+			// 				showClose:true
+			// 			}).on("dp.change", function (e) {
+			// 				console.log(e);
+			// 			});
+
+			// 			$('#datetimepicker').datetimepicker({
+			// 				autoclose : true,
+			// 				endDate : '+0d',
+			// // 				pickSeconds: false,
+			// 				sideBySide:true,
+			// 				todayHighlight : true,
+			// 				maskInput:true,
+			// 				language:'es',
+			// 				pick12HourFormat: false,
+			// 				minuteStep : 1
+			// 			});
+			$('#datepicker1').datepicker({
+				autoclose : true,
+				endDate : '+0d',
+				todayHighlight : true
+			});
+			/*Timepicker
+			$(".timepicker").timepicker({
+				showInputs : false
+			});*/
+
+		});
+	</script>
+
+</body>
+
+</html>

@@ -1,0 +1,72 @@
+<div class="modal fade" id="lotecancelacion" role="dialog" data-keyboard="false" data-backdrop="static">
+<meta charset="utf-8" />
+  
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header bg-red-active">
+         <button type="button" class="close" data-dismiss="modal" style="color:red !important;margin-left: 3px !important;" 
+				ng-if="!optionsview.resume" class="close" data-dismiss="modal" aria-label="Close" ng-click="closeAfter()">	<span aria-hidden="true">&times;</span>
+			</button>
+        <h4 class="modal-title">{{optionsview.titleprocess}}</h4>
+        </div>
+        <div class="modal-body">
+	  		<form name="form" novalidate>
+	  			<div class="row" ng-if="!optionsview.resume">
+			  		<div class="col-md-12">
+			  			<div class="form-group" ng-class="{'has-error': form.motivo.$invalid && form.motivo.$dirty}">
+							<label for="motivo">Ingrese motivo de cancelación:</label>
+							<textarea style="overflow:auto;resize:none" id="motivo" name="motivo" ng-model="params.motivo" rows="8"
+							class="form-control" rows="5" autocomplete="off" maxlength="500" ng-required="true"></textarea>
+						</div>
+			  		</div>
+			  		
+			  		<div class="col-md-12">
+			  			<button ng-click="cancelacionArchivoComplementado()" class="btn btn-danger center-block">Guardar</button>
+		  			</div>
+	  			</div>
+	  			
+	  			<div class="row" ng-if="optionsview.resume">
+	  				<div class="col-md-12">
+		  				<fieldset>
+							<legend>Datos Generales</legend>
+								<div class="table-responsive">   
+		                       		<table class="table tblsnborder">
+		                               <tr>
+		                                   <td><label>Total Registros:</label></td>
+		                                   <td>{{resumenVO.archivoTotal}}</td>
+		                                   
+		                                   <td><label>Estatus:</label></td>
+		                                   <td>{{resumenVO.estatusProceso}}</td>
+		                               </tr>
+		                            	<tr>
+		                                   <td><label>Fecha Emisión:</label></td>
+		                                   <td>{{resumenVO.fechaEmision}}</td>
+		                                   
+		                                   <td><label>ID:</label></td>
+		                                   <td>{{resumenVO.archivoId}}</td>
+		                               	</tr>
+		                       		</table>
+	                          	</div>
+				  		</fieldset>
+				  		
+				  		<div ng-if="!resumenVO.mostrarCancelacion" class="col-md-6">
+                      		<button  class="btn btn-danger center-block">Cancelar</button>       			
+			  			</div>
+			  			
+			  			<div class="col-md-12">
+			  				<button class="btn btn-danger center-block" ng-click="closeModal()" data-dismiss="modal">Cerrar</button>
+			  			</div>
+				  		
+			  		</div>
+	  			</div>
+  			</form>
+        </div>
+        <div class="modal-footer">
+        	<span ng-show="error" class="alert alert-warning">{{error.message}}</span>
+        </div>
+    </div>
+  </div>
+  
+</div>
+
+

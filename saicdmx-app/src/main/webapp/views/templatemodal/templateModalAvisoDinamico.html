@@ -1,0 +1,62 @@
+<div class="modal fade" id="modalDynamic" role="dialog">
+<meta charset="utf-8" />
+  
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header bg-red-active">
+        	<!--<a class="close" data-dismiss="modal" aria-label="Close"><span style="color:#FFF !important;" aria-hidden="true">&times;</span></a>-->
+        	<h4 class="modal-title text-center" >{{paramsForModal.titleModal}}</h4>
+        </div>
+        <div class="modal-body">			
+ 			<div class="row">
+  				<div class="col-md-12">
+	  				<fieldset ng-if="paramsForModal.parent == 'salidaVehiculoModificacion' || paramsForModal.parent == 'pagoInfraccion' || paramsForModal.parent == 'pagoActa'">
+						<legend>Resultado de la Operación</legend>
+							<div class="table-responsive">   
+	                       		<table class="table tblsnborder">
+	                               <tr>
+	                                   <td align="center"><label>Resultado</label></td>
+	                                   <td colspan="3"><label>Mensaje</label></td>
+	                               </tr>
+	                               <tr>
+	                                   <td align="center">{{paramsForModal.datos.salidaVO.resultado}}</td>
+	                                   <td colspan="3">{{paramsForModal.datos.salidaVO.mensaje}}</td>
+	                               </tr>
+	                               <tr>
+	                                   <td align="center">{{paramsForModal.datos.salidaAdminVO.resultado}}</td>
+	                                   <td colspan="3">{{paramsForModal.datos.salidaAdminVO.mensaje}}</td>
+	                               </tr>
+	                       		</table>
+                          	</div>
+			  		</fieldset>
+					
+					<fieldset ng-if="paramsForModal.parent == 'soporteOperacion'">
+						<legend>Resultado de la Operación</legend>
+							<div class="table-responsive">   
+	                       		<table class="table tblsnborder">
+	                               <tr>
+	                                   <td align="center"><label>Registro</label></td>
+	                                   <td colspan="3"><label>Resultado</label></td>
+	                               </tr>
+	                               <tr>
+	                                   <td align="center">{{paramsForModal.datos.resultado}}</td>
+	                                   <td colspan="3">{{paramsForModal.datos.mensaje}}</td>
+	                               </tr>
+	                       		</table>
+                          	</div>
+			  		</fieldset>
+		  			
+		  		</div>
+  			</div>
+        </div>
+        <div class="modal-footer">
+        	<div class="col-md-12 text-center">
+  				<button class="btn btn-danger center-block" ng-click="actionModal()" data-dismiss="modal">Cerrar</button>
+  			</div>
+        </div>
+    </div>
+  </div>
+  
+</div>
+
+

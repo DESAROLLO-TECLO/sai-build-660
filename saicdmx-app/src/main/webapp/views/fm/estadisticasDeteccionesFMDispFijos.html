@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Estadísticas Detecciones</title>
+		<link rel="stylesheet" href="https://kendo.cdn.telerik.com/2017.1.118/styles/kendo.common-material.min.css" />
+		<link rel="stylesheet" href="https://kendo.cdn.telerik.com/2017.1.118/styles/kendo.material.min.css" />
+		<link rel="stylesheet" href="https://kendo.cdn.telerik.com/2017.1.118/styles/kendo.material.mobile.min.css" />
+		
+		<style type="text/css">
+			#chartdiv {
+				width: 100%;
+				height: 500px;
+			}
+			#amcharts-graph-column-element{
+				max-width: 10px;
+			}
+		</style>
+	</head>
+	<body>
+		<section class="content-header">
+			<h1>Estadísticas</h1>
+			<ol class="breadcrumb">
+				<li><a><i class="fa fa-book"></i>Dispositivos-Fijos</a></li>
+				<li class="active">Estadísticas</li>
+			</ol>
+		</section>
+		
+		<!-- Main content -->
+		<section class="content">
+			<form role="form" name="form" novalidate>
+				<div class="row">
+					<div class="col-md-1"></div>
+					<div class="col-md-10">
+						<div class="box box-danger">
+							<div class="box-header with-border text-center">
+								<h3 class="box-title">Búsqueda</h3>
+								<div class="box-tools pull-right">
+   									<button type="button" class="btn btn-box-tool" data-widget="collapse">
+	  										<i class="fa fa-minus"></i>
+   									</button>
+								</div>
+							</div>
+							<div class="box-body">
+								<div class="row">
+									<div class="col-md-3">
+										<div class="form-group">
+											<label for="fechaConsulta">Tipo de Fecha:</label>
+											<div class="input-group date">
+												<div class="input-group-addon">
+													<i class="fa fa-calendar-check-o"></i>
+												</div>
+												<select class="form-control select2" name="fechaConsulta" id="fechaConsulta" 
+													ng-model="parametroBusqueda.periodoFecha" ng-disabled="disabledTipoFecha"
+													ng-options='option.codigo as option.descripcion for option in filterPeriodoFecha'>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-2">
+										<div class="form-group">
+											<label for="checkTest1" class="labelCheck noneSelectedUser">
+												Rango de fechas
+											</label>
+											<div class="input-group">
+												<switcher class="swTeclo"
+													id-check="switchRangoFecha"
+													ng-model="switchRangoFecha"
+													ng-change="activaRangoFecha(newValue, oldValue)"
+													true-label="<i class='fa fa-check-circle'></i>"
+													true-value="1"
+													false-label="<i class='fa fa-times-circle'></i>"
+													false-value="0">
+												</switcher>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group"  ng-class="{'has-error': switchRangoFecha == 1 && form.fInicio.$invalid && form.fInicio.$dirty}">
+											<label for="fInicio">Fecha Inicio:</label>
+											<div class="input-group">
+												<div class="input-group-addon">
+													<i class="fa fa-calendar"></i>
+												</div>
+												<input class="form-control inputFecha" id="fInicio" name="fInicio" readonly 
+													date-picker	idioma-dp="{{currentLanguage}}" ng-disabled="disabledFechas"
+													ng-model="parametroBusqueda.startDate" elemento="'fFin'"
+													mindate="parametroBusqueda.startDate"/>
+											</div>
+											<span ng-if="switchRangoFecha == 1 && form.fInicio.$invalid && form.fInicio.$dirty}" ng-style="{color:'red'}">
+												La fecha de Inicio es requerida
+											</span>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group">
+											<label for="fFin">Fecha Fin:</label>
+											<div class="input-group">
+												<div class="input-group-addon">
+													<i class="fa fa-calendar"></i>
+												</div>
+												<input class="form-control inputFecha" id="fFin" name="fFin" readonly 
+													date-picker	idioma-dp="{{currentLanguage}}" ng-disabled="disabledFechas" 
+													ng-model="parametroBusqueda.endDate" elemento="'fInicio'" 
+													maxdate="parametroBusqueda.endDate"/>
+											</div>
+										</div>
+									</div>
+								</div>	
+								<div class="row">
+									<div class="col-md-3">
+										<div class="form-group">
+											<label for="radar">Tipo Deteccion:</label>
+											<div class="input-group date">
+												<div class="input-group-addon">
+													<i class="fa fa-tachometer"></i>
+												</div>
+												<select class="form-control select2" name="radar" 
+													id="radar" ng-required="true"
+													ng-model="parametroBusqueda.tipoDeteccion" 
+													ng-options='option.idArchivoTipoFora as option.nbDispositivoDeteccion for option in filterTipoDetecciones'
+													ng-change="buscaFiltroRadares();">
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group">
+											<label for="radar">Tipo Radar:</label>
+											<div class="input-group date">
+												<div class="input-group-addon">
+													<i class="fa fa-tachometer"></i>
+												</div>
+												<select class="form-control select2" name="radar" 
+													id="radar" ng-required="true"
+													ng-model="parametroBusqueda.tipoRadar" 
+													ng-options='option.idMarcaDispositivoDet as option.nbMarcaDispositivo for option in filterRadares'
+													ng-disabled="tipoRadardisabled">
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group">
+											<label for="fFin">Tipo de Placa:</label>
+											<div class="input-group">
+												<div class="input-group-addon">
+													<i class="fa fa-car"></i>
+												</div>
+												<select class="form-control select2" name="origenplaca" id="origenplaca"
+													ng-model="parametroBusqueda.origenPlaca" 
+													ng-options='option.codigo as option.descripcion for option in filterOrigenPlaca'>
+												</select>
+											</div>
+										</div>
+									</div>
+<!-- 									<div class="col-md-3"> -->
+<!-- 										<div class="form-group"> -->
+<!-- 											<label for="Eprocesados">Estatus Proceso:</label> -->
+<!-- 											<div class="input-group date"> -->
+<!-- 												<div class="input-group-addon"> -->
+<!-- 													<i class="fa fa-cog"></i> -->
+<!-- 												</div> -->
+<!-- 												<select ng-required="true" class="form-control select2" name="Eprocesados" id="Eprocesados" -->
+<!-- 													ng-model="parametroBusqueda.estatusproceso"  -->
+<!-- 													ng-options='option.value as option.label for option in comboLlenarEstatus'> -->
+<!-- 												</select> -->
+<!-- 											</div> -->
+<!-- 										</div> -->
+<!-- 									</div> -->
+<!-- 									<div class="col-md-3"> -->
+<!-- 										<div class="form-group"> -->
+<!-- 											<div class="input-group"> -->
+<!-- 												<div class="input-group-addon"> -->
+<!-- 													<i class="fa fa-list-ul"></i> -->
+<!-- 												</div> -->
+<!-- 												<select class="form-control" select2 Smultiple="multiple" -->
+<!-- 													data-allow-clear="false"  -->
+<!-- 													ng-model="parametroBusqueda.selectMultipleOp1" -->
+<!-- 													ng-options="sm1 as sm1.label for sm1 in comboLlenarEstatus track by sm1.value"> -->
+<!-- 												</select> -->
+<!-- 											</div> -->
+<!-- 										</div>									 -->
+<!-- 									</div> -->
+									
+									<div class="col-md-3">
+										<div class="form-group" ng-class="{'has-error': form.Eprocesados.$invalid && form.Eprocesados.$dirty}">
+											<label for="Eprocesados">Estatus Proceso:</label>
+											<div class="input-group">
+												<div class="input-group-addon">
+													<i class="fa fa-list-alt"></i>
+												</div>
+												<select class="form-control" select-picker multiple ng-required="true" name="Eprocesados" 
+													id="Eprocesados" data-actions-box="true" data-selected-text-format="count > 2" 
+													data-max-options="4" ng-model="parametroBusqueda.selectMultipleOp1"
+													ng-options="sp.value as sp.label for sp in comboLlenarEstatus">
+												</select>
+											</div>
+											<span ng-if="form.Eprocesados.$invalid && form.Eprocesados.$dirty" ng-style="{color:'red'}">
+												El estatus de proceso es requerido
+											</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-12 text-center">
+									<button class="btn btn-danger" ng-click="consultaDetEstadistica()">Buscar</button>	
+								</div>	
+							</div>
+						</div>
+					</div>
+					<div class="col-md-2"></div>
+				</div>
+				
+				<div class="row" ng-show="viewpanelEstadistica == true">
+					<div class="col-md-12 text-center">
+						<div class="box box-danger">
+							<div class="box-header with-border" align="center">
+								<div class="col-md-12">
+									<table width="100%;">
+										<tr>
+											<td width="30%;"><h3 class="box-title">Detecciones por Tipo</h3></td>
+											<td width="32%;"><h3 class="box-title">Periodo: {{periodoTitulo}}</h3></td>
+											<td width="32%;"><h3 class="box-title">Estatus Proceso: {{estatusProcesoTitulo}}</h3></td>
+											<td width="6%;">
+												<a class="img-rounded" title="Genera Reporte Detecciones por Tipo Deteccion" ng-click="generarExcelDetecciones('tipoDeteccion')">
+													<span class="pull-center">
+														<img src="static/dist/img/excel.png" width="25px;">
+													</span>
+												</a>
+											</td>
+										</tr>
+									</table>
+								</div>
+<!-- 								<h3 class="box-title">Detecciones Por Tipo</h3> -->
+								<div class="box-tools pull-right">
+									<button class="btn btn-box-tool" type="button"
+										data-widget="collapse">
+										<i class="fa fa-minus"></i>
+									</button>
+								</div>
+							</div>
+							<!-- /.box-header -->
+							<div class="box-body">
+								<div class="row">
+									<div class="col-md-12">
+										<ul class="nav nav-tabs">
+											<li ng-repeat="tab in tabs"
+												ng-class="{'active': tab.isActive}"
+												ng-click="changeGraph(tab.nbTab)">
+												<a>{{tab.nbTab}}</a>
+											</li>
+										</ul>
+										
+										<div ng-show="tabTipoDetecciones" id="tipoDetecciones">
+										    <div class="box-body">
+										    	<div class="row">
+										    		<div class="col-md-2"></div>
+										    		<div class="col-md-8">
+										    			<table id="tabla_resultado" class="table table-striped table-hover" >
+															<thead>
+																<tr>
+																	<th>ID TIPO</th>
+																	<th>TIPO DETECCIÓN</th>
+																	<th>RADAR</th>
+																	<th ng-show="muestraOrigenPlaca == 2 || muestraOrigenPlaca == 0">CDMX</th>
+																	<th ng-show="muestraOrigenPlaca == 2 || muestraOrigenPlaca == 1">FORÁNEAS</th>
+																	<th>TOTAL</th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr dir-paginate="deteccion in deteccionesXTipo | filter:view.searchSomething | itemsPerPage: view.rowsPerPage" >
+																	<td class="text-center">{{deteccion.idTipoDeteccion}}</td>
+																	<td class="text-center">
+																		<a name="linkActual1" id="linkActual1" 
+																			ng-click="consultaDetDelegacion(1,deteccion.idTipoFora,0);">
+																			{{deteccion.tipoDeteccion}}
+																		</a>
+																	</td>
+																	<td class="text-center" >
+																		<a name="linkActual2" id="linkActual2" 
+																			ng-click="consultaDetDelegacion(2,deteccion.idTipoFora,deteccion.idMarca);">
+																			{{deteccion.marca}}
+																		</a>
+																	</td>						
+																	<td class="text-center" ng-show="muestraOrigenPlaca == 2 || muestraOrigenPlaca == 0">
+																		<span ng-if="deteccion.cdmx > 0">
+																			{{deteccion.cdmx}}
+																		</span>
+																		<span ng-if="deteccion.cdmx === 0 || deteccion.cdmx == ''">
+																			0
+																		</span>
+										                            </td>
+																	<td class="text-center" ng-show="muestraOrigenPlaca == 2 || muestraOrigenPlaca == 1">
+																		<span ng-if="deteccion.fora > 0">
+																			{{deteccion.fora}}
+																		</span>
+																		<span ng-if="deteccion.fora === 0 || deteccion.fora == ''">
+																			0
+																		</span>
+										 							</td>
+										                            <td class="text-center">
+										                            	<a name="linkActual3" id="linkActual3" 
+																			ng-click="consultaDetDelegacion(3,deteccion.idTipoFora,deteccion.idMarca);">
+										                            		{{deteccion.total}}
+										                            	</a>
+										                            </td>
+																</tr>
+																<tr>
+																	<td class="text-center"></td>
+																	<td class="text-center"></td>
+																	<td class="text-center"><b>TOTAL:</b></td>
+																	<td class="text-center" ng-show="muestraOrigenPlaca == 2 || muestraOrigenPlaca == 0">
+																		<span ng-if="TotalCdmx > 0">
+																			<b>{{TotalCdmx}}</b>
+																		</span>
+																		<span ng-if="TotalCdmx === 0 || TotalCdmx == ''">
+																			<b>0</b>
+																		</span>
+																	</td>
+																	<td class="text-center" ng-show="muestraOrigenPlaca == 2 || muestraOrigenPlaca == 1">
+																		<span ng-if="TotalFora > 0">
+																			<b>{{TotalFora}}</b>
+																		</span>
+																		<span ng-if="TotalFora === 0 || TotalFora == ''">
+																			<b>0</b>
+																		</span>
+																	</td>
+																	<td class="text-center">
+																		<span ng-if="TotalFinal > 0">
+																			<b>{{TotalFinal}}</b>
+																		</span>
+																		<span ng-if="TotalFinal === 0 || TotalFinal == ''">
+																			<b>0</b>
+																		</span>
+																	</td>
+																</tr>
+														  	</tbody>
+														</table>
+										    		</div>
+										    	</div>
+											</div>
+										</div>
+										
+										<div ng-show="tabTipoDeteccionesGraf">
+											<div class="row col-md-12">
+												<div class="col-md-1"></div>
+												<div class="col-md-10">
+													<div class="col-md-3 col-xs-6" ng-repeat="ctrl in ctrls">
+														<!-- small box -->
+ 														<div class="small-box" style="background-color: {{ctrl.colorTotal}} !important; color:white;"><!--width: 147px; -->
+															<div class="inner">
+																<div class="counter" value="ctrl.total" to="ctrl.idTipoFora"
+																	duration="ctrl.duracion" effect="ctrl.effect">
+																	<h3 style="text-align: left;">{{ctrl.total | number:0 }} Det.</h3>
+																</div>
+																<p style="text-align: left;">{{ctrl.tipoDeteccion}}</p>
+															</div>
+															<div class="icon">
+																<i class="fa {{ctrl.icono}}"></i>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="row col-md-12">
+													<div class="col-md-1"></div>
+									    			<div class=" col-md-10 amCharts" id="grafTipoDet"></div>
+									    		</div>
+											</div>
+											<div class="row col-md-12">
+										    	<div class=" col-md-6 amCharts" id="grafTipoDetCdmx" style="width: 50%;"></div>
+										    	<div class=" col-md-6 amCharts" id="grafTipoDetFora" style="width: 50%;"></div>
+										    </div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="row" ng-show="viewpanelEstadisticaDelegaciones == true">
+					<div class="col-md-12 text-center">
+						<div class="box box-danger">
+							<div class="box-header with-border" align="center">
+								<div class="col-md-12">
+									<div class="col-md-12">
+									<table width="100%;">
+										<tr>
+											<td width="30%;"><h3 class="box-title">Detecciones por Delegacion</h3></td>
+											<td width="32%;"><h3 class="box-title">Periodo: {{periodoTitulo}}</h3></td>
+											<td width="32%;"><h3 class="box-title">Estatus Proceso: {{estatusProcesoTituloDel}}</h3></td>
+											<td width="6%;">
+												<a class="img-rounded" title="Genera Reporte Detecciones por Delegacion" ng-click="generarExcelDetecciones('porDelegacion')">
+													<span class="pull-center">
+														<img src="static/dist/img/excel.png" width="25px;">
+													</span>
+												</a>
+											</td>
+										</tr>
+									</table>
+								</div>
+								</div>
+
+								<div class="box-tools pull-right">
+									<button class="btn btn-box-tool" type="button"
+										data-widget="collapse">
+										<i class="fa fa-minus"></i>
+									</button>
+								</div>
+							</div>
+							<!-- /.box-header -->
+							<div class="box-body">
+								<div class="row">
+									<div class="col-md-12">
+										<h4 class="box-title">{{nombreDeteccionDel}} - {{nombreRadarDel}}</h4>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<ul class="nav nav-tabs">
+											<li ng-repeat="tabDel in tabsDel"
+												ng-class="{'active': tabDel.isActive}"
+												ng-click="changeGraph2(tabDel.nbTab)">
+												<a>{{tabDel.nbTab}}</a>
+											</li>
+										</ul>
+										
+										<div ng-show="tabDatoDelegaciones" id="datoDelegaciones">
+											<div class="box-body">
+										    	<div class="row">
+										    		<div class="col-md-2"></div>
+										    		<div class="col-md-8">
+										    			<table id="tabla_resultado2" class="table table-striped table-hover" >
+															<thead>
+																<tr>
+																	<th>ID DELEGACION</th>
+																	<th>DELEGACION</th>
+																	<th ng-show="muestraOrigenPlaca == 2 || muestraOrigenPlaca == 0">CDMX</th>
+																	<th ng-show="muestraOrigenPlaca == 2 || muestraOrigenPlaca == 1">FORÁNEAS</th>
+																	<th>TOTAL</th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr dir-paginate="delegacion in deteccionesDel | filter:view.searchSomething | itemsPerPage: view.rowsPerPage" >
+																	<td class="text-center">{{delegacion.idDelegacion}}</td>
+																	<td class="text-center">
+<!-- 																		<a name="linkActual1" id="linkActual1"  -->
+<!-- 																			ng-click="consultaDetDelegacion(1,deteccion.idTipoFora,'0');"> -->
+																			{{delegacion.delegacion}}
+<!-- 																		</a> -->
+																	</td>					
+																	<td class="text-center" ng-show="muestraOrigenPlaca == 2 || muestraOrigenPlaca == 0">
+																		<span ng-if="delegacion.cdmx > 0">
+																			{{delegacion.cdmx}}
+																		</span>
+																		<span ng-if="delegacion.cdmx === 0 || delegacion.cdmx == ''">
+																			0
+																		</span>
+										                            </td>
+																	<td class="text-center" ng-show="muestraOrigenPlaca == 2 || muestraOrigenPlaca == 1">
+																		<span ng-if="delegacion.fora > 0">
+																			{{delegacion.fora}}
+																		</span>
+																		<span ng-if="delegacion.fora === 0 || delegacion.fora == ''">
+																			0
+																		</span>
+										 							</td>
+										                            <td class="text-center">
+<!-- 										                            	<a name="linkActual3" id="linkActual3"  -->
+<!-- 																			ng-click="consultaDetDelegacion(3,deteccion.idTipoFora,deteccion.idMarca);"> -->
+										                            	<span ng-if="delegacion.total > 0">
+																			{{delegacion.total}}
+																		</span>
+																		<span ng-if="delegacion.total === 0 || delegacion.total == ''">
+																			0
+																		</span>
+<!-- 										                            	</a> -->
+										                            </td>
+																</tr>
+																<tr>
+																	<td class="text-center"></td>
+																	<td class="text-center"><b>TOTAL:</b></td>
+																	<td class="text-center" ng-show="muestraOrigenPlaca == 2 || muestraOrigenPlaca == 0">
+																		<span ng-if="TotalCdmxDel > 0">
+																			<b>{{TotalCdmxDel}}</b>
+																		</span>
+																		<span ng-if="TotalCdmxDel === 0 || TotalCdmxDel == ''">
+																			<b>0</b>
+																		</span>
+																	</td>
+																	<td class="text-center" ng-show="muestraOrigenPlaca == 2 || muestraOrigenPlaca == 1">
+																		<span ng-if="TotalForaDel > 0">
+																			<b>{{TotalForaDel}}</b>
+																		</span>
+																		<span ng-if="TotalForaDel === 0 || TotalForaDel == ''">
+																			<b>0</b>
+																		</span>
+																	</td>
+																	<td class="text-center">
+																		<span ng-if="TotalFinalDel > 0">
+																			<b>{{TotalFinalDel}}</b>
+																		</span>
+																		<span ng-if="TotalFinalDel === 0 || TotalFinalDel == ''">
+																			<b>0</b>
+																		</span>
+																	</td>
+																</tr>
+														  	</tbody>
+														</table>
+										    		</div>
+										    	</div>
+											</div>
+										</div>
+										<div ng-show="tabDelegacionesGraf" id="DelegacionesGraf">
+											<div class="row col-md-12">
+												<div class="col-md-1"></div>
+								    			<div class=" col-md-10 amCharts" id="grafDelegaciones"></div>
+								    		</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+			</form>
+		</section>
+		
+		
+		
+	</body>
+</html>

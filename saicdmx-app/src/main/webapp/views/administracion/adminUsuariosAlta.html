@@ -1,0 +1,207 @@
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Nuevo Usuario</title>
+</head>
+
+<body>
+
+	<form name="userForm" novalidate>
+		<section class="content-header">
+
+			<h1>Nuevo Usuario</h1>
+			<ol class="breadcrumb">
+				<li>
+					<a>
+						<i class="fa fa-book"></i>Administración</a>
+				</li>
+				<li class="active">Usuarios</li>
+			</ol>
+		</section>
+		<!-- Main content -->
+
+		<section class="content">
+
+
+			<div class="row">
+				<section class="content">
+					<div class="row" align="center">
+						<div class="col-md-2"></div>
+						<section class="col-md-8 connectedSortable">
+
+							<!-- Datos generales -->
+							<div class="box box-danger" align="center">
+								<div class="box-header with-border">
+									<div align="center">
+										<h3 class="box-title">Datos Generales</h3>
+									</div>
+
+								</div>
+
+
+								<div class="box-body">
+									<div class="form-group">
+
+										<div class="form-group">
+											<div class="col-md-6" align="left">
+												<div class="form-group" ng-class="{ 'has-error' : userForm.nombre.$invalid && !userForm.nombre.$pristine }">
+													<div align="left">
+														<label for="example1">*Nombre:</label>
+													</div>
+
+													<div class="input-group">
+														<span class="input-group-addon">
+															<i class="fa fa-user"></i>
+														</span>
+														<input type="text" maxlength="25" ng-model="usuariosVO.emp_nombre" name="nombre" capitalize class="form-control" required>
+													</div>
+
+													<p ng-show="userForm.nombre.$invalid && !userForm.nombre.$pristine" class="help-block">El nombre es requerido</p>
+												</div>
+											</div>
+											<div class="col-md-6" align="left">
+												<div class="form-group" ng-class="{ 'has-error' : userForm.apaterno.$invalid && !userForm.apaterno.$pristine }">
+													<div align="left">
+														<label for="example1">*Apellido Paterno:</label>
+													</div>
+													<div class="input-group">
+														<span class="input-group-addon">
+															<i class="fa fa-user"></i>
+														</span>
+														<input maxlength="25" type="text" ng-model="usuariosVO.emp_ape_paterno" capitalize name="apaterno" class="form-control" required>
+													</div>
+													<p ng-show="userForm.apaterno.$invalid && !userForm.apaterno.$pristine" class="help-block">El apellido paterno es requerido</p>
+												</div>
+											</div>
+											<div class="col-md-12"></div>
+											<div class="col-md-6" align="left">
+												<div class="form-group" ng-class="{ 'has-error' : userForm.amaterno.$invalid && !userForm.amaterno.$pristine }">
+													<div align="left">
+														<label for="example1">*Apellido Materno:</label>
+													</div>
+
+													<div class="input-group">
+														<span class="input-group-addon">
+															<i class="fa fa-user"></i>
+														</span>
+														<input maxlength="25" type="text" ng-model="usuariosVO.emp_ape_materno" capitalize name="amaterno" class="form-control" required>
+													</div>
+
+													<p ng-show="userForm.amaterno.$invalid && !userForm.amaterno.$pristine" class="help-block">El apellido materno es requerido</p>
+												</div>
+											</div>
+											<div class="col-md-6" align="left">
+												<div class="form-group" ng-class="{ 'has-error' : userForm.placa.$invalid && !userForm.placa.$pristine }">
+													<div align="left">
+														<label for="example1">*Placa/Usuario:</label>
+													</div>
+
+													<div class="input-group">
+														<span class="input-group-addon">
+															<i class="fa fa-shield"></i>
+														</span>
+
+														<input maxlength="10" type="text" maxlength="10" ng-model="usuariosVO.emp_placa" name="placa" id="placa" class="form-control"
+															onKeyUp="this.value=this.value.toLowerCase()" required>
+													</div>
+													<p ng-show="userForm.placa.$invalid && !userForm.placa.$pristine" class="help-block">La placa es requerida</p>
+												</div>
+											</div>
+										<div class="col-md-12"></div>
+										<div class="col-md-6">
+											<div class="form-group" align="left" ng-class="{ 'has-error' : userForm.perfilOpc.$invalid && !userForm.perfilOpc.$pristine }">
+												<div align="left">
+													<label>*Perfil Web:</label>
+												</div>
+
+												<div class="input-group">
+													<span class="input-group-addon">
+														<i class="glyphicon glyphicon-user"></i>
+													</span>
+													<select name="perfilOpc" required ng-change="evaluaPerfil(usuariosVO.selected.perfilNombre)" ng-options="item as item.perfilNombre for item in perfil"
+													    ng-model="usuariosVO.selected" class="form-control">
+														<option value="">Seleccione</option>
+													</select>
+												</div>
+												<p ng-show="userForm.perfilOpc.$invalid && !userForm.perfilOpc.$pristine" class="help-block">El perfil es requerido</p>
+
+											</div>
+										</div>
+										<div class="col-md-6" align="left">
+											<div class="form-group" ng-class="{ 'has-error' : userForm.rfc.$invalid && !userForm.rfc.$pristine }">
+												<label for="example2">RFC:</label>
+
+												<div class="input-group">
+													<span class="input-group-addon">
+														<i class="fa fa-building-o"></i>
+													</span>
+
+													<input maxlength="13" type="text" ng-model="usuariosVO.emp_rfc" name="rfc" capitalize class="form-control" required>
+												</div>
+												<p ng-show="userForm.rfc.$invalid && !userForm.rfc.$pristine" class="help-block">RFC Inválido</p>
+											</div>
+										</div>
+										<div class="col-md-12"></div>
+										<div ng-show="showComboRadio">
+											<div class="col-md-6">
+												<div class="form-group">
+													<div align="left">
+														<label>Tipo Oficial:</label>
+													</div>
+
+													<div class="input-group">
+														<span class="input-group-addon">
+															<i class="fa fa-ellipsis-v"></i>
+														</span>
+
+														<select ng-options="o.name for o in options" ng-model="usuariosVO.selectedOption" class="form-control"></select>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="form-group">
+													<div align="left">
+														<label>Realizar Cobro:</label>
+														<br>
+														<input type="radio" ng-model="usuariosVO.result" ng-value="true" ng-checked="usuariosVO.result"> SI
+														<input type="radio" ng-model="usuariosVO.result" ng-value="false" ng-checked="!usuariosVO.result"> NO
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="box-footer">
+								<div class="row">
+									<div class="col-md-12">
+										<button class="btn btn-danger" ng-click="altaUsuario(usuariosVO)">
+											Guardar
+										</button>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<a type="button" class="btn pull-left" ng-click="doBack()">
+											<i class="fa fa-arrow-circle-left"></i>
+											Regresar
+										</a>
+									</div>
+								</div>
+							</div>
+					</div>
+					</section>
+			</div>
+			</section>
+			</div>
+		</section>
+	</form>
+
+
+
+</body>
+
+
+</html>

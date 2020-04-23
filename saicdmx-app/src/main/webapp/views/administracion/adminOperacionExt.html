@@ -1,0 +1,173 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>Operaciones Extemporaneas</title>
+</head>
+<body >
+	<section class="content-header">
+		<h1>Operaciones Extemporáneas</h1>
+		<ol class="breadcrumb">
+			<li><a><i class="fa fa-book"></i>Administración</a></li>
+			<li class="active">Operaciones Extemporáneas</li>
+		</ol>
+	</section>
+
+	<section class="content">
+		<form role="form" name="formCrud" novalidate>
+			<div class="row">
+				<div class="col-md-6 col-md-offset-3">
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Búsqueda</h3>
+						</div>
+						
+						<div class="box-body">
+							<div class="row">
+								<div class="col-xs-12 itemsBox">
+									<div>
+										<input type="radio" name="accion" value="habilitar" ng-model="opcion" ng-change="changeOption()" id="label1">
+										<label class="labelRadio" for="label1">
+											&nbsp;Habilitar Cajas
+									    </label>
+								    </div>
+								    <div>
+								    	<input type="radio" name="accion" value="desabilitar" ng-model="opcion" ng-change="changeOption()" id="label2">
+									    <label class="labelRadio" for="label2">
+									    	&nbsp;Deshabilitar Cajas
+									    </label>
+								    </div>
+								</div>
+							</div>
+							
+							
+							<div class="row" ng-if="opcion != undefined">
+								<div class="col-md-6 col-xs-12" ng-if="opcion === 'habilitar'">
+									<div class="form-group" ng-class="{'has-error': formCrud.tipoBusqueda.$invalid && formCrud.tipoBusqueda.$dirty}">
+<!-- 										<label for="tipoBusqueda">Tipo Búsqueda: </label>  -->
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-list-ul"></i>
+											</div>
+											<select class="form-control" name="tipoBusqueda" id="tipoBusqueda" 
+												ng-model="parametros.tipoBusqueda" ng-required="true" ng-change="changeTipoBusqueda()">
+<!-- 												<option value="">Seleccionar</option> -->
+												<option value="placa">Por Placa</option>
+												<option value="caja">Por Caja</option>
+											</select>
+										</div>
+										<div ng-if="formCrud.tipoBusqueda.$error.required && formCrud.tipoBusqueda.$dirty" ng-style="{color:'red'}">El tipo búsqueda es requerido</div>
+									</div>								
+								</div>							
+								<div class="col-md-6 col-xs-12" ng-if="opcion === 'habilitar'">
+									<div class="form-group" ng-class="{'has-error': formCrud.valorx.$invalid && formCrud.valorx.$dirty}">
+<!-- 										<label for="valorx">Parámetro: </label>  -->
+										<div class="input-group date">
+											<div class="input-group-addon">
+												<i class="fa fa-pencil"></i>
+											</div>
+											<input id="valorx" name="valorx" maxlength="12" ng-model="parametros.valor" type="text" class="form-control" ng-required="true" ng-change="changeTipoBusqueda()"/>
+											<div ng-if="opcion === 'habilitar' && !viewHelpers.controlHabilitar" class="input-group-btn">
+												<button type="button" ng-click="buscarCaja()" class="btn btn-danger">Buscar</button>
+											</div>
+										</div>
+										<div ng-if="formCrud.valorx.$error.required && formCrud.valorx.$dirty" ng-style="{color:'red'}">El valor es requerido</div>
+									</div>
+								</div>
+							</div>
+							
+							<!-- Inicia Control Para Deshabilitar Cajas -->
+							<div class="row centerCol" ng-if="opcion === 'desabilitar'" ng-init="buscarCajasDesactivar()">
+								<div class="col-xs-12 col-sm-9">
+									<div class="form-group" ng-class="{'has-error': formCrud.caja.$invalid && formCrud.caja.$dirty}">
+<!-- 										<label for="tipoBusqueda">Caja: </label> -->
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-list-ul"></i>
+											</div>
+											<select
+												class="form-control" name="caja" id="caja"
+												ng-options="caja.label for caja in cajas"
+												ng-model="datosDeshabilitar.caja" ng-required="opcion === 'desabilitar'">
+												<option value="">Seleccione</option>
+											</select>
+										</div>
+										<div ng-if="formCrud.caja.$error.required && formCrud.caja.$dirty" ng-style="{color:'red'}">La caja es requerida</div>
+									</div>																													
+								</div>
+							</div>
+							<!-- Termina Control Para Deshabilitar Cajas  -->
+							<hr ng-if="viewHelpers.controlHabilitar" />
+							
+							<div class="row centerCol" ng-if="opcion != undefined">
+								<div class="col-xs-12 col-sm-6" ng-if="viewHelpers.controlHabilitar">
+									<div class="form-group" ng-class="{'has-error': formCrud.datepicker.$invalid && formCrud.datepicker.$dirty}">
+										<label for="fecha">*Fecha: </label>
+										<div class="input-group date">
+											<div class="input-group-addon">
+												<i class="fa fa-calendar"></i>
+											</div>
+											<input type="text" name="datepicker" readonly ng-model="datosHabilitar.fecha" id="datepicker" class="form-control inputFecha" ng-required="viewHelpers.controlHabilitar"/>
+										</div> 
+										<div ng-if="formCrud.datepicker.$error.required && formCrud.datepicker.$dirty" ng-style="{color:'red'}">La Fecha es requerida</div>
+									</div>
+								</div>
+							</div>
+							
+							<!-- Termina Controles Para Parámetros -->
+							
+							<div class="row" ng-if="viewHelpers.controlHabilitar">
+								<div class="col-xs-12">
+									<div class="table-responsive">
+										<fieldset>
+											<legend>Datos de la Caja</legend>
+		                               		<table class="table tblsnborder">
+		                                       <tr>
+		                                           <td><label>Nombre:</label></td>
+		                                           <td colspan="3">{{caja.nombreEmpleado}}</td>
+		                                       </tr>
+		                                    	<tr>
+		                                           <td><label>Placa:</label></td>
+		                                           <td>{{caja.placaEmpleado}}</td>
+		                                           
+		                                           <td><label>Caja:</label></td>
+		                                           <td>{{caja.cajaCod}}</td>
+		                                       	</tr>
+		                               		</table>
+										</fieldset>
+									</div>
+								</div>	
+							</div>
+							
+							<div class="row text-center" ng-if="opcion != undefined"> 
+								<div class="col-md-6 col-md-offset-3 col-xs-12" ng-if="viewHelpers.controlHabilitar">
+									<button type="button" ng-click="habilitarExtemporanea(datosHabilitar)" class="btn btn-danger">Habilitar</button>
+								</div>
+<!-- 								<div class="col-md-6 col-md-offset-3 col-xs-12" ng-if="opcion === 'habilitar' && !viewHelpers.controlHabilitar"> -->
+<!-- 									<button type="button" ng-click="buscarCaja()" class="btn btn-danger">Buscar</button> -->
+<!-- 								</div> -->
+								<div class="col-md-6 col-md-offset-3 col-xs-12" ng-if="opcion === 'desabilitar'">
+									<button type="button" ng-click="desabilitarExtemporanea(datosDeshabilitar.caja)" class="btn btn-danger">Deshabilitar</button>
+								</div>
+							</div>
+							
+						</div>						
+					</div>
+				</div>
+			</div>
+		</form>
+	</section>
+	
+	<script type="text/javascript">
+		$(function () {
+		 	$('body').on('focus',"#datepicker", function(){
+		    	$(this).datepicker({             
+					format: 'dd/mm/yyyy',
+					todayHighlight : true,
+					autoclose : true,
+					endDate : '-1d'
+				});
+			});
+		});
+	</script>		
+</body>
+</html>

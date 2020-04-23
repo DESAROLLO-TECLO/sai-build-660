@@ -1,0 +1,237 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+	</head>
+	<body>
+		<section class="content-header">
+			<h1>Reasigna Línea de Captura Masiva</h1>
+			<ol class="breadcrumb">
+				<li><a><i class="fa fa-book"></i>Línea de Captura</a></li>
+				<li class="active">Reasignación LC Masiva</li>
+			</ol>
+		</section>
+		
+		<!-- Contenido -->
+		<section  class="content" ng-init="validarArchivoPendiente()" ng-controller="reasignacionLCMasivaController">
+			<div class="row" ng-hide="showPendiente || showResultado">
+				<div class="col-md-6 col-md-offset-3">
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+<!-- 							<div class="row"> -->
+<!-- 								<div class="col-xs-12 text-center"> -->
+<!-- 									<h3 class="box-title">Seleccionar Archivo</h3> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+							
+							<h3 class="box-title">Seleccionar Archivo</h3>
+							<div class="box-tools pull-right">
+								<button type="button" class="btn btn-box-tool" data-widget="collapse">
+									<i class="fa fa-minus"></i>
+								</button>
+							</div>
+						</div>
+						<div class="box-body">
+							<form role="form" name="formReasigMasivo">
+								<div class="row">
+									<div class="col-md-12">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="fEmision">*Fecha de Emisión:</label>
+												<div class="form-group" ng-class="{'has-error': form.fEmision.$invalid && form.fEmision.$dirty}">
+													<div class="input-group date">
+														<div class="input-group-addon">
+															<i class="fa fa-calendar"></i>
+														</div>
+														<input type="text" id="fEmision" readonly 
+															ng-style='fEmisionS'
+															class="form-control pull-right inputFecha" 
+															name="fEmision" 
+															ng-model="reasignadoVO.fEmision" 
+															ng-required="true" 
+															autocomplete="off" 
+															ng-change="compara_fechas()"
+															date-picker	idioma-dp="{{currentLanguage}}" 
+															>
+													</div>
+													<div ng-if="form.fEmision.$error.required && form.fEmision.$dirty" 
+														ng-style="{color:'red'}">
+														La fecha de emisión es requerida
+													</div>
+												</div>
+											</div>
+										</div>
+										
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="tipoDescuento">Tipo de Descuento:</label>
+												<div class="input-group">
+													<div class="input-group-addon">
+														<i class="fa fa-percent"></i>
+													</div>
+													<select class="form-control select2" name="tipoDescuento" id="tipoDescuento"
+														ng-model="reasignadoVO.tipoDescuento" 
+														ng-options='option.codigo as option.descripcion for option in tipoDescuento'>
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="col-md-1"></div>
+										<div class="col-md-10">
+											<div class="form-group" ng-class="{'has-error': formReasigMasivo.fileReasignacion.$invalid && formReasigMasivo.fileReasignacion.$dirty}">
+												<div class="input-group" style="position: relative !important;">
+													<span class="input-group-addon">
+														<i class="fa fa-file" ng-if="reasignadoVO.file == null"></i>
+														<i class="fa fa-file-text" ng-if="reasignadoVO.file != null"></i>
+													</span>
+													<input type="text" class="form-control inputFile" name="fileReasignacion" ng-disabled="true" ng-required="true" ng-model="reasignadoVO.file.name"/>
+													<input type="reset" class="resetearInput" value="x" />
+													<span class="input-group-btn">
+														<input type="file" style="display:none;" id="fileReasigna" ng-required="true" onchange="angular.element(this).scope().getFileReasigna(this)" />
+														<label for="fileReasigna" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Cargar archivo">
+															<i class="fa fa-upload" style="color: #fff !important;"></i>
+														</label>
+													</span>
+												</div>
+												<div ng-show="formReasigMasivo.fileReasignacion.$error.required && formReasigMasivo.fileReasignacion.$dirty" 
+													ng-style="{color:'red'}">
+													El archivo .txt es requerido
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row text-center">
+									<div class="col-md-12">
+										<button type="button" class="btn btn-danger" ng-click="cargarArchivoReasignado()">Comprobar archivo</button>
+									</div>
+								</div>
+								</div>
+<!-- 								<div class="row"> -->
+<!-- 									<div class="col-md-5"> -->
+<!-- 										<label for="fEmision">*Fecha de Emisión:</label> -->
+<!-- 										<div class="form-group" ng-class="{'has-error': form.fEmision.$invalid && form.fEmision.$dirty}"> -->
+<!-- 											<div class="input-group date"> -->
+<!-- 												<div class="input-group-addon"> -->
+<!-- 													<i class="fa fa-calendar"></i> -->
+<!-- 												</div> -->
+<!-- 												<input type="text" id="fEmision" readonly  -->
+<!-- 													ng-style='fEmisionS' -->
+<!-- 													class="form-control pull-right inputFecha"  -->
+<!-- 													name="fEmision"  -->
+<!-- 													ng-model="reasignadoVO.fEmision"  -->
+<!-- 													ng-required="true"  -->
+<!-- 													autocomplete="off"  -->
+<!-- 													ng-change="compara_fechas()" -->
+<!-- 													date-picker	idioma-dp="{{currentLanguage}}"  -->
+<!-- 													> -->
+<!-- 											</div> -->
+<!-- 											<div ng-if="form.fEmision.$error.required && form.fEmision.$dirty"  -->
+<!-- 												ng-style="{color:'red'}"> -->
+<!-- 												La fecha de emisión es requerida -->
+<!-- 											</div> -->
+<!-- 										</div> -->
+<!-- 									</div> -->
+									
+<!-- 									<div class="col-md-5"> -->
+<!-- 										<div class="form-group"> -->
+<!-- 											<label for="tipoDescuento">Tipo de Descuento:</label> -->
+<!-- 											<div class="input-group"> -->
+<!-- 												<div class="input-group-addon"> -->
+<!-- 													<i class="fa fa-car"></i> -->
+<!-- 												</div> -->
+<!-- 												<select class="form-control select2" name="tipoDescuento" id="tipoDescuento" -->
+<!-- 													ng-model="reasignadoVO.tipoDescuento"  -->
+<!-- 													ng-options='option.codigo as option.descripcion for option in tipoDescuento'> -->
+<!-- 												</select> -->
+<!-- 											</div> -->
+<!-- 										</div> -->
+<!-- 									</div> -->
+<!-- 								</div> -->
+<!-- 								<div class="row centerCol">	 -->
+<!-- 									<div class="col-md-9"> -->
+<!-- 										<div class="form-group" ng-class="{'has-error': formReasigMasivo.fileReasignacion.$invalid && formReasigMasivo.fileReasignacion.$dirty}"> -->
+<!-- 											<div class="input-group" style="position: relative !important;"> -->
+<!-- 												<span class="input-group-addon"> -->
+<!-- 													<i class="fa fa-file" ng-if="reasignadoVO.file == null"></i> -->
+<!-- 													<i class="fa fa-file-text" ng-if="reasignadoVO.file != null"></i> -->
+<!-- 												</span> -->
+<!-- 												<input type="text" class="form-control inputFile" name="fileReasignacion" ng-disabled="true" ng-required="true" ng-model="reasignadoVO.file.name"/> -->
+<!-- 												<input type="reset" class="resetearInput" value="x" /> -->
+<!-- 												<span class="input-group-btn"> -->
+<!-- 													<input type="file" style="display:none;" id="fileReasigna" ng-required="true" onchange="angular.element(this).scope().getFileReasigna(this)" /> -->
+<!-- 													<label for="fileReasigna" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Cargar archivo"> -->
+<!-- 														<i class="fa fa-upload" style="color: #fff !important;"></i> -->
+<!-- 													</label> -->
+<!-- 												</span> -->
+<!-- 											</div> -->
+<!-- 											<div ng-show="formReasigMasivo.fileReasignacion.$error.required && formReasigMasivo.fileReasignacion.$dirty"  -->
+<!-- 												ng-style="{color:'red'}"> -->
+<!-- 												El archivo .txt es requerido -->
+<!-- 											</div> -->
+<!-- 										</div> -->
+<!-- 									</div> -->
+<!-- 								</div> -->
+<!-- 								<div class="row text-center"> -->
+<!-- 									<div class="col-md-12"> -->
+<!-- 										<button type="button" class="btn btn-danger" ng-click="cargarArchivoReasignado()">Comprobar archivo</button> -->
+<!-- 									</div> -->
+<!-- 								</div> -->
+								
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row" ng-show="showPendiente">
+				<div class="col-md-6 col-md-offset-3">
+					<div class="box box-danger" style="overflow: hidden;">
+						<div class="box-header with-border">
+							<div class="row">
+								<div class="col-xs-12 text-center">
+									<h3 class="box-title">Archivo Pendiente</h3>
+								</div>
+							</div>	
+						</div>
+						<div class="box-body">
+							<div class="row text-center">
+								<div class="col-md-10 col-md-offset-1">
+									<label>Se encuentra un archivo pendiente a reasignar</label>
+								</div>
+								<div class="col-md-10 col-md-offset-1">
+									<label>Folios pendientes a reasignar: {{ reasignadoVO.cantidadPendientes }}</label>
+								</div>
+							</div>
+							<div class="row text-center">
+								<div class="col-md-6" style="margin-top: 10px;">
+									<button type="button" id="reasignar" class="btn btn-danger" ng-click="reasignarArchivo()">Reasignar archivo</button>
+								</div>
+								<div class="col-md-6" style="margin-top: 10px;">
+									<button type="button" id="cancelar" class="btn btn-danger" ng-click="cancelarArchivo()">Cancelar archivo</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<script type="text/javascript">
+// 			$(function () {
+// 				$("#fEmision").datepicker({             
+// 					format: 'dd/mm/yyyy',
+// 					todayHighlight : true,
+// 					autoclose : true
+// 				});
+// 			}
+			//).on('changeDate', function (selected) {
+	        //	var maxDate = new Date(selected.date.valueOf());
+	        //	//$('#fInicio').datepicker('setEndDate', maxDate);
+	        //	alert(maxDate);
+	    	//});
+// 			);
+		</script>
+	</body>
+</html>
