@@ -1,0 +1,177 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>Libera Preimpresa</title>
+</head>
+<body>
+<!-- 	<div ng-show="error" class="alert alert-warning"> -->
+<!-- 		{{error.message}}</div> -->
+	<section class="content-header">
+		<h1>Libera Infracciones Preimpresas</h1>
+		<ol class="breadcrumb">
+			<li><a><i class="fa fa-book"></i>Infracción</a></li>
+			<li class="active">Libera Preimpresas</li>
+		</ol>
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<section class="connectedSortable" ng-show="!showCargaResp">
+			<form id="form1" role="form" name="marcadoInfraccion">
+				<div class="row">
+					<section class="col-lg-offset-3 col-lg-6 connectedSortable">
+						<div class="box box-danger">
+							<div class="box-header with-border text-center">
+								<h3 class="box-title">Infracciones sin Liberar: {{totalSinliberar}}</h3>
+							</div>
+							<div class="box-body">
+<!-- 								<div class="row"> -->
+<!-- 									<div class="col-sm-6 col-xs-12 text-center btnMargen"> -->
+<!-- 										<button type="button" class="btn btn-danger"  -->
+<!-- 										id="btnLiberar" ng-click="liberar()" style="width:80%">Liberar Infracciones</button> -->
+<!-- 									</div> -->
+<!-- 									<div class="col-sm-2 col-xs-12 text-center"></div> -->
+<!-- 									<div class="col-sm-6 col-xs-12 text-center btnMargen"> -->
+<!-- 										<button type="button" class="btn btn-danger"  -->
+<!-- 										id="btnDuplicados" ng-click="duplicados()" style="width:80%">Folios Duplicados</button> -->
+<!-- 									</div> -->
+<!-- 								</div> -->
+								<div class="row itemsBox">
+									<div class="btnMargen">
+										<button type="button" class="btn btn-danger" 
+										id="btnLiberar" ng-click="liberar()">Liberar Infracciones</button>
+									</div>
+									<div class="btnMargen">
+										<button type="button" class="btn btn-danger" 
+										id="btnDuplicados" ng-click="duplicados()">Folios Duplicados</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
+				</div>
+			</form>
+		</section>
+		<section class="connectedSortable" ng-show="showDuplicados">
+			<div class="row">
+				<section class="col-lg-12 connectedSortable">
+					<div class="box box-danger">
+						<div class="box-header col-md-12">
+							<div class="col-md-6">
+								<h3 class="box-title">Registros Encontrados: {{(foliosDuplicados | filter : view.searchSomething).length }}</h3>
+							</div>
+							<div class="col-md-6 form-group">
+								<div class="row">
+									<div class="col-md-offset-6 col-md-6 col-xs-12">
+						      			<div class="input-group pull-right">
+						        			<input type="text" class="form-control" placeholder="Buscar por filtro" ng-model="view.searchSomething">
+											<div class="input-group-addon"><i class="fa fa-search"></i></div>
+						     			</div>
+						     		</div>
+					     		</div>  
+							</div>
+						</div>
+						<div class="box-body table-responsive">
+							<table class="table table-hover header-fixed">
+								<thead>
+									<tr>
+										<th sort order="'folio'" by="order" reverse="reverse" class="center"  width="15%">FOLIO</th>
+										<th sort order="'placa'" by="order" reverse="reverse" class="center"  width="15%">PLACA</th>
+										<th sort order="'fechaHoraOrder'" by="order" reverse="reverse" class="center"  width="15%">FECHA INFRACCIÓN</th>
+										<th sort order="'infraccion'" by="order" reverse="reverse" class="center"  width="25%">FUNDAMENTACIÓN</th>
+										<th sort order="'fechaCreacionOrder'" by="order" reverse="reverse" class="center"  width="15%">FECHA DE PROCESAMIENTO	</th>
+										<th sort order="'lote'" by="order" reverse="reverse" class="center"  width="15%">LOTE</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr dir-paginate="infraccion in foliosDuplicados | orderBy:order:reverse | filter:view.searchSomething | itemsPerPage: view.rowsPerPage">
+										<td class="center"  width="15%">{{infraccion.folio}}</td>
+										<td class="center"  width="15%">{{infraccion.placa}}</td>
+										<td class="center"  width="15%">{{infraccion.fechaHora}}</td>
+										<td class="center"  width="25%">{{fundamentacion(infraccion)}}</td>
+										<td class="center"  width="15%">{{infraccion.fechaCreacion}}</td>
+										<td class="center"  width="15%">{{infraccion.lote}}</td>
+									</tr>
+										<tr ng-if="(foliosDuplicados | filter:view.searchSomething).length < 1"><td colspan="10" class="text-center"><h4>No se encontraron coincidencias</h4></td></tr>
+								</tbody>
+							</table>
+<!-- 							<dir-pagination-controls></dir-pagination-controls> -->
+						</div>
+						<div class="container-fluid">
+							<div class="fixed-table-pagination" style="display:block;">
+								<rows-per-page rows="view.rowsPerPage" filtro="view.searchSomething" array="foliosDuplicados"></rows-per-page>
+								
+								<div class="pull-right pagination">
+									<dir-pagination-controls class="pagination"></dir-pagination-controls>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+		</section>
+		<section class="connectedSortable" ng-show="showCargaResp">
+			<div class="row">
+				<section class="col-lg-offset-2 col-lg-8 connectedSortable">
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Resultado de la Operación</h3>
+						</div>
+						<div class="box-body" style="padding-left: 20px;padding-right: 20px;">
+							<div class="table-responsive">
+								<table class="table tblsnborder">
+									<tr>
+	                            		<td><dt style="text-align : right;">Estatus:</dt></td>
+	                            		<td>{{cargaRes.messageOut}}</td>
+	                            	</tr>
+	                            	<tr>
+	                            		<td><dt style="text-align : right;">Infracciones Liberadas:</dt></td>
+	                           			<td>{{cargaRes.foliosLiberados}}</td>
+	                           		</tr>
+	                           		<tr>
+	                            		<td><dt style="text-align : right;">Infracciones Duplicadas:</dt></td>
+	                           			<td>{{cargaRes.foliosRepetidos}}</td>
+	                           		</tr>
+								</table>
+							</div>
+							<div class="row">
+								<div class="col-xs-12 text-center">
+									<button class="btn btn-danger" id="btnRegresar" type="button"  ng-click="getTotalSinLibrerar()">Regresar</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+		</section>
+	</section>
+	<div class="row">
+		<div class="col-md-12">
+		<!--{{foliosDuplicados}}
+		 {{cargaRes}}  -->
+			 
+		</div>
+	</div>
+
+	<div class="control-sidebar-bg"></div>
+
+	<style type="text/css">
+legend.scheduler-border {
+	font-size: 1em !important;
+	font-weight: bold !important;
+	text-align: left !important;
+	width: auto;
+	padding: 0 10px;
+	border-bottom: none;
+}
+
+fieldset.scheduler-border {
+	border-radius: 0.5em; /* applied border radius */
+	border: 1px solid #ccc !important;
+	padding: 0 1.4em 1.4em 1.4em !important;
+	margin: 0 0 1.5em 0 !important;
+}
+</style>
+
+</body>
+</html>

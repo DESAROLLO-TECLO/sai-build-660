@@ -1,0 +1,31 @@
+/*INPUT SALIDAS IMG MULTIPLE*/
+.inputFileSalidaVeh{
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: 1;
+}
+
+.inputFileSalidaVeh + label{
+	width: 70px;
+	height: 70px;
+	font-size: 1.25em;
+	font-weight: 700;
+	color: tomato;
+	background-color: #EEEE;
+	display: inline-block;
+	cursor: pointer;
+}
+
+.inputFileSalidaVeh:focus +label,
+.inputFileSalidaVeh + label:hover{
+	background-color: red;
+}
+.inputFileSalidaVeh:focus + label{
+	outline: 1px dotted #000;
+}
+.inputFileSalidaVeh + label *{
+	pointer-events: none;
+}

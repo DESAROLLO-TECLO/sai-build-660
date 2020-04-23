@@ -1,0 +1,42 @@
+#map { 
+	/*   width: 50px; */
+	height: 42.86rem;
+	/* position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	bottom: 0;
+	top: 0;
+	z-index: 0; */
+}
+  
+ .list li ul { 
+     display: none; 
+ }
+ 
+.list {
+	list-style: none;
+  	padding: 0;
+}
+
+.list li ul{
+	list-style: none;
+  	padding: 0;
+  	margin-left: 1em;
+}
+
+.list li .plus:before {
+	content: "\f067"; /* FontAwesome Unicode */
+	font-family: FontAwesome;
+	display: inline-block;
+	margin-left: -1.3rem; /* same as padding-left set on li */
+	width: 1.3rem; /* same as padding-left set on li */
+}
+
+.list li .minus:before {
+	content: "\f068"; /* FontAwesome Unicode */
+	font-family: FontAwesome;
+	display: inline-block;
+	margin-left: -1.3rem; /* same as padding-left set on li */
+	width: 1.3rem; /* same as padding-left set on li */
+}

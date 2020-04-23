@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Alta de Salidas</title>
+</head>
+<body>
+	
+	<section class="content-header">
+		<h1>Nuevo Movimiento</h1>
+		<ol class="breadcrumb">
+			<li><a href=""><i class="fa fa-arrow-circle-down tool"></i>Movimiento entre Depósitos</a></li>
+			<li class="active">Nuevo Movimiento</li>
+		</ol>
+	</section>
+
+	<section class="content">
+		<form name="AltaSalidaVeh" role="form">
+			<div class="row">
+				<section class="col-md-6 connectedSortable">
+				<div class="box box-danger" style="height:146px!important">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Datos Generales</h3>
+						</div>
+						<div class="box-body">
+							<div class="row">
+								<div class="col-md-6 form-group">
+									<label>Folio de Infracción:</label><br>
+									<label> {{infoBusqueda.infracNum}} </label>
+									<div class="input-group">
+<!-- 										<span class="input-group-addon"> <i -->
+<!-- 											class="fa fa-pencil" aria-hidden="true"></i> -->
+<!-- 										</span>  -->
+										
+									</div>
+								</div>
+
+								<div class="col-md-6">
+									<div class="form-group"
+										ng-class="{'has-error': forms.altaInfraccion.resguardo.$invalid && forms.altaInfraccion.resguardo.$dirty}">
+										<label>Número de Control Interno (NCI):</label><br>
+										 <label> {{infoBusqueda.infracNumCtrl}} </label>
+<!-- 										<div class="input-group"> -->
+<!-- 											<span class="input-group-addon"> <i -->
+<!-- 												class="fa fa-building-o" aria-hidden="true"></i> -->
+<!-- 											</span> -->
+<!-- 										</div> -->
+										<div
+											ng-if="forms.altaInfraccion.resguardo.$error.required && forms.altaInfraccion.resguardo.$dirty"
+											ng-style="{color:'red'}">El no. de resguardo es
+											requerido</div>
+									</div>
+								</div>
+							</div>
+							</div>
+						
+					</div>
+							
+						<div class="box box-danger" style="min-height:220px !important">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Datos de Salida</h3>
+						</div>
+						<div class="box-body">
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group"
+										ng-class="{'has-error': AltaSalidaVeh.tipoSalida.$invalid && AltaSalidaVeh.tipoSalida.$dirty}">
+										<label>*Tipo de Salida:</label>
+										<div class="input-group">
+											<span class="input-group-addon"> <i
+												class="fa fa-list-ul" aria-hidden="true"></i>
+											</span> 
+											<select ng-change="changeView()" name="tipoSalida" ng-model="infoBusqueda.filtroValue" class="form-control"
+										    ng-options='option.codigoString as option.descripcion for option in valuesFiltro' ng-required="true">
+											</select>
+											
+										</div>
+										<div ng-if="AltaSalidaVeh.tipoSalida.$error.required && AltaSalidaVeh.tipoSalida.$dirty"
+											ng-style="{color:'red'}">El tipo de salida es
+											requerido</div>
+									</div> 
+								</div>
+									<div class="col-md-6" ng-show="infoBusqueda.filtroValue == '1' "><!--   -->
+									<div class="form-group"
+										ng-class="{'has-error': AltaSalidaVeh.adjudicacionDest.$invalid && AltaSalidaVeh.adjudicacionDest.$dirty}">
+										<label>*Adjudicación Destino:</label>
+										<div class="input-group">
+											<span class="input-group-addon"> <i
+												class="fa fa-list-ul" aria-hidden="true"></i>
+											</span> 
+											<select name="adjudicacionDest" ng-model="infoBusqueda.adjudDestino" class="form-control" ng-change="validToAfter()" ng-disabled="infoBusqueda.filtroValue == 3"
+										    ng-options='option.codigoString as option.descripcion for option in valuesAdjudDestino' ng-required="infoBusqueda.filtroValue == 1">
+											<option value="">--- Seleccione ---</option>
+											</select>
+											
+										</div>
+										<div ng-if="AltaSalidaVeh.adjudicacionDest.$error.required && AltaSalidaVeh.adjudicacionDest.$dirty"
+											ng-style="{color:'red'}">La adjundicación destino es
+											requerido</div>
+									</div>
+								</div>
+								<div class="col-md-6" ng-if="infoBusqueda.filtroValue == 2 ">
+									<div class="form-group"
+										ng-class="{'has-error': AltaSalidaVeh.faseCompacta.$invalid && AltaSalidaVeh.faseCompacta.$dirty}">
+										<label>*Fase compactación:</label>
+										<div class="input-group">
+											<span class="input-group-addon"> <i
+												class="fa fa-list-ul" aria-hidden="true"></i>
+											</span> 
+											<select name="faseCompacta" ng-change="validToAfter()" ng-model="infoBusqueda.faseCompacta" class="form-control" ng-disabled="infoBusqueda.filtroValue == 3"
+										    ng-options='option.codigo as option.descripcion for option in valuesFaseCompactas' ng-required="infoBusqueda.filtroValue == 2">
+											<option value="">--- Seleccione ---</option>
+											</select>
+											
+										</div>
+										<div ng-if="AltaSalidaVeh.faseCompacta.$error.required && AltaSalidaVeh.faseCompacta.$dirty"
+											ng-style="{color:'red'}">La fase compactación es
+											requerida</div>
+									</div>
+								</div>
+								
+								
+								<div class="col-md-6" ng-if="infoBusqueda.filtroValue == 4">
+									<div class="form-group"
+										ng-class="{'has-error': AltaSalidaVeh.folioDocto.$invalid && AltaSalidaVeh.folioDocto.$dirty}">
+										<label>*Folio Documento:</label>
+										<div class="input-group">
+											<span class="input-group-addon"> <i
+												class="fa fa-building-o" aria-hidden="true"></i>
+											</span> <input type="text" name="folioDocto"
+												ng-model="infoBusqueda.folioDocto" maxlength = "20" ng-disabled="infoBusqueda.filtroValue == 3" ng-change="validToAfter()"
+												class="form-control" ng-required="infoBusqueda.filtroValue == 4"></input>
+										</div>
+										<div
+											ng-if="AltaSalidaVeh.folioDocto.$error.required && AltaSalidaVeh.folioDocto.$dirty"
+											ng-style="{color:'red'}">El folio documento es
+											requerido</div>
+									</div>
+								</div>
+								<div class="col-md-6" ng-if="infoBusqueda.filtroValue == 5 ">
+									<div class="form-group"
+										ng-class="{'has-error': AltaSalidaVeh.depDestino.$invalid && AltaSalidaVeh.depDestino.$dirty}">
+										<label>*Depósito Destino:</label>
+										<div class="input-group">
+											<span class="input-group-addon"> <i
+												class="fa fa-list-ul" aria-hidden="true"></i>
+											</span> 
+											<select name="depDestino" ng-change="validToAfter()" ng-model="infoBusqueda.depDestino" class="form-control" ng-disabled="infoBusqueda.filtroValue == 3"
+										    ng-options='option.codigo as option.descripcion for option in valuesDepDestino' ng-required="infoBusqueda.filtroValue == 5">
+											<option value="">--- Seleccione ---</option>
+											</select>
+											
+										</div>
+										<div ng-if="AltaSalidaVeh.depDestino.$error.required && AltaSalidaVeh.depDestino.$dirty"
+											ng-style="{color:'red'}">El depósito destino es
+											requerido</div>
+									</div>
+								</div>
+								<div class="text-center col-md-6" ng-if="infoBusqueda.filtroValue == 3">
+									<div class="form-group" >
+									<label></label>
+										<div class="input-group text-center">
+										<label>{{msg}}</label>
+											
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+							
+								<div class="col-md-6">
+									<div class="form-group"
+										ng-class="{'has-error': AltaSalidaVeh.placaOficial.$invalid && AltaSalidaVeh.placaOficial.$dirty || viewMessagePlaca}"
+										ng-style="{color:validColor}">
+										<label>*Placa Oficial:</label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-star"></i>
+											</div>
+											<input type="text" name="placaOficial" ng-change="validaShowView()"
+												ng-model="infoBusqueda.placaOficial"
+												ng-required="infoBusqueda.filtroValue != 3 || viewMessagePlaca" class="form-control "
+												 maxlength="10"  ng-disabled="infoBusqueda.filtroValue == 3"></input>
+											<span class="input-group-btn">
+												<button type="button"
+													ng-click="consultarPlacaOficial()"
+													class="btn btn-danger btn-flat" ng-disabled="infoBusqueda.filtroValue == 3">Buscar</button>
+											</span>
+										</div>
+
+										<div ng-if="AltaSalidaVeh.placaOficial.$error.required && AltaSalidaVeh.placaOficial.$dirty"
+											ng-style="{color:'red'}">La placa oficial es requerida</div>
+										<div ng-if="viewMessagePlaca" ng-style="{color:'red'}">{{validMensaje}}</div>
+									</div>
+								</div>
+							
+							</div>
+							<div class="row">
+							
+							<div class="col-md-12 form-group" ng-if="viewMessagePlacaShow && infoBusqueda.placaOficial.length == banderaLengthPlacaAct ">
+									<fieldset>
+									<legend><h6>Datos del oficial</h6></legend>
+									<div class="col-md-6">
+										<label>Nombre Oficial : {{validMensaje.nombreEmp}}</label>
+									</div>
+									<div class="form-group col-md-6">
+										<label>Agrupamiento : {{validMensaje.nomAgrupamiento}}</label>
+									</div>
+										<div class="form-group col-md-6">
+										<label>Sector : {{validMensaje.nomSector}}</label>
+									</div>
+									<div class="form-group col-md-6">
+										<label>Perfil : {{validMensaje.perfil}}</label>
+									</div>
+									</fieldset>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			<section class="col-md-6 connectedSortable">
+								<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Datos del Ingreso</h3>
+						</div>
+						<div class="box-body">
+							<div class="row">
+								<div class="col-md-6 form-group">
+									<label>Depósito Origen:</label>
+									<label> {{infoBusqueda.nomDep}} </label>
+<!-- 									<div class="input-group"> -->
+<!-- 										<span class="input-group-addon"> <i -->
+<!-- 											class="fa fa-pencil" aria-hidden="true"></i> -->
+<!-- 										</span>  -->
+										
+										<input ng-hide="true" type="text" class="form-control" ng-model="infoBusqueda.numDeposito"></input>
+<!-- 									</div> -->
+								</div>
+
+								<div class="col-md-6">
+									<div class="form-group"
+										ng-class="{'has-error': forms.altaInfraccion.resguardo.$invalid && forms.altaInfraccion.resguardo.$dirty}">
+										<label>Fecha de Ingreso:</label>
+										<label> {{infoBusqueda.ingresoFecha}} </label>
+<!-- 										<div class="input-group"> -->
+<!-- 											<span class="input-group-addon"> <i -->
+<!-- 												class="fa fa-calendar" aria-hidden="true"></i> -->
+<!-- 											</span>  -->
+											
+<!-- 										</div> -->
+										<div
+											ng-if="forms.altaInfraccion.resguardo.$error.required && forms.altaInfraccion.resguardo.$dirty"
+											ng-style="{color:'red'}">El no. de resguardo es
+											requerido</div>
+									</div>
+								</div>
+									<div class="col-md-6">
+									<div class="form-group"
+										ng-class="{'has-error': forms.altaInfraccion.resguardo.$invalid && forms.altaInfraccion.resguardo.$dirty}">
+										<label>Número de Resguardo:</label>
+										<label> {{infoBusqueda.numResguardo}} </label>
+<!-- 										<div class="input-group"> -->
+<!-- 											<span class="input-group-addon"> <i -->
+<!-- 												class="fa fa-pencil" aria-hidden="true"></i> -->
+<!-- 											</span>  -->
+											
+<!-- 										</div> -->
+										<div
+											ng-if="forms.altaInfraccion.resguardo.$error.required && forms.altaInfraccion.resguardo.$dirty"
+											ng-style="{color:'red'}">El no. de resguardo es
+											requerido</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Datos del Vehículo</h3>
+						</div>
+						<div class="box-body">
+							<div class="row">
+								<div class="col-md-6 form-group">
+									<label>Placa:</label>
+									<label>{{infoBusqueda.placaNum}}</label>
+<!-- 									<div class="input-group"> -->
+<!-- 										<span class="input-group-addon"> <i -->
+<!-- 											class="fa fa-automobile" aria-hidden="true"></i> -->
+<!-- 										</span>  -->
+										
+<!-- 									</div> -->
+								</div>
+								<div class="col-md-6 form-group">
+									<label>Marca:</label>
+									<label>{{infoBusqueda.nomMarca}}</label>
+								</div>
+								<div class="col-md-6 form-group">
+									<label>Modelo:</label>
+									<label>{{infoBusqueda.nomModelo}}</label>
+								</div>
+								<div class="col-md-6 form-group">
+									<label>Color:</label>
+									<label>{{infoBusqueda.nomColor}}</label>
+								</div>
+
+								<div class="col-md-6">
+									<div class="form-group"
+										ng-class="{'has-error': AltaSalidaVeh.numSerie.$invalid && AltaSalidaVeh.numSerie.$dirty}">
+										<label>*Número de Serie:</label>
+										<div class="input-group">
+											<span class="input-group-addon"> <i
+												class="fa fa-pencil" aria-hidden="true"></i>
+											</span> <input type="text" name="numSerie"
+												ng-model="infoBusqueda.numSerie" maxlength="15"
+												class="form-control" capitalize ng-required="true"></input>
+										</div>
+										<div
+											ng-if="AltaSalidaVeh.numSerie.$error.required && AltaSalidaVeh.numSerie.$dirty"
+											ng-style="{color:'red'}">El no. de serie es
+											requerido</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+		
+			</section>
+			
+			<!-- INICIA EL INGRESO DE ARCHIVOS -->
+			<section class="col-md-6 connectedSortable">
+				
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Carga de archivos </h3>
+						</div>
+						
+					<div class="box-body">
+						
+							<div class="row"> 
+										
+										<div class="col-md-12 col-xs-12">				
+											<div class="form-group" ng-class="{'has-error': AltaSalidaVeh.imgFile.$invalid && AltaSalidaVeh.imgFile.$dirty || flagInputFileView } ">
+												<div class="input-group">
+													<div class="input-group-addon">
+														<i class="fa fa-file-text"></i>
+													</div>
+												<input class="form-control inputFile" disabled value="{{nombreArchivo}}">
+													<span class="input-group-btn">
+														<label class="btn btn-danger btn-flat" for="file">
+															<input type="file" name="file" id="file" ng-model="files" class="inputFileSalidaVeh" data-multiple-caption="{count} archivos seleccionados" on-change="listenerForImg" accept="image/*" multiple  base-sixty-four-input validEmpty="1">
+															<i class="fa fa-upload" style="color:white;"></i>
+														</label>
+													</span>
+												</div>
+												
+												<div ng-show="flagInputFileView" ng-style="{color:'red'}">La evidencia es requerida</div>
+	                     					</div>
+										</div>
+										<div class="col-sm-3"></div>	
+									</div>
+						</div>
+					</div>
+					
+			</section>
+			
+			</div>
+			
+			<div class="row itemsBox">
+								<button ng-click="regresarBusqMod()" class="btn btn-danger">
+									<i class="fa fa-arrow-circle-left"></i>
+									<span>Regresar</span>
+								</button>
+								<button type="button" class="btn btn-danger" id="btnGuardarDatos" ng-click="registraSalida()">
+									<span>Guardar</span>
+								</button>
+			</div>
+		</form>
+		
+	</section>
+	
+		<script type="text/javascript">
+			$(function () {
+					    $("#fInicio").datepicker({             
+							format: 'dd/mm/yyyy',
+							//language: 'es',
+							todayHighlight : true,
+							autoclose : true
+						}).on('changeDate', function (selected) {
+				        	var minDate = new Date(selected.date.valueOf());
+				        	$('#fFin').datepicker('setStartDate', minDate);
+				    	});
+						
+						$("#fFin").datepicker({             
+							format: 'dd/mm/yyyy',
+							//language: 'es',
+							todayHighlight : true,
+							autoclose : true
+						}).on('changeDate', function (selected) {
+				        	var maxDate = new Date(selected.date.valueOf());
+				        	$('#fInicio').datepicker('setEndDate', maxDate);
+				    	});
+					});
+					
+	
+    </script> 
+</body>
+</html>

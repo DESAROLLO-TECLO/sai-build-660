@@ -1,0 +1,168 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>Consulta Infracciónes Impugnacion</title>
+</head>
+<body>
+
+	<section class="content-header">
+		<h1 >Consulta de Impugnaciones</h1>
+		<ol class="breadcrumb">
+			<li><a><i class="fa fa-book"></i>Impugnación</a></li>
+			<li class="active">Consulta</li>
+		</ol>
+	</section>
+
+	<!-- Main content -->
+
+	<section class="content">
+			<div class="row">
+				<div class="col-md-3"></div>
+				<div class="col-md-6 ">
+
+					<!-- Datos Del Infractor -->
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Consulta</h3>
+
+						</div>
+
+						<!-- /.box-header -->
+						<div class="box-body">
+						 
+							<div class="row">
+
+								<div class="col-md-6">
+
+									<div class="form-group">
+									
+										<div class="input-group">
+									    		<span class="input-group-addon">
+									    		<i class="fa fa-list"></i></span>
+										<select name="mySelect" id="mySelect"
+											ng-options="option.name for option in data.availableOptions track by option.id"
+											ng-model="data.selectedOption"
+											class="form-control" >
+										</select>
+										</div>
+									</div>
+								</div>
+
+							 <form name="formImpugna" novalidate>
+								<div class="col-md-6"> 	
+								   <div class="form-group"
+										ng-class="{ 'has-error' : formImpugna.valor.$invalid && !formImpugna.valor.$pristine }">
+
+											<div class="input-group">
+												<span class="input-group-addon"> <i
+													class="fa fa-pencil"></i></span> <input type="text"
+													ng-model="parametroBusqueda.valor" name="valor"
+													class="form-control" capitalize required>
+											
+											
+											
+											<span class="input-group-btn">	  
+												<button type="button"
+													ng-click="buscarImpugnaciones(data.selectedOption.id, parametroBusqueda.valor)"
+													class="btn btn-danger btn-flat" >Buscar</button>
+											
+											
+											</span>
+										</div>
+										<p ng-show="formImpugna.valor.$invalid && !formImpugna.valor.$pristine"
+											   class="help-block">El valor es requerido</p>
+										  
+										</div>
+									</div>
+								 </form>
+								</div>
+								
+								</div>
+								</div>
+								</div>
+								</div>
+
+				<div  ng-if="mostrarTabla">
+					<div class="box box-danger">
+						<div class="box-header col-md-12">
+							<div class="col-sm-6">
+								<h3 class="box-title">Registros Encontrados: {{ (impugnacion | filter:view.searchSomething).length }}</h3>
+							</div>
+							<div class="col-sm-6 form-group">
+								<div class="row">
+									<div class="col-md-offset-6">
+						      			<div class="input-group pull-right">
+						        			<input id="searchsomething" type="text" class="form-control" placeholder="Buscar por filtro" ng-model="view.searchSomething">
+											<div class="input-group-addon"><i class="fa fa-search"></i></div>
+						     			</div>
+						     		</div>
+					     		</div>  
+							</div>
+						</div>
+		
+						<div class="box-body table-responsive">
+							<table  id="tabla_impugnacion" class="table table-hover">
+								<thead>
+									<tr>
+										<th width="18%">OFICIO JURÍDICO</th>
+										<th class="center" width="15%">JUICIO</th>
+										<th class="center" width="21%">CONST. CUMPLIMIENTO</th>
+										<th class="center" width="18%">NOMBRE</th>
+										<th class="center" width="18%">FECHA</th>
+										<th class="center" width="5%">CONSULTA</th>
+										<th class="center" width="5%">MODIFICA INFORMACIÓN</th>
+										<th class="center" width="5%">MODIFICA INFRACCIONES</th>
+									</tr>
+								</thead>
+								<tbody>
+								
+									<tr dir-paginate="imp in impugnacion | filter: view.searchSomething | itemsPerPage: view.rowsPerPage">			
+										<td class="center">{{imp.impugnacionOficioJur}}</td>
+										<td class="center">{{imp.impugnacionJuicio}}</td>
+										<td class="center">{{imp.impugnacionConstanciaCump}}</td>
+										<td class="center">{{imp.actorNombre}} {{imp.actorApellidoPaterno}} {{imp.actorApellidoMaterno}}</td>
+										<td class="center">{{imp.fechaRecepcion}}</td>
+										
+										<td class="center">
+											<a href="" ng-click="verDetalleConsulta(impugnacion)">
+												<span class="fa fa-search fa-2x" data-toggle="tooltip" data-placement="left"
+										      		title="Consulta">
+									      		</span>
+								      		</a>
+										</td>
+										<td class="center">
+											<a href="" ng-click="modificaInformacion(impugnacion)" >
+												<span class="fa fa-pencil fa-2x" data-toggle="tooltip" data-placement="left"
+												       	title="Modifica Información">
+												</span>
+											</a>
+										</td>
+										
+										<td class="center"><a href="" ng-click="verInfracciones(impugnacion)"  >
+										<i class="fa fa-pencil fa-2x" 
+										     data-toggle="tooltip"
+										     data-placement="left"
+										      title="Modifica Infracciones"></i></a>
+										</td>
+									</tr>
+									
+									<tr ng-if="(impugnacion | filter:view.searchSomething).length < 1"><td colspan="8" class="text-center"><h4>No se encontraron coincidencias</h4></td></tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="container-fluid">
+							<div class="fixed-table-pagination" style="display:block;">
+								<rows-per-page rows="view.rowsPerPage" filtro="view.searchSomething" array="impugnacion"></rows-per-page>
+								
+								<div class="pull-right pagination">
+									<dir-pagination-controls class="pagination"></dir-pagination-controls>
+								</div>
+							</div>
+						</div>
+						
+						
+					</div>
+				</div>
+	</section>
+<body>
+</html>

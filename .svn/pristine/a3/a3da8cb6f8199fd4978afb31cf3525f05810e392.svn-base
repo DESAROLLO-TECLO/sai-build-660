@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Mapa Infracciones</title>
+</head>
+<body>
+	<section class="content-header">
+		<h1 >Mapa Infracciones </h1>
+		<ol class="breadcrumb">
+			<li><a href="#"><i class="fa fa-line-chart tool"></i>Reportes</a></li>
+			<li class="active">Mapa Infracciones</li>
+		</ol>
+	</section>
+	
+	<section class="content-header">
+		<h1></h1>
+	</section>
+	<section class="content"> <!-- ng-init="loadFirstTime()" -->
+	<form role="form" name="reportesEstadisticasInfracciones">
+	<div class="row">
+				<div class="col-md-6 col-md-offset-3">
+			<!-- INICIA LAS OPCIONES -->
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Búsqueda</h3>
+						</div>
+						<div class="box-body">							
+							<div class="row">
+								<div class="col-xs-6">
+									<div class="form-group" ng-class="{'has-error': reportesEstadisticasInfracciones.repeatSelect.$invalid && reportesEstadisticasInfracciones.repeatSelect.$dirty}">
+										<label>*Tipo de Infracción:</label>
+										<select name="repeatSelect" multiple data-actions-box="true"  
+											id="repeatSelect" ng-model="data.model" class="form-control selectpicker select2" style="width: 100%;" ng-required="true">
+											 <option on-finish-render="ngRepeatFinished" ng-repeat="option in data.availableOptions "  value="{{option.cdTipoInfraccion}}">{{option.nbTipoInfraccion}}</option>
+									   </select>
+									   <span ng-style="{color:'red'}" 
+											ng-show="reportesEstadisticasInfracciones.repeatSelect.$error.required && reportesEstadisticasInfracciones.repeatSelect.$dirty">
+												Seleccione al menos un tipo de infracción
+										</span>
+								   </div>
+							   </div>
+							   <div class="col-xs-6">
+									<div class="form-group">
+										<label>Tipo de Búsqueda:</label>
+										<select name="selectTipoBusqueda" 
+											id="repeatSelect" ng-model="datab.model"  class="form-control select2" style="width: 100%;" ng-change="changeCombo()">
+											 <option  ng-repeat="option in datab.availableOptions" value="{{option.id}}">{{option.name}}</option>
+									   </select>
+								   </div>
+							   </div>
+							</div>							
+							<div class="row">
+								
+							   
+								<div class="col-xs-6">
+									<div class="form-group" ng-class="{'has-error': reportesEstadisticasInfracciones.fInicio.$invalid &&  reportesEstadisticasInfracciones.fInicio.$dirty }">
+										<label>*Fecha de Inicio:</label>
+										<div class="input-group date">
+											<div class="input-group-addon">
+												<i class="fa fa-calendar"></i>
+											</div>
+											<input type="text" 
+												id="fInicio" name="fInicio"
+												class="form-control pull-right inputFecha"
+												ng-required="datab.model == 02" 
+												ng-model="filtroBusqueda.fechaInicio"
+												
+												autocomplete="off"
+												readonly 
+												ng-disabled="isDisabled" />
+										</div>
+										<div ng-style="{color:'red'}" 
+											ng-show="reportesEstadisticasInfracciones.fInicio.$error.required &&  reportesEstadisticasInfracciones.fInicio.$dirty">
+												La fecha de inicio es requerida
+										</div>
+									</div>
+								</div>
+								
+								<div class="col-xs-6">
+									<div class="form-group"  ng-class="{'has-error': reportesEstadisticasInfracciones.fFin.$invalid &&  reportesEstadisticasInfracciones.fFin.$dirty }">
+										<label>*Fecha Fin:</label>
+										<div class="input-group date">
+											<div class="input-group-addon">
+												<i class="fa fa-calendar"></i>
+											</div>
+											<input type="text" 
+												id="fFin" name="fFin"
+												class="form-control pull-right inputFecha"
+												ng-required="datab.model == 02"  
+												ng-model="filtroBusqueda.fechaFin" 
+												
+												autocomplete="off" 
+												readonly 
+												ng-disabled="isDisabled" />
+										</div>
+										<div ng-style="{color:'red'}" 
+											ng-show="reportesEstadisticasInfracciones.fFin.$error.required &&  reportesEstadisticasInfracciones.fFin.$dirty ">
+												La fecha fin es requerida
+										</div>
+									</div>
+								</div>
+			
+							</div>
+							
+							<div class="row">
+								<div class="col-xs-12" >
+									<button  type="button" 
+										class="btn bg-red-active center-block"
+										ng-click="actualizarConsulta()">
+											Buscar
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					</div>
+					</div>
+					
+	</form>
+	<div class="row centerCol">
+		<div class="col-md-11 col-xs-12">
+			<div class="box box-danger">
+				<div class="box-header with-border center">
+<!-- 					<h3 class="box-title">Mapa</h3> -->
+				</div>
+				<div class="box-body">
+					<div id="map"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div ng-if="datab.model == 01" ng-init="habilitaCampoFecha(true)"></div>
+	<div ng-if="datab.model == 02" ng-init="habilitaCampoFecha(false)"></div>
+	<!-- <div ng-if="data.model == 11"></div>                       Infracciones totales del día
+	<div ng-if="data.model == 00"></div>Infracciones totales
+	<div ng-if="data.model == 01"></div>Infracciones gruas
+    <div ng-if="data.model == 02"></div>Infracciones acta administrativa
+    <div ng-if="data.model == 03"></div>SSP Velocidad
+    <div ng-if="data.model == 04"></div>HandHeld
+    <div ng-if="data.model == 05"></div>Inmovilizador
+    <div ng-if="data.model == 06"></div>Parkimetros
+    <div ng-if="data.model == 07"></div>Carril confinado
+    <div ng-if="data.model == 08"></div>Fotomultas
+    <div ng-if="data.model == 09"></div>Consesionados
+    <div ng-if="data.model == 10"></div>Boleta -->
+	</section>		
+</body>
+</html>

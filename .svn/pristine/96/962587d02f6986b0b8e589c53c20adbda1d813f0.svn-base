@@ -1,0 +1,187 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>Consulta de Pagos</title>
+</head>
+<body>
+	<section class="content-header">
+		<h1>Consulta de Pagos</h1>
+		<ol class="breadcrumb">
+			<li><i class="fa fa-paypal"></i> Pagos</li>
+			<li class="active">Consulta</li>
+		</ol>
+	</section>
+	<form id="form1" role="form" name="infraccionesDeposito">
+
+		<!-- Main content -->
+		<section class="content">
+			<div class="row"></div>
+			<!-- /.row -->
+
+			<div class="row">
+				<div class="col-md-3"></div>
+				<div class=" col-md-6">
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Consulta de Pagos</h3>
+						</div>
+						<!-- /.box-header -->
+						<div class="box-body">
+
+							<div class="row">
+
+								<div class="col-md-6">
+									<div class="form-group">
+										<div class="input-group">
+											<span class="input-group-addon"><i class="fa fa-map"></i></span>
+
+											<select class="form-control"
+												ng-class="{'has-error': (infraccionesDeposito.tipoBusqueda.$error.required && infraccionesDeposito.tipoBusqueda.$dirty) }"
+												ng-options="tipoBusqueda.codigoString as tipoBusqueda.descripcion for tipoBusqueda in catTiposBusqueda"
+												required ng-model="infraccionDepositoVO.tipoParametro"
+												name="tipoBusqueda">
+											</select>
+										</div>
+										<div
+											ng-show="infraccionesDeposito.tipoBusqueda.$error.required && infraccionesDeposito.tipoBusqueda.$dirty"
+											ng-style="{color:'red'}">El tipo de búsqueda es
+											requerida</div>
+										<!-- /.form-group -->
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group"
+										ng-class="{'has-error': (infraccionesDeposito.infraccionDepositoCampo.$error.required && infraccionesDeposito.infraccionDepositoCampo.$dirty) }">
+										<div class="input-group">
+											<span class="input-group-addon"> <i
+												class="fa  fa-credit-card"></i></span> <input type="text"
+												class="form-control" capitalize
+												id="infraccionDepositoCampo"
+												ng-model="infraccionDepositoVO.valorParametro"
+												required="true" name="infraccionDepositoCampo"> <span
+												class="input-group-btn">
+												<button type="button" class="btn btn-danger"
+													id="btnBuscarInfraccion"
+													ng-click="consultaInfraccionesPagadas( infraccionDepositoVO )">Buscar</button>
+											</span>
+										</div>
+
+										<div
+											ng-show="infraccionesDeposito.infraccionDepositoCampo.$error.required && infraccionesDeposito.infraccionDepositoCampo.$dirty "
+											ng-style="{color:'red'}">El valor es requerido</div>
+									</div>
+								</div>
+							</div>
+							<div class="row"></div>
+						</div>
+
+
+					</div>
+					<!-- /.row -->
+				</div>
+			</div>
+
+
+			</br>
+
+			<div class="row" id="listaInfraccionesPagadas"
+				ng-if="listaInfraccionesPagadas.length > 0">
+
+				<div class="col-md-12">
+
+					<div class="box box-danger">
+						<div class="box-header row">
+
+							<div class="col-md-6 col-xs-12">
+								<h3 class="box-title  text-center">Registros Encontrados: {{ (listaInfraccionesPagadas | filter:view.filterSearch).length }}</h3>
+							</div>
+
+
+							
+							<div class="col-md-offset-3 col-md-3 col-xs-10">
+								<div class="input-group">
+									<input id="searchsomething" type="text" class="form-control" placeholder="Buscar por filtro" ng-model="view.filterSearch">
+									<div class="input-group-addon">
+										<i class="fa fa-search"></i>
+									</div>
+								</div>
+
+							</div>
+
+
+						</div>
+
+
+						<!-- /.box-header -->
+						<div class="box-body table-responsive">
+							<div class="col-md-12">
+								<div class="table-responsive">
+
+									<table id="tabla_infracciones" class="table table-striped table-hover">
+										<thead>
+											<tr>
+<!-- 												<th>NCI</th> -->
+												<th sort order="'infracNum'" by="order" reverse="reverse">INFRACCIÓN</th>
+												<th sort order="'pagoFechaOrder'" by="order" reverse="reverse">FECHA PAGO</th>
+												<th sort order="'infracPlaca'" by="order" reverse="reverse">NO. PLACA</th>
+<!-- 												<th>MARCA</th> -->
+<!-- 												<th>MODELO</th> -->
+<!-- 												<th>COLOR</th> -->
+												<th sort order="'infractorNombre'" by="order" reverse="reverse">INFRACTOR</th>
+												<th sort order="'tipoPago'"        by="order" reverse="reverse">TIPO DE PAGO</th>
+												<th >RECIBO</th>
+												<th >VOUCHER</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr
+												dir-paginate="infraccionVO in listaInfraccionesPagadas | orderBy:order:reverse | filter: view.filterSearch | itemsPerPage: view.rowsPerPage"
+												class="center">
+<!-- 												<td>{{infraccionVO.infracNumCtrl}}</td> -->
+												<td><a ng-click="modalDetalleInfraccionPagada($index)">{{infraccionVO.infracNum}}</a></td>
+												<td>{{infraccionVO.pagoFecha}}</td>
+												<td>{{infraccionVO.infracPlaca}}</td>
+<!-- 												<td>{{infraccionVO.vehiculoMarca}}</td> -->
+<!-- 												<td>{{infraccionVO.vehiculoModelo}}</td> -->
+<!-- 												<td>{{infraccionVO.vehiculoColor}}</td> -->
+												<td>{{infraccionVO.infractorNombre}}</td>
+												<td>{{infraccionVO.tipoPago}}</td>
+												<td><a ng-if="infraccionVO.pagoConMonto" class="btn btn-danger btn-sm"
+													ng-click="descargaVaucher(infraccionVO.infracNum ,'reporteRecibo')">
+														<i class="fa fa-download" aria-hidden="true"></i>
+												</a></td>
+												<td><a ng-if="infraccionVO.pagoTieneVoucher" class="btn btn-danger btn-sm"
+													ng-click="descargaVaucher(infraccionVO.infracNum ,'reporteVoucher')"><i class="fa fa-download" aria-hidden="true"></i> </a></td>
+
+
+
+											</tr>
+											<tr ng-if="(listaInfraccionesPagadas | filter:view.filterSearch).length < 1"><td colspan="10" class="text-center"><h4>No se encontraron coincidencias</h4></td></tr>
+										</tbody>
+									</table>
+								</div>
+								
+								<div class="container-fluid">
+									<div class="fixed-table-pagination" style="display:block;">
+										<rows-per-page rows="view.rowsPerPage" filtro="view.filterSearch" array="listaInfraccionesPagadas"></rows-per-page>
+										
+										<div class="pull-right pagination">
+											<dir-pagination-controls class="pagination"></dir-pagination-controls>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+
+					</div>
+					<!-- /.box -->
+				</div>
+			</div>
+
+		</section>
+	</form>
+
+
+</body>
+</html>

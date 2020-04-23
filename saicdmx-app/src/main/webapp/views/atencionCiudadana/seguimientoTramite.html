@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Consulta Trámite</title>
+		<style>
+			.carousel-control{
+				width: 3%;
+			}
+			fieldset {
+				border-radius: 0.4rem;
+				border: 1px solid #ccc;
+				padding: 0;
+				margin: 0;
+ 				width: 100%; 
+			}
+			.etiquetaCancelado {
+				display: inline-block;
+				min-width: 0.7143rem;
+				padding: 0.2143rem 0.0rem;
+				font-size: 0.8857rem;
+				font-weight: 600;
+				color: #fff;
+				line-height: 1;
+				vertical-align: baseline;
+				white-space: nowrap;
+				text-align: center;
+				border-radius: 0.7143rem;
+			}
+			.divParpadea {
+			  font-weight:bold;
+/* 			  color:#71d90b; */
+/* 			  text-transform:uppercase; */
+			}
+			.parpadea {
+			  animation-name: parpadeo;
+			  animation-duration: 1s;
+			  animation-timing-function: linear;
+			  animation-iteration-count: infinite;
+			
+			  -webkit-animation-name:parpadeo;
+			  -webkit-animation-duration: 2s;
+			  -webkit-animation-timing-function: linear;
+			  -webkit-animation-iteration-count: infinite;
+			}
+			
+			@-moz-keyframes parpadeo{  
+			  0% { opacity: 1.0; }
+			  50% { opacity: 0.3; }
+			  100% { opacity: 1.0; }
+			}
+			
+			@-webkit-keyframes parpadeo {  
+			  0% { opacity: 1.0; }
+			  50% { opacity: 0.3; }
+			  100% { opacity: 1.0; }
+			}
+			
+			@keyframes parpadeo {  
+			  0% { opacity: 1.0; }
+			  50% { opacity: 0.3; }
+			  100% { opacity: 1.0; }
+			}
+			.btnEstatus{
+			background-color: #36df1e;
+				border-color: #cf0a2c;
+				font-size: 1rem;
+				width: 20px;
+				height: 20px;
+				text-align: center;
+				padding: 0px;
+				vertical-align: middle;
+				color: #fff;
+				
+				box-shadow: 0px 1px 5px rgba(0, 0, 0, .4);
+				transition: all .1s ease-out;
+			}
+		</style>
+	</head>
+	<body>
+		<section class="content-header">
+			<h1>Cambio Tipo de Persona</h1>
+			<ol class="breadcrumb">
+				<li><a><i class="fa fa-book"></i>Atención Ciudadana</a></li>
+				<li class="active">Cambio Tipo de Persona</li>
+			</ol>
+		</section>
+		<!-- Main content -->
+		
+		<section class="content">
+			<form id="form1" role="form" name="seguimientoTramite">
+				<div class="row">
+					<div class="col-md-offset-3 col-md-6 col-md-offset-3">
+						<div class="box box-danger">
+							<div class="box-header with-border text-center">
+								<h3 class="box-title">Búsqueda</h3>
+							</div>
+							<div class="box-body">
+<!-- 								<div class="row"> -->
+<!-- 									<div class="col-md-3"> -->
+<!-- 										<label> Período:</label> -->
+<!-- 										<div class="form-group"> -->
+<!-- 											<div class="input-group"> -->
+<!-- 												<span class="input-group-addon"><i class="fa fa-list"></i></span> -->
+<!-- 												<select class="form-control" name="tipoFecha" id="tipoFecha" -->
+<!-- 													ng-disabled="!checkTipoBusqudaFecha" -->
+<!-- 													ng-options="filtro as filtro.nbTipoFecha for filtro in catalogoTipoFechas" -->
+<!-- 													ng-model="tipoFecha"> -->
+<!-- 												</select> -->
+<!-- 											</div> -->
+<!-- 										</div> -->
+<!-- 									</div> -->
+<!-- 									<div class="col-md-3 center"> -->
+<!-- 										<label>Rango de Fechas</label> -->
+<!-- 										<div class="form-grouo"> -->
+<!-- 											<div class="row centerRow"> -->
+<!-- 												<switcher class="swTeclo pull-right" -->
+<!-- 													id-check="checkTipoBusqudaFecha" false-label="Período" -->
+<!-- 													false-value="true" true-label="Rango" true-value="false" -->
+<!-- 													ng-change="" ng-model="checkTipoBusqudaFecha"> </switcher> -->
+<!-- 											</div> -->
+<!-- 										</div> -->
+<!-- 									</div> -->
+	
+<!-- 									<div class="col-md-3"> -->
+<!-- 										<div class="form-group" -->
+<!-- 											ng-class="{'has-error': consultaTramite.FHInicio.$invalid && consultaTramite.FHInicio.$dirty}"> -->
+<!-- 											<label for="FHInicio">*Fecha Inicio:</label> -->
+<!-- 											<div class="input-group date"  datetimepicker -->
+<!-- 												options="dateTimePickerOptions" -->
+<!-- 												ng-required="!checkTipoBusqudaFecha" name="FHInicio" -->
+<!-- 												ng-model="FHInicio" on-hide="" show-button-bar="true"> -->
+<!-- 												<div class="input-group-addon"> -->
+<!-- 													<i class="fa fa-calendar"></i> -->
+<!-- 												</div> -->
+<!-- 												<input type="text" -->
+<!-- 													class="form-control inputFecha input-append" name="FHInicio" -->
+<!-- 													ng-disabled="checkTipoBusqudaFecha" readonly /> -->
+<!-- 											</div> -->
+<!-- 											<div -->
+<!-- 												ng-show="consultaTramite.FHInicio.$error.required && consultaTramite.FHInicio.$dirty" -->
+<!-- 												ng-style="{color:'red'}">La fecha de inicio es -->
+<!-- 												requerida</div> -->
+<!-- 										</div> -->
+<!-- 									</div> -->
+	
+<!-- 									<div class="col-md-3"> -->
+<!-- 										<div class="form-group" -->
+<!-- 											ng-class="{'has-error': consultaTramite.FHFin.$invalid && consultaTramite.FHFin.$dirty}"> -->
+<!-- 											<label for="FHFin">*Fecha Fin:</label> -->
+<!-- 											<div class="input-group date" datetimepicker -->
+<!-- 												options="dateTimePickerOptions" -->
+<!-- 												ng-required="!checkTipoBusqudaFecha" name="FHFin" -->
+<!-- 												ng-model="FHFin" on-hide="" show-button-bar="true"> -->
+<!-- 												<div class="input-group-addon"> -->
+<!-- 													<i class="fa fa-calendar"></i> -->
+<!-- 												</div> -->
+<!-- 												<input type="text" -->
+<!-- 													class="form-control inputFecha input-append" name="FHFin" -->
+<!-- 													ng-disabled="checkTipoBusqudaFecha" readonly /> -->
+<!-- 											</div> -->
+<!-- 											<div -->
+<!-- 												ng-show="consultaTramite.FHFin.$error.required && consultaTramite.FHFin.$dirty" -->
+<!-- 												ng-style="{color:'red'}">La fecha fin es requerida</div> -->
+<!-- 										</div> -->
+<!-- 									</div> -->
+<!-- 								</div> -->
+								
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											<label>Tipo Trámite:</label>
+											<div class="input-group">
+												<span class="input-group-addon"><i class="fa fa-list"></i></span>
+												<select class="form-control" name="tipoTramite"
+													id="parametroBusqueda.tipoTramite"
+													ng-options="filtroTipoTram.idTramite as filtroTipoTram.nbTramite for filtroTipoTram in filtroTipoTramite"
+													ng-model="parametroBusqueda.tipoTramite"
+													ng-disabled="true">
+													<!-- ng-change="cambioComboParametro(paramBusqueda)" -->
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label>Estatus Trámite:</label>
+											<div class="input-group">
+												<span class="input-group-addon"><i class="fa fa-list"></i></span>
+												<select class="form-control" 
+													name="estatusTramite"
+													id="estatusTramite"
+													ng-model="parametroBusqueda.estatusTramite"
+													ng-options="filtroEstatusTram.idStSeguimiento as filtroEstatusTram.nbStSeguimiento for filtroEstatusTram in filtroEstatusTramite">
+													<!-- ng-change="cambioComboParametro(paramBusqueda)" -->
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											<label>Parámetro Búsqueda:</label>
+											<div class="input-group">
+												<span class="input-group-addon"><i class="fa fa-list"></i></span>
+												<select class="form-control" name="opcionBusqueda"
+													id="opcionBusqueda"
+													ng-options="filtroOpcionBus.codigo as filtroOpcionBus.descripcion for filtroOpcionBus in filtroOpcionBusqueda"
+													ng-model="parametroBusqueda.opcionBusqueda"
+													ng-change="cambiaOpcionBusqueda()">
+													<option value="">Seleccione</option>
+													<!-- ng-change="cambioComboParametro(paramBusqueda)" -->
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group" ng-class="{'has-error': seguimientoTramite.valorBusqueda.$invalid && seguimientoTramite.valorBusqueda.$dirty}">
+											<label ng-if="valorRequerido">*Valor:</label>
+											<label ng-if="!valorRequerido">Valor:</label>
+											<div class="input-group">
+												<span class="input-group-addon">
+													<i class="fa fa-pencil"></i>
+												</span>
+												<input ng-disabled="busquedaAvanzada||bloquearValorBusquedaTodo" 
+													type="text"
+													ng-model="parametroBusqueda.valorBusqueda" 
+													id="valorBusqueda" 
+													name="valorBusqueda" maxlength="30"
+													ng-required="valorRequerido" class="form-control "
+													capitalize>
+												</input>
+												<span class="input-group-btn"></span>
+											</div>
+											<div
+												ng-show="seguimientoTramite.valorBusqueda.$error.required  && seguimientoTramite.valorBusqueda.$dirty"
+												ng-style="{color:'red'}">El valor es requerido</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-md-12 center">
+										<div class="box-tools col-md-1 pull-left">
+											<button type="button" class="btn btn-box-tool btn-danger" 
+												ng-click="openModalCambioTP('NuevoTP', '')" style="font-size: 1.1rem;"
+												data-toggle="tooltip" data-placement="right" 
+												title="Nuevo cambio de tipo de persona">
+												<i class="fa fa-plus" style="width: 13px;"></i>
+											</button>
+							     		</div>
+										<button type="button" ng-click="buscaTramites(2)"
+											class="btn btn-danger btn-flat">
+											Buscar
+										</button>
+										<div class="box-tools col-md-1 pull-right">
+											<button type="button" class="btn btn-box-tool btn-danger" 
+												ng-click="limpiarCampos()" style="font-size: 1.1rem;"
+												data-toggle="tooltip" data-placement="left" 
+												title="Limpiar Campos">
+												<i class="fa fa-refresh"></i>
+											</button>
+							     		</div>		
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="row" ng-if="viewpanelConsultaTramites">
+					<div class="col-xs-12">
+						<div class="box box-danger">
+							<div class="box-header row">
+								<div class="col-md-3 col-xs-12">
+									<h3 class="box-title">
+										Registros Encontrados:  {{ (consultaTramitesData | filter:view.searchSomething).length | number:0 }}
+									</h3>
+								</div>
+								<div class="col-md-6 col-xs-12 parpadea divParpadea center">
+									<h3 class="box-title" ng-show="origen == 1">
+										Pendientes
+									</h3>
+								</div>
+	  						 	<div class="col-md-3 col-xs-10">
+	      						 	<div class="input-group">
+						        		<input id="searchsomething" type="text" class="form-control" placeholder="Buscar por filtro" ng-model="view.searchSomething">
+										<span class="input-group-addon"><i class="fa fa-search"></i></span>
+										<a class="img-rounded" title="Genera Reporte Detecciones" ng-click="descargarReporteExel()">
+											<span class="pull-right">
+												<img src="static/dist/img/excel.png" width="25px;">
+											</span>
+										</a>
+									</div>
+						 		</div>
+							</div>
+							
+							<div class="box-body table-responsive">
+								<div class="col-md-12">
+									<div style="display: block; overflow: auto;">
+										<table id="tabla_informacion" class="table table-striped table-hover header-fixed">
+											<thead>
+												<tr>
+<!-- 													<th sort order="'stSegTramite'"		by="order" reverse="reverse" class="text-center" style="width: 10px;"></th> -->
+					                                <th sort order="'idAcTramite'" 		by="order" reverse="reverse" class="text-center" style="width: 100px;" colspan=2>FOLIO</th>
+					                                <th sort order="'cdCPlaca'" 		by="order" reverse="reverse" class="text-center" style="width: 65px;">PLACA</th>
+					                                <th sort order="'ctSolicitados'" 	by="order" reverse="reverse" class="text-center" style="width: 95px;">INFRACCIONES</th>
+					                                <th sort order="'nbTipoTramite'"	by="order" reverse="reverse" class="text-center" style="width: 100px;">TIPO TRÁMITE</th>
+					                                <th sort order="'solicitud'"		by="order" reverse="reverse" class="text-center" style="width: 100px;">CAMBIO</th>
+					                                <th sort order="'fhCreacion'"		by="order" reverse="reverse" class="text-center" style="width: 100px;">FECHA TRÁMITE</th>
+					                                <th sort order="'idUsrCreacion'"	by="order" reverse="reverse" class="text-center" style="width: 100px;">USUARIO CREACIÓN</th>
+					                                <th sort order="'fhModificacion'"	by="order" reverse="reverse" class="text-center" style="width: 100px;">FECHA MODIFICACIÓN</th>
+					                                <th sort order="'idUsrModifica'"	by="order" reverse="reverse" class="text-center" style="width: 100px;">USUARIO MODIFICACIÓN</th>
+					                                <th sort order="''" 				by="order" reverse="reverse" class="text-center" style="width: 100px;">ACCIONES</th>
+												</tr>
+											</thead>
+											<tbody style="overflow-y: scroll;">
+												<tr ng-if="(consultaTramitesData | filter:view.searchSomething).length < 1">
+													<td colspan="14" class="text-center">
+														<h4>No se encontraron coincidencias</h4>
+													</td>
+												</tr>
+												<tr dir-paginate="tramite in consultaTramitesData | filter:view.searchSomething  | orderBy:order:reverse|itemsPerPage: view.rowsPerPage">
+													<td class="text-center" style="width: 10px; height: 100%; vertical-align: middle;">
+														<span ng-show="(isEmpty(tramite.txComentarioTram) || tramite.txComentarioTram == null)" 
+															class="etiquetaCancelado fullWidth"
+															style="background-color: {{tramite.cdColor}}; min-height: 55px; height: 100%;"
+															data-toggle="tooltip" data-placement="right" 
+															title="Estatus: {{tramite.nbstSegTramite}}">
+<!-- 															{{tramite.nbstSegTramite}} -->
+														</span>
+														<popover ng-show="!isEmpty(tramite.txComentarioTram) && tramite.txComentarioTram != null" 
+															id="popoverBootstrap" 
+															class="etiquetaCancelado col-md-6 fullWidth"
+															style="background-color: {{tramite.cdColor}}; min-height: 55px; height: 100%;"
+															options="opcionesPopover"
+															placement="left"
+															title="<div class='text-center'>Observaciones</div>"
+															content="<div class='text-center'>{{tramite.txComentarioTram}}</div>"
+															data-html="true">
+<!-- 															{{tramite.nbstSegTramite}} -->
+														</popover>
+													</td>
+													<td class="text-center" style="width: 90px;">{{tramite.idAcTramite}}</td>
+													<td class="text-center" style="width: 65px;">{{tramite.cdCPlaca}}</td>
+													<td class="text-center" style="width: 90px;">
+														<webuipopover class="etiquetaCancelado col-md-6 fullWidth" 
+															style="background-color: #868686;" 
+															idioma-wup="es_ES" 
+															webui-title="Infracciones" 
+															webui-options="opcionesWebuipopover" 
+															webui-placement="right" 
+															data-html="true" 
+															selector-content="miContenido_{{tramite.idAcTramite}}">
+															{{tramite.ctSolicitados}}
+														</webuipopover>
+											
+														<div id="miContenido_{{tramite.idAcTramite}}" 
+															style="width:100px; height:100px; overflow: scroll-y;">
+															<table ng-repeat="inf in tramite.listInf">
+																<tr><td>{{inf}}</td></tr>
+															</table>
+														</div>
+													
+<!-- 														<popover  -->
+<!-- 															id="popoverBootstrap1"  -->
+<!-- 															class="etiquetaCancelado col-md-6 fullWidth" -->
+<!-- 															style="background-color: #868686;" -->
+<!-- 															options="opcionesPopover" -->
+<!-- 															placement="right" -->
+<!-- 															title="<div class='text-center'>Infracciones</div>" -->
+<!-- 															content="<div class='text-center'><table>{{tramite.txInfraccion}}</table></div>" -->
+<!-- 															data-html="true"> -->
+<!-- 															{{tramite.ctSolicitados}} -->
+<!-- 														</popover> -->
+													</td>
+													<td class="text-center" style="width: 100px;">{{tramite.nbTipoTramite}}</td>
+													<td class="text-center" style="width: 100px;">{{tramite.nbNuevoOrigenPlaca}}<br>{{tramite.nbNuevoTipoPersona}}<br>{{tramite.nbNuevoEdo}}</td>
+													<td class="text-center" style="width: 100px;">{{tramite.fhCreacion}}</td>
+													<td class="text-center" style="width: 100px;">{{tramite.nbOficial}}</td>
+													<td class="text-center" style="width: 100px;">{{tramite.fhModificacion}}</td>
+													<td class="text-center" style="width: 100px;">{{tramite.nbOficialModifica}}</td>
+													<td class="text-center" style="width: 100px;">
+														<!--	Boton para cambio de tipo de persona	-->
+														<button ng-if="tramite.stSegTramite == 1" type="button" class="btn btnEstatus"
+															style="background-color: {{tramite.cdColor}}; border-color: {{tramite.cdColor}};"
+															data-toggle="tooltip" data-placement="top" 
+															title="Realizar cambio de persona"
+															ng-click="openModalCambioTP('CambioTP', tramite)" >
+															<i class="fa fa-bars" aria-hidden="true"></i>
+														</button>
+														<button ng-if="tramite.stSegTramite == 2" type="button" class="btn btnEstatus"
+															style="background-color: {{tramite.cdColor}}; border-color: {{tramite.cdColor}};"
+															data-toggle="tooltip" data-placement="top" 
+															title="Realizar cambio de persona"
+															ng-click="openModalCambioTP('ConsultaCTP', tramite)" >
+															<i class="fa fa-bars" aria-hidden="true"></i>
+														</button>
+														
+														<!--	Boton para descarga de solicitud generada por el sistema	-->
+														<a ng-if="true" 
+															class="img-rounded"
+															style="font-size: 1rem; width: 20px; height: 20px; text-align: center; padding: 0px; vertical-align: middle;"
+															data-toggle="tooltip" data-placement="bottom" 
+															title="Descargar trámite"
+															ng-click="generaReporteTramite(tramite.idAcTramite)">
+															<span>
+																<img src="static/dist/img/pdf_logo.png" 
+																width="25px" height="25px"/>
+															</span>
+														</a>
+														
+														<!--	Botones para descarga de solicitud firmada	-->
+														<a ng-if="tramite.stExpediente=='1'" 
+															style="font-size: 1rem; width: 20px; height: 20px; text-align: center; padding: 0px; vertical-align: middle; color: #7DC431" 
+															data-toggle="tooltip" data-placement="top" 
+															title="Descarga expediente"
+															ng-click="descargarExpedienteTramite(tramite.idAcTramite)">
+															<span>
+																<i class="fa fa-folder-o fa-2x" aria-hidden="true"
+																	style="vertical-align: middle;"></i>
+															</span>
+														</a>
+														<a ng-if="tramite.stExpediente=='0'" 
+															style="font-size: 1rem; width: 20px; height: 20px; text-align: center; padding: 0px; vertical-align: middle; color: red"
+															data-toggle="tooltip" data-placement="top" 
+															title="Sin expediente">
+															<span>
+																<i class="fa fa-folder-o fa-2x" aria-hidden="true"
+																	style="vertical-align: middle;"></i>
+															</span>
+														</a>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+<!-- 										{{consultaTramitesData}} -->
+									</div>
+								</div>
+							</div>
+							<div class="container-fluid">
+								<div class="fixed-table-pagination" style="display:block;">
+									<rows-per-page rows="view.rowsPerPage" filtro="view.searchSomething" array="consultaTramitesData"></rows-per-page>
+									
+									<div class="pull-right pagination">
+										<dir-pagination-controls class="pagination"></dir-pagination-controls>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				
+				
+				
+				
+				
+			</form>
+		</section>
+	</body>
+</html>

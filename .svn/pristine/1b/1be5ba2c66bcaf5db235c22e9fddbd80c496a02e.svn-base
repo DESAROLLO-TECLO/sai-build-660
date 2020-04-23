@@ -1,0 +1,320 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>Consulta Vehículos Robados </title>
+</head>
+<body>
+	<section class="content-header">
+		<h1>Consulta Vehículos Robados</h1>
+		<ol class="breadcrumb">
+			<li><a><i class="fa fa-book"></i>Vehiculos Robados</a></li>
+			<li class="active">Consulta Vehículo Robados</li>
+		</ol>
+	</section>
+	<br>
+	<!-- Main content -->
+
+	<section class="content">
+		<form role="form" name="form.vehConsulta">
+			<div class="row">
+				<div class="col-md-3"></div>
+				<div class="col-md-6 ">
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Búsqueda</h3>
+						</div>
+						<div class="box-body">
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group input-group">
+										<div class="input-group-addon">
+											<i class="fa fa-list"></i>
+										</div>
+										<select ng-model="vehRobadoVO.options" class="form-control"
+											style="background: white; cursor: default !important;"
+											ng-options="option.codigoString as option.descripcion for option in combo">
+										</select>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group"
+										ng-class="{'has-error': form.vehConsulta.valor.$invalid &&  form.vehConsulta.valor.$dirty }">
+
+										<div class="input-group date">
+											<div class="input-group-addon">
+												<i class="fa fa-pencil"></i>
+											</div>
+											<input ng-required="true" type="text" id="valor" name="valor"
+												ng-model="vehRobadoVO.values"
+												class="form-control pull-right"></input> <span
+												class="input-group-btn">
+												<button type="button" id="searchVeh"
+													ng-click="searchVehRobados()"
+													class="btn btn-danger btn-flat">Buscar</button>
+											</span>
+										</div>
+										<div>
+											<div
+												ng-show="form.vehConsulta.valor.$error.required &&  form.vehConsulta.valor.$dirty "
+												ng-style="{color:'red'}">El valor es requerido</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="row ngIfAnimate" ng-if="listVO.length > 0">
+				<div class="col-xs-12">
+					<div class="box box-danger">
+
+						<div class="box-header">
+							<div class="col-md-12">
+								<div class="col-md-6 col-xs-12">
+									<h3 class="box-title">
+										Registros Encontrados: <span ng-model="NoTam">{{
+											(listVO | filter:view.searchSomething).length }}
+									</h3>
+								</div>
+								<div class="col-md-offset-2 col-md-3 col-xs-10">
+									<div class="input-group">
+										<input id="searchsomething" type="text" class="form-control"
+											placeholder="Buscar por filtro"
+											ng-model="view.searchSomething"> <span
+											class="input-group-addon"><i class="fa fa-search"></i></span>
+									</div>
+								</div>
+								<div class="col-md-1 col-xs-1 pull-right">
+									<a ng-click="downloadReporte()"> <span
+										class="pull-right "><img
+											src="static/dist/img/excel.png"></span>
+									</a>
+								</div>
+							</div>
+						</div>
+
+						<div class="box-body table-responsive no-padding">
+							<table class="table table-hover header-fixed">
+								<thead>
+									<tr>
+										<th sort order="'expediente'" by="order" reverse="reverse">EXPEDIENTE</th>
+										<th sort order="'turnoDgant'" by="order" reverse="reverse">TURNO DGANT</th>
+										<th sort order="'placaVehiculo'" by="order" reverse="reverse">PLACA VEHICULAR</th>
+										<th sort order="'numSerie'" by="order" reverse="reverse">NÚMERO DE SERIE</th>
+										<th sort order="'numMotor'" by="order" reverse="reverse">NÚMERO DE MOTOR</th>
+										<th sort order="'estatus'" by="order" reverse="reverse">ESTATUS</th>
+										<th sort order="'fechaRoboOrder'" by="order" reverse="reverse">FECHA DE ROBO</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr
+										dir-paginate="result in listVO | orderBy:order:reverse  |filter:view.searchSomething | itemsPerPage: view.rowsPerPage">
+
+										<td class="center">
+											<span data-toggle="tooltip" data-placement="left" title="Ver Expediente">
+												<a data-toggle="modal" data-target="#modalDetalle"
+												ng-click="moreExpedient(result.expediente)">
+													{{result.expediente}}
+												</a>
+											</span>										
+										</td>
+										<td class="center">
+											<span data-toggle="tooltip" data-placement="left" title="Ver detalle">
+												<a data-toggle="modal" data-target="#modalDetalle"
+												ng-click="buscarDetalleId(result.idRobo)">
+													{{result.turnoDgant}}
+												</a>
+											</span>										
+										</td>
+										<td class="center">{{result.placaVehiculo}}</td>
+										<td class="center">{{result.numSerie}}</td>
+										<td class="center">{{result.numMotor}}</td>
+										<td class="center">{{result.estatus}}</td>
+										<td class="center">{{result.fechaRobo}}</td>
+
+
+									</tr>
+									<tr ng-if="(listVO | filter:view.searchSomething).length < 1">
+										<td colspan="5" class="text-center"><h4>No se
+												encontraron coincidencias</h4></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="container-fluid">
+							<div class="fixed-table-pagination" style="display: block;">
+								<rows-per-page rows="view.rowsPerPage"
+									filtro="view.searchSomething" array="listVO"></rows-per-page>
+
+								<div class="pull-right pagination">
+									<dir-pagination-controls class="pagination"></dir-pagination-controls>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="modal fade" id="modalDetalle" role="dialog"
+				data-keyboard="false" data-backdrop="static">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header bg-red-active">
+							<button type="button" class="close" data-dismiss="modal"
+								ng-click="close()">&times;</button>
+							<h3 ng-if="!flagMoreExp" class="modal-title">Detalle del Reporte</h3>
+							<h3 ng-if="flagMoreExp" class="modal-title">Expediente: {{valorExpMore}}</h3>
+						</div>
+						<div ng-if="!flagMoreExp" class="modal-body">
+									<div class="form-group" align="left">
+									<fieldset>
+										<legend class="text-left">Datos  del Robo</legend>
+										<div class="row">
+											<div class="col-md-4">
+												<label for="example2">Turno DGANT:</label>
+												<div class="form-group">{{listVOActual.turnoDgant}}</div>
+											</div>
+											<div class="col-md-4">
+												<label for="example1">Expediente:</label>
+
+												<div class="form-group">{{listVOActual.expediente}}</div>
+											</div>
+											<div class="col-md-4">
+												<label for="example3">Fecha de Robo:</label>
+												<div class="form-group">{{listVOActual.fechaRobo}}</div>
+											</div>
+										</div>
+									</fieldset>
+									<fieldset>
+										<legend class="text-left">Datos  del Vehículo</legend>
+										<div class="row ">
+											<div class="col-md-4">
+												<label for="example2">Placa Vehicular:</label>
+												<div class="form-group">{{listVOActual.placaVehiculo}}</div>
+											</div>
+											<div class="col-md-4">
+												<label for="example1">Número de Serie:</label>
+
+												<div class="form-group">{{listVOActual.numSerie}}</div>
+											</div>
+											<div class="col-md-4">
+												<label for="example3">Número de Motor:</label>
+												<div class="form-group">{{listVOActual.numMotor}}</div>
+											</div>
+										</div>
+										<div class="row ">											
+											<div class="col-md-4">
+												<label for="example3">Marca:</label>
+												<div class="form-group">{{listVOActual.marca}}</div>
+											</div>
+											<div class="col-md-4">
+												<label for="example3">Tipo:</label>
+												<div class="form-group">{{listVOActual.modelo}}</div>
+											</div>
+											<div class="col-md-4">
+												<label for="example3">Modelo:</label>
+												<div class="form-group">{{listVOActual.anio}}</div>
+											</div>										
+										</div>
+										
+										<div class="row ">
+											<div class="col-md-4">
+												<label for="example3">Color:</label>
+												<div class="form-group">{{listVOActual.color}}</div>
+											</div>
+																				
+										</div>
+									</fieldset>
+								<fieldset ng-if="listHisto.length > 0">
+									<legend class="text-left">Histórico del Reporte</legend>
+									<div class="row center">
+										
+										<div class="col-md-6">
+											<label for="example2">Estatus:</label>
+										</div>
+										<div class="col-md-6">
+											<label for="example1">Fecha Registro:</label>
+										</div>
+									</div>
+									<div class="pre-scrollable" style="max-height : 100px;
+  									padding: 5px 0; border-bottom: 2px solid #DDDDDD; margin-left: 5px;"> 
+									<div class="row" ng-repeat="listHist in listHisto">
+										<div class="col-md-6 center">
+											<div class="form-group">{{listHist.estatus}}</div>
+										</div>
+										<div class="col-md-6 center">
+											<div class="form-group">{{listHist.fechaModificacion}}</div>
+										</div>
+										
+									</div>
+									</div>
+
+								</fieldset>
+								</div>
+							</div>
+							
+							<div ng-if="flagMoreExp" class="modal-body">
+									<div class="form-group" align="left">
+								<fieldset>
+									<legend class="text-left">Placas Relacionadas</legend>
+									<div class="row center">
+										<div class="col-md-3">
+											<label for="example2">#</label>
+										</div>
+										<div class="col-md-3">
+											<label for="example2">Turno Dgant:</label>
+										</div>
+										<div class="col-md-3">
+											<label for="example2">Placa Vehículo</label>
+										</div>
+										<div class="col-md-3">
+											<label for="example1">Fecha Registro:</label>
+										</div>
+									</div>
+									<div class="pre-scrollable" style="max-height : 100px;
+  									padding: 5px 0; border-bottom: 2px solid #DDDDDD; margin-left: 5px;"> 
+									<div class="row" ng-repeat="listMore in listMoreExp">
+										<div class="col-md-3 center">
+											<div class="form-group">{{$index+1}}</div>
+										</div>
+										<div class="col-md-3 center">
+											<div class="form-group">{{listMore.turnoDgant}}</div>
+										</div>
+										<div class="col-md-3 center">
+											<div class="form-group">{{listMore.placaVehiculo}}</div>
+										</div>
+										<div class="col-md-3 center">
+											<div class="form-group">{{listMore.fechaRobo}}</div>
+										</div>
+									</div>
+									</div>
+
+								</fieldset>
+								</div>
+							</div>
+							
+						</div>
+					</div>
+				</div>
+			</form>
+	</section>
+</body>
+<script>
+  $(function () {  
+  $('#scrollVehRobados').slimScroll({
+		height: '100%',
+        color: '#abb2b9',
+        opacity: .5,
+        size: "4px",
+        alwaysVisible: false,
+        allowPageScroll : true
+    });
+
+ });
+</script>
+
+</html>

@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="new_add_partida_corte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="13303238-fe50-4461-b0bd-e0bcc6aa824b">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="0.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="tableDataSet" uuid="9eed322a-9c91-4490-88a5-807fa3b37898">
+		<field name="t_RENGLON" class="java.lang.Double"/>
+		<field name="t_SUMA_MONTOS" class="java.lang.Double"/>
+		<field name="t_PARTIDAS" class="java.lang.Double"/>
+		<field name="t_STATUS_TXT" class="java.lang.String"/>
+		<field name="numCaja" class="java.lang.String"/>
+		<field name="cajaId" class="java.lang.String"/>
+		<field name="t_INFRACCION" class="java.lang.String"/>
+		<field name="t_MONTO" class="java.lang.Double"/>
+		<variable name="NUM_PARTIDA" class="java.lang.Double" calculation="Count">
+			<variableExpression><![CDATA[$F{t_RENGLON}]]></variableExpression>
+		</variable>
+	</subDataset>
+	<parameter name="recordDataSource" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
+	<parameter name="fecha" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="17" y="24" width="136" height="20" uuid="b0841c7f-ba4c-4048-ba4b-be9179140ef7"/>
+				<text><![CDATA[FECHA DE RECAUDACIÓN: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="153" y="24" width="168" height="20" uuid="f9750692-d169-44c4-8fe3-6d0bd2f7c188"/>
+				<textFieldExpression><![CDATA[$P{fecha}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="40" splitType="Stretch">
+			<componentElement>
+				<reportElement key="table" style="table" x="38" y="0" width="517" height="40" uuid="002db427-7c1a-4693-901b-5e96acd88bce"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="tableDataSet" uuid="c7a9ecc2-34a1-425a-b5ce-9737702cd144">
+						<dataSourceExpression><![CDATA[$P{recordDataSource}]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="46" uuid="e9d8e92d-59b6-42e7-b3c6-34dfcc52ac3e">
+						<jr:tableHeader style="table_TD" height="0" rowSpan="1">
+							<box>
+								<pen lineWidth="0.0"/>
+								<topPen lineWidth="0.0"/>
+								<leftPen lineWidth="0.0"/>
+								<bottomPen lineWidth="0.0"/>
+								<rightPen lineWidth="0.0"/>
+							</box>
+						</jr:tableHeader>
+						<jr:tableFooter style="table_TD" height="79" rowSpan="1">
+							<box>
+								<pen lineWidth="0.0"/>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+						</jr:tableFooter>
+						<jr:columnHeader style="table_TD" height="30" rowSpan="1">
+							<box>
+								<pen lineWidth="0.0"/>
+								<topPen lineWidth="2.0"/>
+								<leftPen lineWidth="2.0"/>
+								<bottomPen lineWidth="0.0"/>
+								<rightPen lineWidth="0.0"/>
+							</box>
+						</jr:columnHeader>
+						<jr:columnFooter style="table_TD" height="19" rowSpan="1">
+							<box>
+								<pen lineWidth="2.0" lineStyle="Solid"/>
+								<topPen lineWidth="2.0" lineStyle="Solid"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid"/>
+								<bottomPen lineWidth="2.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid"/>
+							</box>
+						</jr:columnFooter>
+						<jr:detailCell style="table_TD" height="21" rowSpan="1">
+							<box>
+								<pen lineWidth="2.0" lineStyle="Solid"/>
+								<topPen lineWidth="2.0" lineStyle="Solid"/>
+								<leftPen lineWidth="2.0" lineStyle="Solid"/>
+								<bottomPen lineWidth="2.0" lineStyle="Solid"/>
+								<rightPen lineWidth="2.0" lineStyle="Solid"/>
+							</box>
+							<textField pattern="###0">
+								<reportElement x="0" y="0" width="46" height="21" uuid="0b765f3d-1776-44e1-98fb-2b11b2481074"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{t_RENGLON}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="122" uuid="debefc03-2b2b-4ad2-8386-fe00b583a751">
+						<jr:tableHeader style="table_TD" height="0" rowSpan="1">
+							<box>
+								<pen lineWidth="0.0"/>
+								<topPen lineWidth="0.0"/>
+								<leftPen lineWidth="0.0"/>
+								<bottomPen lineWidth="0.0"/>
+								<rightPen lineWidth="0.0"/>
+							</box>
+						</jr:tableHeader>
+						<jr:tableFooter style="table_TD" height="79" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<staticText>
+								<reportElement x="0" y="25" width="122" height="24" uuid="60ae4198-fc10-4950-a8b2-47390ca9b01b">
+									<property name="local_mesure_unitheight" value="pixel"/>
+									<property name="com.jaspersoft.studio.unit.height" value="px"/>
+								</reportElement>
+								<box>
+									<topPen lineWidth="2.0" lineStyle="Solid" lineColor="#000000"/>
+									<leftPen lineWidth="2.0" lineStyle="Solid" lineColor="#000000"/>
+									<bottomPen lineWidth="2.0" lineStyle="Solid" lineColor="#000000"/>
+									<rightPen lineWidth="2.0" lineStyle="Solid" lineColor="#000000"/>
+								</box>
+								<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None">
+									<font fontName="SansSerif" size="8" isBold="false"/>
+									<paragraph rightIndent="2"/>
+								</textElement>
+								<text><![CDATA[OPERACIONES EFECTUADAS:]]></text>
+							</staticText>
+							<staticText>
+								<reportElement x="0" y="55" width="122" height="24" uuid="0bd6b744-e595-408b-bb9c-86fd4d5d8ee9"/>
+								<box>
+									<topPen lineWidth="2.0" lineStyle="Solid" lineColor="#000000"/>
+									<leftPen lineWidth="2.0" lineStyle="Solid" lineColor="#000000"/>
+									<bottomPen lineWidth="2.0" lineStyle="Solid" lineColor="#000000"/>
+									<rightPen lineWidth="2.0" lineStyle="Solid" lineColor="#000000"/>
+								</box>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="SansSerif" size="8" isBold="false"/>
+									<paragraph rightIndent="2"/>
+								</textElement>
+								<text><![CDATA[TOTAL CONCENTRADO:]]></text>
+							</staticText>
+						</jr:tableFooter>
+						<jr:columnHeader style="table_TD" height="30" rowSpan="1">
+							<box>
+								<pen lineWidth="0.0"/>
+								<topPen lineWidth="2.0"/>
+								<leftPen lineWidth="0.0"/>
+								<bottomPen lineWidth="0.0"/>
+								<rightPen lineWidth="0.0"/>
+							</box>
+							<staticText>
+								<reportElement x="0" y="0" width="122" height="30" uuid="ecce2dec-d9e8-49c5-a47f-c375193208f1"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle">
+									<font fontName="Arial"/>
+								</textElement>
+								<text><![CDATA[N° DE INFRACCION]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table_TD" height="19" rowSpan="1">
+							<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+							<box>
+								<pen lineWidth="2.0" lineStyle="Solid"/>
+								<topPen lineWidth="2.0" lineStyle="Solid"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid"/>
+								<bottomPen lineWidth="2.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid"/>
+							</box>
+						</jr:columnFooter>
+						<jr:detailCell style="table_TD" height="21" rowSpan="1">
+							<box>
+								<pen lineWidth="2.0" lineStyle="Solid"/>
+								<topPen lineWidth="2.0" lineStyle="Solid"/>
+								<leftPen lineWidth="2.0" lineStyle="Solid"/>
+								<bottomPen lineWidth="2.0" lineStyle="Solid"/>
+								<rightPen lineWidth="2.0" lineStyle="Solid"/>
+							</box>
+							<textField>
+								<reportElement x="0" y="0" width="122" height="21" uuid="e123d790-e26c-481f-8c06-729183fa07cf"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle">
+									<paragraph leftIndent="10"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{t_INFRACCION}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="119" uuid="2a68f292-cd10-4f20-b117-a4951a78cb8a">
+						<jr:tableHeader style="table_TD" height="0" rowSpan="1">
+							<box>
+								<pen lineWidth="0.0"/>
+								<topPen lineWidth="0.0"/>
+								<leftPen lineWidth="0.0"/>
+								<bottomPen lineWidth="0.0"/>
+								<rightPen lineWidth="0.0"/>
+							</box>
+						</jr:tableHeader>
+						<jr:tableFooter style="table_TD" height="79" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField pattern="###0">
+								<reportElement x="0" y="25" width="118" height="24" uuid="fb00ddd2-9867-42d9-9b26-d27ae60e2f7d"/>
+								<box>
+									<topPen lineWidth="2.0" lineStyle="Solid" lineColor="#000000"/>
+									<leftPen lineWidth="2.0" lineStyle="Solid" lineColor="#000000"/>
+									<bottomPen lineWidth="2.0" lineStyle="Solid" lineColor="#000000"/>
+									<rightPen lineWidth="2.0" lineStyle="Solid" lineColor="#000000"/>
+								</box>
+								<textElement textAlignment="Left" verticalAlignment="Middle">
+									<font size="10"/>
+									<paragraph leftIndent="10"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{NUM_PARTIDA}]]></textFieldExpression>
+							</textField>
+							<textField pattern="¤ #,##0.00">
+								<reportElement x="0" y="55" width="119" height="24" uuid="e4034fcc-7533-4bca-8965-451469377593"/>
+								<box>
+									<topPen lineWidth="2.0" lineStyle="Solid" lineColor="#000000"/>
+									<leftPen lineWidth="2.0" lineStyle="Solid" lineColor="#000000"/>
+									<bottomPen lineWidth="2.0" lineStyle="Solid" lineColor="#000000"/>
+									<rightPen lineWidth="2.0" lineStyle="Solid" lineColor="#000000"/>
+								</box>
+								<textElement textAlignment="Left" verticalAlignment="Middle">
+									<font size="10"/>
+									<paragraph leftIndent="10" rightIndent="10"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{t_SUMA_MONTOS}]]></textFieldExpression>
+							</textField>
+						</jr:tableFooter>
+						<jr:columnHeader style="table_TD" height="30" rowSpan="1">
+							<box>
+								<pen lineWidth="2.0" lineStyle="Solid"/>
+								<topPen lineWidth="2.0" lineStyle="Solid"/>
+								<leftPen lineWidth="2.0" lineStyle="Solid"/>
+								<bottomPen lineWidth="2.0" lineStyle="Solid"/>
+								<rightPen lineWidth="2.0" lineStyle="Solid"/>
+							</box>
+							<staticText>
+								<reportElement x="0" y="0" width="119" height="30" uuid="5efe6725-e416-47e0-888d-d35f302a8ba4"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Arial" size="11"/>
+								</textElement>
+								<text><![CDATA[MONTO]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table_TD" height="19" rowSpan="1">
+							<box>
+								<pen lineWidth="2.0" lineStyle="Solid"/>
+								<topPen lineWidth="2.0" lineStyle="Solid"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid"/>
+								<bottomPen lineWidth="2.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid"/>
+							</box>
+						</jr:columnFooter>
+						<jr:detailCell style="table_TD" height="21" rowSpan="1">
+							<box>
+								<pen lineWidth="2.0" lineStyle="Solid"/>
+								<topPen lineWidth="2.0" lineStyle="Solid"/>
+								<leftPen lineWidth="2.0" lineStyle="Solid"/>
+								<bottomPen lineWidth="2.0" lineStyle="Solid"/>
+								<rightPen lineWidth="2.0" lineStyle="Solid"/>
+							</box>
+							<textField pattern="¤ #,##0.00">
+								<reportElement x="0" y="0" width="119" height="21" uuid="4f66a0f0-58e5-4923-b15b-f56b5c098b2e"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<paragraph leftIndent="10" rightIndent="10"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{t_MONTO}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="0bda78ef-71ca-4d41-ac9a-6574848088a9">
+						<jr:tableHeader style="table_TD" height="0" rowSpan="1">
+							<box>
+								<pen lineWidth="0.0"/>
+								<topPen lineWidth="0.0"/>
+								<leftPen lineWidth="0.0"/>
+								<bottomPen lineWidth="0.0"/>
+								<rightPen lineWidth="0.0"/>
+							</box>
+						</jr:tableHeader>
+						<jr:tableFooter style="table_TD" height="79" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+						</jr:tableFooter>
+						<jr:columnHeader style="table_TD" height="30" rowSpan="1">
+							<box>
+								<pen lineWidth="2.0" lineStyle="Solid"/>
+								<topPen lineWidth="2.0" lineStyle="Solid"/>
+								<leftPen lineWidth="2.0" lineStyle="Solid"/>
+								<bottomPen lineWidth="2.0" lineStyle="Solid"/>
+								<rightPen lineWidth="2.0" lineStyle="Solid"/>
+							</box>
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" forecolor="#000000" backcolor="#FFFFFF" uuid="9d5a5c19-338b-497c-9424-f2f7e365e7b4"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+									<font fontName="Arial" size="11" isBold="false" isItalic="false" isUnderline="false"/>
+									<paragraph lineSpacing="1_1_2"/>
+								</textElement>
+								<text><![CDATA[CANCELADO]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table_TD" height="19" rowSpan="1">
+							<box>
+								<pen lineWidth="2.0" lineStyle="Solid"/>
+								<topPen lineWidth="2.0" lineStyle="Solid"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid"/>
+								<bottomPen lineWidth="2.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid"/>
+							</box>
+						</jr:columnFooter>
+						<jr:detailCell style="table_TD" height="21" rowSpan="1">
+							<box>
+								<pen lineWidth="2.0" lineStyle="Solid"/>
+								<topPen lineWidth="2.0" lineStyle="Solid"/>
+								<leftPen lineWidth="2.0" lineStyle="Solid"/>
+								<bottomPen lineWidth="2.0" lineStyle="Solid"/>
+								<rightPen lineWidth="2.0" lineStyle="Solid"/>
+							</box>
+							<textField pattern="¤ #,##0.00">
+								<reportElement x="0" y="0" width="90" height="21" uuid="4957eba8-8cca-41cf-8222-34e6a246b1dc"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<paragraph leftIndent="10" rightIndent="10"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{t_STATUS_TXT}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</detail>
+	<lastPageFooter>
+		<band height="122">
+			<staticText>
+				<reportElement x="73" y="88" width="133" height="20" uuid="69f06bce-aa63-4f85-92a1-db9f043ff9eb"/>
+				<text><![CDATA[--------------------------------------------------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="88" y="10" width="100" height="20" uuid="a2cdb576-9218-4c0d-a8d1-3aea71dfb6cc"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="12" isBold="true" isItalic="false" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[ELABORÓ
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="60" y="30" width="146" height="20" uuid="5c37a709-de61-4327-9cc8-169bd2788fd0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Cajero Recaudador
+]]></text>
+			</staticText>
+		</band>
+	</lastPageFooter>
+</jasperReport>

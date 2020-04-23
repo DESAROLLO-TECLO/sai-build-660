@@ -1,0 +1,266 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>Alta de Infracción</title>
+</head>
+<body>
+	<section class="content-header">
+		<h1>Consulta Bloqueo Handheld</h1>
+		<ol class="breadcrumb">
+			<li><a><i class="fa fa-book"></i> Bloqueo Hand Held</a></li>
+			<li class="active">Consulta</li>
+		</ol>
+	</section>	
+
+
+	<!-- Main content -->
+	<section class="content">
+
+		<form role="form" name="busq" novalidate>
+
+			<div class="row">
+				<div class="col-md-2"></div>
+				<div class="col-md-8 ">
+
+					<!-- Datos Del Infractor -->
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Búsqueda</h3>
+
+						</div>
+
+						<!-- /.box-header -->
+						<div class="box-body">
+							<div class="row">
+								<div class="col-md-4">
+									<!-- Date -->
+									<div class="form-group" ng-class="{'has-error': busq.datepicker2.$invalid && busq.datepicker2.$dirty}">
+										<label>Fecha Inicio:</label>
+										<div class="input-group date">
+											<div class="input-group-addon">
+												<i class="fa fa-calendar"></i>
+											</div>
+											<input ng-required="bloqueohhVO.fechaFin.length > 0" type="text" class="form-control pull-right inputFecha" readonly
+												ng-model="bloqueohhVO.fechaInicio" id="datepicker2" name="datepicker2"
+												data-date-format="dd/mm/yyyy">
+										</div>
+										<div ng-show="busq.datepicker2.$error.required && busq.datepicker2.$dirty" ng-style="{color:'red'}">
+										La fecha inicio es requerida
+										</div>	
+									</div>
+								</div>
+
+								<div class="col-md-4">
+									<!-- Date -->
+									<div class="form-group" ng-class="{'has-error': busq.datepicker3.$invalid && busq.datepicker3.$dirty}">
+										<label>Fecha Fin:</label>
+
+										<div class="input-group date">
+											<div class="input-group-addon">
+												<i class="fa fa-calendar"></i>
+											</div>
+											<input ng-required="bloqueohhVO.fechaInicio.length > 0" type="text" ng-model="bloqueohhVO.fechaFin" readonly
+												class="form-control pull-right inputFecha" id="datepicker3" name="datepicker3"
+												data-date-format="dd/mm/yyyy">
+										</div>
+										<div ng-show="busq.datepicker3.$error.required && busq.datepicker3.$dirty" ng-style="{color:'red'}">
+										La fecha fin es requerida
+										</div>	
+									
+									</div>
+								</div>
+								
+								
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="example3">Estatus:</label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-list"></i>
+											</div>
+											<select
+												ng-options="tipoEstatus.codigo as tipoEstatus.descripcion for tipoEstatus in tiposEstatus"
+												ng-required="true" ng-model="bloqueohhVO.estatusBloqueo"
+												class="form-control" id="estatusBloqueo">
+	
+											</select>
+										</div>
+									</div>
+								</div>
+
+							</div>
+
+							<div class="row">
+
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="example1">Placa Oficial: </label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-star"></i>
+											</div>
+											<input type="text"
+											ng-model="bloqueohhVO.placaOficial" class="form-control"
+											id="placaOficialhh">
+										</div>
+									</div>
+								</div>
+								
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="example3">Tipo de Bloqueo: </label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-list"></i>
+											</div>
+											<select
+												ng-options="tipoBloqueo.codigo as tipoBloqueo.descripcion  for tipoBloqueo in tiposBloquehohh"
+												ng-required="true" ng-model="bloqueohhVO.tipoBloqueo"
+												class="form-control" id="tipoBLoqueohh">
+											</select>
+										</div>
+									</div>
+
+								</div>
+
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="example1">Serie Handheld:</label>
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-barcode"></i></span> <input type="text" 
+												ng-model="bloqueohhVO.numeroSeriehh" class="form-control"
+												id="seriehh">
+										</div>
+									</div>
+								</div>
+
+							</div>
+
+							<div class="row">
+
+								<div class="form-group">
+									<div class="col-md-12 text-center">
+										<span class="input-group-btn">
+											<button type="button" class="btn btn-danger"
+												ng-click="consultaHandHeld(bloqueohhVO)" id="btnConsultarhh">Buscar</button>
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- /.row -->
+
+				</div>
+ 			</div>
+
+
+
+			<div class="row" id="listaInfracciones"
+				ng-if="listaBloqueohhVO.length > 0 ">
+
+				<div class="col-xs-12">
+
+					<div class="box box-danger">
+						<div class="box-header row">
+							
+							<div class="col-md-6 col-xs-12">
+								<h3 class="box-title  text-center">Registros Encontrados: {{ (listaBloqueohhVO | filter:view.searchSomething).length }}</h3>
+							</div>
+   						 
+		      				<div class="col-md-offset-2 col-md-3 col-xs-8">
+						    	<div class="input-group ">
+							        <input id="searchsomething" type="text" class="form-control" placeholder="Buscar por filtro" ng-model="view.searchSomething">
+							 		<span class="input-group-addon"><i class="fa fa-search"></i></span>
+							     </div>  
+							</div>
+	 								<div class="col-md-1 col-xs-4">
+								<a href="#/consultaHandHeld" 
+									ng-click="downloadReporte()"> <span class="pull-right "><img
+										src="static/dist/img/excel.png"></span></a>
+							</div>
+							
+						</div>
+
+						<!-- /.box-header -->
+						<div class="box-body table-responsive">
+							
+								<table id="tabla_infracciones" class="table table-striped table-hover">
+									<thead>
+										<tr>
+											<th sort order="'numeroSeriehh'" by="order" reverse="reverse" class="center">SERIE HANDHELD</th>
+											<th sort order="'nombreOficial'" by="order" reverse="reverse" class="center">NOMBRE OFICIAL</th>
+											<th sort order="'placaOficial'" by="order" reverse="reverse" class="center">PLACA OFICIAL</th>
+											<th sort order="'bloqueohhCatTipoBloqueo.descripcion'" by="order" reverse="reverse" class="center">TIPO BLOQUEO</th>
+											<th sort order="'estatusBloqueo'" by="order" reverse="reverse" class="center">ESTATUS</th>
+											<th sort order="'fechaBloqueoOrder'" by="order" reverse="reverse" class="center">FECHA BLOQUEO</th>
+											<th sort order="'fechaDesbloqueoOrder'" by="order" reverse="reverse" class="center">FECHA DESBLOQUEO</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-if="(listaBloqueohhVO | filter:view.searchSomething).length < 1"><td colspan="7" class="text-center"><h4>No se encontraron coincidencias</h4></td></tr>
+										<tr
+											dir-paginate="bloquehoVO in listaBloqueohhVO | orderBy:order:reverse | filter:view.searchSomething | itemsPerPage: view.rowsPerPage">
+											<td class="center">{{bloquehoVO.numeroSeriehh}}</td>
+											<td>{{bloquehoVO.nombreOficial}}</td>
+											<td class="center">{{bloquehoVO.placaOficial}}</td>
+											<td class="center">{{bloquehoVO.bloqueohhCatTipoBloqueo.descripcion}}</td>
+											<td class="center">{{bloquehoVO.estatusBloqueo | uppercase}}</td>
+											<td class="center">{{bloquehoVO.fechaBloqueo}}</td>
+											<td class="center">{{bloquehoVO.fechaDesbloqueo}}</td>
+<!-- 											<td class="center">{{bloquehoVO.fechaDesbloqueo | formatDateTime}}</td> -->
+
+										</tr>
+
+									</tbody>
+								</table>
+							
+						</div>
+						<div class="container-fluid">
+							<div class="fixed-table-pagination" style="display:block;">
+								<rows-per-page rows="view.rowsPerPage" filtro="view.searchSomething" array="listaBloqueohhVO"></rows-per-page>
+								
+								<div class="pull-right pagination">
+									<dir-pagination-controls class="pagination"></dir-pagination-controls>
+								</div>
+							</div>
+						</div>
+
+					</div>
+					<!-- /.box -->
+				</div>
+			</div>
+		</form>
+	</section>
+	<!-- /.content -->
+
+	<!-- Page script -->
+	<script>
+		$(function() {
+
+			//Datemask dd/mm/yyyy
+			$("#datemask").inputmask("dd/mm/yyyy", {
+				"placeholder" : "dd/mm/yyyy"
+			});
+
+			//Date picker
+			$('#datepicker').datepicker({
+				todayHighlight : true,
+				autoclose : true
+			});
+			$('#datepicker2').datepicker({
+				todayHighlight : true,
+				autoclose : true
+			});
+			$('#datepicker3').datepicker({
+				todayHighlight : true,
+				autoclose : true
+			});
+
+		});
+	</script>
+
+
+</body>
+</html>

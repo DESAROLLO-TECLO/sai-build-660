@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="impresionInfraccionRegDF" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6d81bd37-2c96-42c8-a867-a7d2b5108c9a">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="0.75"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="196"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sourceforge.barbecue.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="infracNumCtrl" class="java.lang.String">
+		<defaultValueExpression><![CDATA["0"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="INFRAC_NUM" class="java.lang.String"/>
+	<parameter name="INFRAC_NUM_CTRL" class="java.lang.String"/>
+	<parameter name="EMP_NOMBRE_COMPLETO" class="java.lang.String"/>
+	<parameter name="EMP_PLACA" class="java.lang.String"/>
+	<parameter name="EMP_SECTOR" class="java.lang.String"/>
+	<parameter name="EMP_AGRUPAMIENTO" class="java.lang.String"/>
+	<parameter name="INFRAC_FECHA" class="java.lang.String"/>
+	<parameter name="INFRAC_HORA" class="java.lang.String"/>
+	<parameter name="INFRAC_DIA" class="java.lang.String"/>
+	<parameter name="INFRAC_MES" class="java.lang.String"/>
+	<parameter name="INFRAC_ANIO" class="java.lang.String"/>
+	<parameter name="INFRAC_EN_LA_CALLE" class="java.lang.String"/>
+	<parameter name="INFRAC_ENTRE_LA_CALLE" class="java.lang.String"/>
+	<parameter name="INFRAC_Y_LA_CALLE" class="java.lang.String"/>
+	<parameter name="INFRAC_COLONIA" class="java.lang.String"/>
+	<parameter name="INFRAC_DELEGACION" class="java.lang.String"/>
+	<parameter name="INFRAC_CON_DIRECCION" class="java.lang.String"/>
+	<parameter name="INFRAC_FRENTE_AL_NUM" class="java.lang.String"/>
+	<parameter name="OBSERVE_QUE" class="java.lang.String"/>
+	<parameter name="VEH_MARCA" class="java.lang.String"/>
+	<parameter name="VEH_MODELO" class="java.lang.String"/>
+	<parameter name="VEH_COLOR" class="java.lang.String"/>
+	<parameter name="VEH_PLACA" class="java.lang.String"/>
+	<parameter name="ARTICULO" class="java.lang.String"/>
+	<parameter name="FRACCION" class="java.lang.String"/>
+	<parameter name="PARRAFO" class="java.lang.String"/>
+	<parameter name="INCISO" class="java.lang.String"/>
+	<parameter name="INFRACTOR_NOMBRE" class="java.lang.String"/>
+	<parameter name="INFRACTOR_LIC" class="java.lang.String"/>
+	<parameter name="INFRACTOR_LIC_TIPO" class="java.lang.String"/>
+	<parameter name="INFRACTOR_LIC_EXPEDIDA" class="java.lang.String"/>
+	<parameter name="INFRACTOR_CALLE" class="java.lang.String"/>
+	<parameter name="INFRACTOR_NUM_EXT" class="java.lang.String"/>
+	<parameter name="INFRACTOR_NUM_INT" class="java.lang.String"/>
+	<parameter name="INFRACTOR_COLONIA" class="java.lang.String"/>
+	<parameter name="INFRACTOR_DELEGACION" class="java.lang.String"/>
+	<parameter name="INFRACTOR_ESTADO" class="java.lang.String"/>
+	<parameter name="INFRAC_MOTIVACION" class="java.lang.String"/>
+	<parameter name="INFRAC_DIAS_SANCION" class="java.lang.String"/>
+	<parameter name="INFRAC_OBSERVACIONES" class="java.lang.String"/>
+	<parameter name="INFRAC_EN_DEPOSITO" class="java.lang.String"/>
+	<parameter name="INFRAC_DEPOSITO" class="java.lang.String"/>
+	<parameter name="RESPONSABLE_VEH" class="java.lang.String"/>
+	<parameter name="LEYENDA_SALARIO" class="java.lang.String"/>
+	<parameter name="VEH_ORIGEN" class="java.lang.String"/>
+	<parameter name="HANDHELD_SERIE" class="java.lang.String"/>
+	<parameter name="GARANTIA_RETENIDA" class="java.lang.String"/>
+	<parameter name="SELLO_DIGITAL" class="java.lang.String"/>
+	<parameter name="CADENA_ORIGINAL" class="java.lang.String"/>
+	<parameter name="VEH_PLACA_EXPEDIDA" class="java.lang.String"/>
+	<parameter name="EMP_ID" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT * FROM icd.V_REP_BOLETA_INFRACCION where infrac_num_ctrl=$P{infracNumCtrl}]]>
+	</queryString>
+	<variable name="variable1" class="java.lang.String">
+		<variableExpression><![CDATA[$P{HANDHELD_SERIE}.length() > 11 ? "ZEBRA, modelo MC67" : "INTERMEC, modelo CN3"]]></variableExpression>
+		<initialValueExpression><![CDATA[]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Prevent"/>
+	</background>
+	<title>
+		<band splitType="Prevent"/>
+	</title>
+	<pageHeader>
+		<band splitType="Prevent"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Prevent"/>
+	</columnHeader>
+	<detail>
+		<band height="716" splitType="Prevent">
+			<rectangle radius="0">
+				<reportElement key="rectangle-2" mode="Opaque" x="11" y="0" width="269" height="709" forecolor="#000000" backcolor="#FFFFFF" uuid="6a937442-c067-4c49-9d4e-47d52f2ae9f1"/>
+				<graphicElement fill="Solid">
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+				</graphicElement>
+			</rectangle>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement key="descripcion" mode="Transparent" x="14" y="77" width="262" height="86" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF" uuid="7b90140c-fdc3-435b-b3d3-1ca723afad21"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Top" rotation="None">
+					<font fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Con fundamento en lo dispuesto por los articulos 16 y 21 cuarto párrafo de la Constitución Politica de los Estados Unidos Mexicanos; 87 del Estatuto de Gobierno del Distrito Federal; 15 fracción de la Ley Organica de la Administración Pública del Distrito; 1, 2 y 5 de la Ley de Seguridad Pública del Distrito Federal; 2 fracción V, 3 fraccion XIV, XV, XVII y XX de la Ley Orgánica de la Secretaria de Seguridad Pública del Distrito Federal; 3, 4 fracción I, 59 fraccion II, 60, 61 y 64 del Reglamento de Tránsito del Distrito Federal; 1, 2, 3 y 4 de la Ley que Regula el Uso de la Tecnología para la Seguridad Pública del Distrito Federal."]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-18" mode="Transparent" x="15" y="14" width="101" height="19" forecolor="#000000" backcolor="#FFFFFF" uuid="c0e464a9-87f6-493e-bb97-965d902ec98c"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+					<font fontName="Arial" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[BOLETA SANCIÓN]]></text>
+			</staticText>
+			<rectangle radius="0">
+				<reportElement key="rectangle-3" mode="Opaque" x="296" y="8" width="269" height="703" forecolor="#000000" backcolor="#FFFFFF" uuid="39bb03a2-412d-44a7-89f8-6f9ffbbd5d8a"/>
+				<graphicElement fill="Solid">
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+				</graphicElement>
+			</rectangle>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement key="descripcion-3" mode="Transparent" x="16" y="470" width="260" height="75" forecolor="#000000" backcolor="#FFFFFF" uuid="161e05ae-36ef-4846-a7a4-ac9ca448665d"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Top" rotation="None">
+					<font fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Es de señalar que dicho medio tecnológico permite captar la imagen del vehículo anteriormente descrito, por lo que una vez que ha sido confirmada la autenticidad de los elementos que la componen y que no existe alteración de ningún tipo, la información obtenia hace prueba plena de conformidad con el último párrafo del artículo 61 del Reglamento de Tránsito del Distrito Federal en relación con el dispositivo 34 de la Ley que Regula el Uso de la Tecnología para la Seguridad Pública del Distrito Federal."]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement key="descripcion-4" mode="Transparent" x="14" y="176" width="262" height="179" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF" uuid="6f1a12d5-fc9c-4b1c-9102-1bfd5529179d"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Top" rotation="None">
+					<font fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["El C. Agente "+$P{EMP_NOMBRE_COMPLETO}+" , con número de placa: "+$P{EMP_PLACA}+", con adscripción en: "+$P{EMP_SECTOR}+"/"+$P{EMP_AGRUPAMIENTO}+", informó que siendo las "+$P{INFRAC_HORA}+" hrs del día "+$P{INFRAC_DIA}+" de "+$P{INFRAC_MES}+" del "+$P{INFRAC_ANIO}+" , al realizar mis funciones en la avenida "+$P{INFRAC_EN_LA_CALLE}+" , entre la calle "+$P{INFRAC_ENTRE_LA_CALLE}+" , y la calle "+$P{INFRAC_Y_LA_CALLE}+", frente al número "+$P{INFRAC_FRENTE_AL_NUM}+" , con dirección hacia el "+$P{INFRAC_CON_DIRECCION}+" , en la colonia "+$P{INFRAC_COLONIA}+" , en la delegación "+$P{INFRAC_DELEGACION}+", México Distrito Federal, haciendo uso del equipo electrónico portátil denominado Hand Held, marca " +
+
+$V{variable1}
+
++" serie "+$P{HANDHELD_SERIE}+ " , utilizado para captar la infracción en materia de tránsito, observé que "+$P{OBSERVE_QUE}+" , de la marca "+$P{VEH_MARCA}+" , submarca "+$P{VEH_MODELO}+" , color "+$P{VEH_COLOR}+" , con placas de matriculación o número de permiso "+$P{VEH_PLACA}+" ; expedidas en "+$P{VEH_PLACA_EXPEDIDA}+", se encontraba transgrediendo la disposición contenida en el Artículo "+$P{ARTICULO}+" , Fracción "+$P{FRACCION}+" , Inciso "+$P{INCISO}+" , Párrafo (Renglón) "+$P{PARRAFO}+" , del Reglamento de Tránsito del Distrito Federal, al realizar la conducta consistente en (Motivación): "+
+$P{INFRAC_OBSERVACIONES}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement key="descripcion-5" mode="Transparent" x="15" y="355" width="259" height="101" forecolor="#000000" backcolor="#FFFFFF" uuid="57f7ff7e-313d-4ecd-8a89-eeb396275745"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Top" rotation="None">
+					<font fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Por lo cual procedo a imponer la sanción consistente en una multa equivalente a "+ $P{INFRAC_DIAS_SANCION} +", veces la unidad de cuenta de la Ciudad de México, lo anterior atiende a que  transgrede lo dispuesto en el artículo previamente aludido del Reglamento de Tránsito del Distrito Federal. "
++"Cabe mencionar que el responsable del vehiculo de referencia responde al nombre de: "+$P{INFRACTOR_NOMBRE}+", quien se identificó con el número de licencia o permiso "+$P{INFRACTOR_LIC}+" , tipo: "+$P{INFRACTOR_LIC_TIPO}+ " , expedida en "+$P{INFRACTOR_LIC_EXPEDIDA}+" , asimismo dijo tener su domicilio ubicado en: "+$P{INFRACTOR_CALLE}+" "+$P{INFRACTOR_NUM_INT}+" , "+ $P{INFRACTOR_NUM_EXT}+" , "+$P{INFRACTOR_COLONIA}+" , "+$P{INFRACTOR_ESTADO}+" "+$P{INFRACTOR_DELEGACION}+". "]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement key="descripcion-6" mode="Transparent" x="16" y="556" width="260" height="74" forecolor="#000000" backcolor="#FFFFFF" uuid="8261e043-7769-4923-bac0-211eea31e48b">
+					<printWhenExpression><![CDATA[new Boolean(!$P{GARANTIA_RETENIDA}.equals( "NO" ))]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Top" rotation="None">
+					<font fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Ahora bien, toda vez que la placa de circulacion número "+$P{VEH_PLACA}+", fue emitida por diversa(o): Entidad Federativa. " +$P{VEH_PLACA_EXPEDIDA}+" y es de origen "+$P{VEH_ORIGEN}+ ", de conformidad con el artículo 62 último párrafo, y debido a que el cobro de la sanción no se realizó en el sitio, el Agente procedió a: "
++"\n"+$P{GARANTIA_RETENIDA}
++"\n\n"+"Remisión del vehículo a deposito ("
++($P{INFRAC_DEPOSITO}.equals("SIN INGRESO")?"NO":"SI")
++(")")
++($P{INFRAC_DEPOSITO}.equals("SIN INGRESO")? "":": "+$P{INFRAC_DEPOSITO})]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement key="line-21" x="11" y="641" width="269" height="1" uuid="c24e27b2-8f00-4a67-8cae-f7b84f74e9ee"/>
+			</line>
+			<line>
+				<reportElement key="line-22" x="11" y="59" width="269" height="1" uuid="5d530060-ca2d-4a31-8624-b81da04c8108"/>
+			</line>
+			<staticText>
+				<reportElement key="staticText-19" mode="Transparent" x="300" y="15" width="101" height="19" forecolor="#000000" backcolor="#FFFFFF" uuid="c0e1b03a-710c-481f-bb13-688b678943af"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+					<font fontName="Arial" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[BOLETA SANCIÓN]]></text>
+			</staticText>
+			<line>
+				<reportElement key="line-23" x="298" y="59" width="269" height="1" uuid="9549a0bf-a511-4312-bbf3-0524b74e9695"/>
+			</line>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement key="descripcion-7" mode="Transparent" x="300" y="78" width="262" height="86" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF" uuid="c656c18c-7ed8-40fd-a870-a0d628d4bf63"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Top" rotation="None">
+					<font fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Con fundamento en lo dispuesto por los articulos 16 y 21 cuarto párrafo de la Constitución Politica de los Estados Unidos Mexicanos; 87 del Estatuto de Gobierno del Distrito Federal; 15 fracción de la Ley Organica de la Administración Pública del Distrito; 1, 2 y 5 de la Ley de Seguridad Pública del Distrito Federal; 2 fracción V, 3 fraccion XIV, XV, XVII y XX de la Ley Orgánica de la Secretaria de Seguridad Pública del Distrito Federal; 3, 4 fracción I, 59 fraccion II, 60, 61 y 64 del Reglamento de Tránsito del Distrito Federal; 1, 2, 3 y 4 de la Ley que Regula el Uso de la Tecnología para la Seguridad Pública del Distrito Federal."]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement key="descripcion-8" mode="Transparent" x="300" y="176" width="262" height="179" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF" uuid="5d92bf04-eeb3-4932-97b1-7a5fc7bc367e"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Top" rotation="None">
+					<font fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["El C. Agente "+$P{EMP_NOMBRE_COMPLETO}+" , con número de placa: "+$P{EMP_PLACA}+", con adscripción en: "+$P{EMP_SECTOR}+"/"+$P{EMP_AGRUPAMIENTO}+", informó que siendo las "+$P{INFRAC_HORA}+" hrs del día "+$P{INFRAC_DIA}+" de "+$P{INFRAC_MES}+" del "+$P{INFRAC_ANIO}+" , al realizar mis funciones en la avenida "+$P{INFRAC_EN_LA_CALLE}+" , entre la calle "+$P{INFRAC_ENTRE_LA_CALLE}+" , y la calle "+$P{INFRAC_Y_LA_CALLE}+", frente al número "+$P{INFRAC_FRENTE_AL_NUM}+" , con dirección hacia el "+$P{INFRAC_CON_DIRECCION}+" , en la colonia "+$P{INFRAC_COLONIA}+" , en la delegación "+$P{INFRAC_DELEGACION}+", México Distrito Federal, haciendo uso del equipo electrónico portátil denominado Hand Held, marca " +
+
+$V{variable1}
+
++" serie "+$P{HANDHELD_SERIE}+ " , utilizado para captar la infracción en materia de tránsito, observé que "+$P{OBSERVE_QUE}+" , de la marca "+$P{VEH_MARCA}+" , submarca "+$P{VEH_MODELO}+" , color "+$P{VEH_COLOR}+" , con placas de matriculación o número de permiso "+$P{VEH_PLACA}+" ; expedidas en "+$P{VEH_PLACA_EXPEDIDA}+", se encontraba transgrediendo la disposición contenida en el Artículo "+$P{ARTICULO}+" , Fracción "+$P{FRACCION}+" , Inciso "+$P{INCISO}+" , Párrafo (Renglón) "+$P{PARRAFO}+" , del Reglamento de Tránsito del Distrito Federal, al realizar la conducta consistente en (Motivación): "+
+$P{INFRAC_OBSERVACIONES}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement key="descripcion-9" mode="Transparent" x="302" y="354" width="260" height="102" forecolor="#000000" backcolor="#FFFFFF" uuid="7c02f9a8-161a-4454-9ad9-8e0d03af4262"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Top" rotation="None">
+					<font fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Por lo cual procedo a imponer la sanción consistente en una multa equivalente a "+ $P{INFRAC_DIAS_SANCION} +", veces la unidad de cuenta de la Ciudad de México, lo anterior atiende a que  transgrede lo dispuesto en el artículo previamente aludido del Reglamento de Tránsito del Distrito Federal. "
++"Cabe mencionar que el responsable del vehiculo de referencia responde al nombre de: "+$P{INFRACTOR_NOMBRE}+", quien se identificó con el número de licencia o permiso "+$P{INFRACTOR_LIC}+" , tipo: "+$P{INFRACTOR_LIC_TIPO}+ " , expedida en "+$P{INFRACTOR_LIC_EXPEDIDA}+" , asimismo dijo tener su domicilio ubicado en: "+$P{INFRACTOR_CALLE}+" "+$P{INFRACTOR_NUM_INT}+" , "+ $P{INFRACTOR_NUM_EXT}+" , "+$P{INFRACTOR_COLONIA}+" , "+$P{INFRACTOR_ESTADO}+" "+$P{INFRACTOR_DELEGACION}+". "]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement key="descripcion-10" mode="Transparent" x="302" y="470" width="260" height="75" forecolor="#000000" backcolor="#FFFFFF" uuid="70fc6307-c3bf-4eec-920f-7019a51d33e0"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Top" rotation="None">
+					<font fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Es de señalar que dicho medio tecnológico permite captar la imagen del vehículo anteriormente descrito, por lo que una vez que ha sido confirmada la autenticidad de los elementos que la componen y que no existe alteración de ningún tipo, la información obtenia hace prueba plena de conformidad con el último párrafo del artículo 61 del Reglamento de Tránsito del Distrito Federal en relación con el dispositivo 34 de la Ley que Regula el Uso de la Tecnología para la Seguridad Pública del Distrito Federal."]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement key="line-24" x="296" y="642" width="269" height="1" uuid="55f44e6e-8a6b-4585-88bc-5a9ee050561d"/>
+			</line>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement key="descripcion-12" mode="Transparent" x="15" y="642" width="260" height="44" forecolor="#000000" backcolor="#FFFFFF" uuid="fdf71424-5ea1-48f7-ac5d-e88cda5137a7">
+					<printWhenExpression><![CDATA[new Boolean(!$P{SELLO_DIGITAL}.equals("N"))]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Top" rotation="None">
+					<font fontName="Arial" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Sello Digital \n"+ $P{SELLO_DIGITAL}
++"Cadena Original \n" + $P{CADENA_ORIGINAL}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement key="descripcion-14" mode="Transparent" x="14" y="687" width="260" height="22" forecolor="#000000" backcolor="#FFFFFF" uuid="808719e7-1000-4512-b924-edc2bf645d9a">
+					<printWhenExpression><![CDATA[new Boolean($P{SELLO_DIGITAL}.equals("N"))]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None">
+					<font fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Firma del Agente de Policía : ______________________________"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement key="descripcion-15" mode="Transparent" x="300" y="688" width="260" height="22" forecolor="#000000" backcolor="#FFFFFF" uuid="8e2d3657-d498-4107-b642-4af36f20f8cf">
+					<printWhenExpression><![CDATA[new Boolean($P{SELLO_DIGITAL}.equals("N"))]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Top" rotation="None">
+					<font fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Firma del Agente de Policía : ______________________________"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement key="descripcion-16" mode="Transparent" x="300" y="643" width="260" height="43" forecolor="#000000" backcolor="#FFFFFF" uuid="0eb0dc61-a831-4555-a2be-d0d5370e17e4">
+					<printWhenExpression><![CDATA[new Boolean(!$P{SELLO_DIGITAL}.equals("N"))]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Top" rotation="None">
+					<font fontName="Arial" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Sello Digital \n"+$P{SELLO_DIGITAL}
++"Cadena Original \n" +$P{CADENA_ORIGINAL}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement key="descripcion-17" mode="Transparent" x="300" y="556" width="260" height="74" forecolor="#000000" backcolor="#FFFFFF" uuid="5904f8f2-18e6-49b4-9103-a95062a0ccd5">
+					<printWhenExpression><![CDATA[new Boolean(!$P{GARANTIA_RETENIDA}.equals( "NO" ))]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Top" rotation="None">
+					<font fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Ahora bien, toda vez que la placa de circulacion número "+$P{VEH_PLACA}+", fue emitida por diversa(o): Entidad Federativa. " +$P{VEH_PLACA_EXPEDIDA}+" y es de origen "+$P{VEH_ORIGEN}+ ", de conformidad con el artículo 62 último párrafo, y debido a que el cobro de la sanción no se realizó en el sitio, el Agente procedió a: "
++"\n"+$P{GARANTIA_RETENIDA}
++"\n\n"+"Remisión del vehículo a deposito ("
++($P{INFRAC_DEPOSITO}.equals("SIN INGRESO")?"NO":"SI")
++(")")
++($P{INFRAC_DEPOSITO}.equals("SIN INGRESO")? "":": "+$P{INFRAC_DEPOSITO})]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-6" mode="Transparent" x="26" y="44" width="90" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="63d9398f-f985-4a35-8f1d-438410dc81d3"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None">
+					<font fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Folio: "+$P{INFRAC_NUM}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-7" mode="Transparent" x="313" y="44" width="88" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="cd1e3acd-433b-4336-b425-7c3211377d06"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None">
+					<font fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Folio: "+$P{INFRAC_NUM}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-5" mode="Transparent" x="427" y="43" width="122" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="448686f6-9878-4b55-9c25-d1db7ce7b2d9"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None">
+					<font fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{INFRAC_NUM_CTRL}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-4" mode="Transparent" x="137" y="43" width="128" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="ade8f0ae-904a-4f9d-ae86-f53bd7b5e854"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None">
+					<font fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{INFRAC_NUM_CTRL}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement x="137" y="14" width="137" height="20" uuid="a750697f-f00e-46c8-a498-17a926b7bf8a"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false">
+					<jr:codeExpression><![CDATA[$P{INFRAC_NUM_CTRL}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<componentElement>
+				<reportElement x="427" y="15" width="130" height="18" uuid="85efeb45-b6d6-4351-8bdf-60aa67fa8ac9"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false">
+					<jr:codeExpression><![CDATA[$P{INFRAC_NUM_CTRL}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Prevent"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="10" splitType="Prevent"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Prevent"/>
+	</summary>
+</jasperReport>

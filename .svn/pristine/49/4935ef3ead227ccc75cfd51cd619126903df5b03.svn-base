@@ -1,0 +1,452 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>Consulta de Expediente</title>
+</head>
+<body>
+	<div ng-show="error" class="alert alert-warning">
+		{{error.message}}</div>
+	<section class="content-header">
+		<h1>Cajas Sin Corte (Actual)</h1>
+		<ol class="breadcrumb">
+			<li><a href="#"><i class="fa fa-book"></i>Cajas Sin Corte</a></li>
+			<li class="active">Consulta Actual</li>
+		</ol>
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+	
+		<div class="row" ng-show="consultaByEmp.length > 0">
+			<section class="col-lg-offset-3 col-lg-6 connectedSortable">
+				<div class="box box-danger">
+					<div class="box-header with-border">
+						<h3 class="box-title">Información de la Caja</h3>
+						<div class="box-tools pull-right">
+							<button type="button" class="btn btn-box-tool"
+								data-widget="collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+						</div>
+					</div>
+					<div class="box-body">
+						<div class="table-responsive">
+							<table class="table tblsnborder">
+								<tr>
+									<td>Número de Caja:</td>
+									<td>{{consultaByEmp[0].cajaCod}}</td>
+								</tr>
+								<tr>
+									<td>Usuario Asignado:</td>
+									<td>{{consultaByEmp[0].empNombre}}</td>
+									<td>Placa Usuario:</td>
+									<td>{{consultaByEmp[0].empPlaca}}</td>
+								</tr>
+							</table>
+						</div>
+						<div class="row">
+							<div class="col-md-offset-5">
+								<button class="btn btn-danger" id="btnGeneraCorte"
+										type="button" ng-click="generarCorte(consultaByEmp[0].cajaIdD)">Generar Corte</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+		<div class="row">
+			<section class="col-lg-6 connectedSortable">
+				<div class="box box-danger">
+					<div class="box-header with-border">
+						<h3 class="box-title">Billetes</h3>
+						<div class="box-tools pull-right">
+							<button type="button" class="btn btn-box-tool"
+								data-widget="collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+						</div>
+					</div>
+					<div class="box-body">
+						<div class="table-responsive">
+							<table class="table tblsnborder">
+								<thead>
+									<tr>
+										<td>Denominación</td>
+										<td>Cantidad</td>
+										<td>Importe</td>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>$1000.00</td>
+										<td><input type="number" min="0" ng-model="milBill" ng-change="modificaBillete(1000, milBill)" class="form-control"></td>
+										<td><input type="text" ng-model="milBillTot" class="form-control" disabled></td>
+									</tr>
+									<tr>
+										<td>$500.00</td>
+										<td><input type="number" min="0" ng-model="quinBill" ng-change="modificaBillete(500, quinBill)" class="form-control"></td>
+										<td><input type="text" ng-model="quinBillTot" class="form-control" disabled></td>
+									</tr>
+									<tr>
+										<td>$200.00</td>
+										<td><input type="number" min="0" ng-model="dosBill" ng-change="modificaBillete(200, dosBill)" class="form-control"></td>
+										<td><input type="text" ng-model="dosBillTot" class="form-control" disabled></td>
+									</tr>
+									<tr>
+										<td>$100.00</td>
+										<td><input type="number" min="0" ng-model="cienBill" ng-change="modificaBillete(100, cienBill)" class="form-control"></td>
+										<td><input type="text" ng-model="cienBillTot" class="form-control" disabled></td>
+									</tr>
+									<tr>
+										<td>$50.00</td>
+										<td><input type="number" min="0" ng-model="cincBill" ng-change="modificaBillete(50, cincBill)" class="form-control"></td>
+										<td><input type="text" ng-model="cincBillTot" class="form-control" disabled></td>
+									</tr>
+									<tr>
+										<td>$20.00</td>
+										<td><input type="number" min="0" ng-model="veinBill" ng-change="modificaBillete(20, veinBill)" class="form-control"></td>
+										<td><input type="text" ng-model="veinBillTot" class="form-control" disabled></td>
+									</tr>
+									<tr>
+										<td colspan="2" style="text-align:right;">Subtotal</td>
+										<td><input type="text" ng-model="totBillDenom" class="form-control" disabled></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="box box-danger">
+					<div class="box-header with-border">
+						<h3 class="box-title">Monedas</h3>
+						<div class="box-tools pull-right">
+							<button type="button" class="btn btn-box-tool"
+								data-widget="collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+						</div>
+					</div>
+					<div class="box-body">
+						<div class="table-responsive">
+							<table class="table tblsnborder">
+								<thead>
+									<tr>
+										<td>Denominación</td>
+										<td>Cantidad</td>
+										<td>Importe</td>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>$20.00</td>
+										<td><input type="number" min="0" ng-model="veinMon" ng-change="modificaMoneda(20, veinMon)" class="form-control"></td>
+										<td><input type="text" ng-model="veinMonTot" class="form-control" disabled></td>
+									</tr>
+									<tr>
+										<td>$10.00</td>
+										<td><input type="number" min="0" ng-model="diezMon" ng-change="modificaMoneda(10, diezMon)" class="form-control"></td>
+										<td><input type="text" ng-model="diezMonTot" class="form-control" disabled></td>
+									</tr>
+									<tr>
+										<td>$5.00</td>
+										<td><input type="number" min="0" ng-model="cincMon" ng-change="modificaMoneda(5, cincMon)" class="form-control"></td>
+										<td><input type="text" ng-model="cincMonTot" class="form-control" disabled></td>
+									</tr>
+									<tr>
+										<td>$2.00</td>
+										<td><input type="number" min="0" ng-model="dosMon" ng-change="modificaMoneda(2, dosMon)" class="form-control"></td>
+										<td><input type="text" ng-model="dosMonTot" class="form-control" disabled></td>
+									</tr>
+									<tr>
+										<td>$1.00</td>
+										<td><input type="number" min="0" ng-model="UnoMon" ng-change="modificaMoneda(1, UnoMon)" class="form-control"></td>
+										<td><input type="text" ng-model="UnoMonTot" class="form-control" disabled></td>
+									</tr>
+									<tr>
+										<td>$0.50</td>
+										<td><input type="number" min="0" ng-model="cincCent" ng-change="modificaCent(.5, cincCent)" class="form-control"></td>
+										<td><input type="text" ng-model="cincCentTot" class="form-control"disabled></td>
+									</tr>
+									<tr>
+										<td>$0.20</td>
+										<td><input type="number" min="0" ng-model="veinCent" ng-change="modificaCent(.2, veinCent)" class="form-control"></td>
+										<td><input type="text" ng-model="veinCentTot" class="form-control" disabled></td>
+									</tr>
+									<tr>
+										<td>$0.10</td>
+										<td><input type="number" min="0" ng-model="diezCent" ng-change="modificaCent(.1, diezCent)" class="form-control"></td>
+										<td><input type="text" ng-model="diezCentTot" class="form-control" disabled></td>
+									</tr>
+									<tr>
+										<td>$0.05</td>
+										<td><input type="number" min="0" ng-model="cinCent" ng-change="modificaCent(.05, cinCent)" class="form-control"></td>
+										<td><input type="text" ng-model="cinCentTot" class="form-control" disabled></td>
+									</tr>
+									<tr>
+										<td colspan="2" style="text-align:right;">Subtotal</td>
+										<td><input type="text" ng-model="totMonDenom" class="form-control" disabled></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				</section>
+				<section class="col-lg-6 connectedSortable">
+				<div class="box box-danger">
+					<div class="box-header with-border">
+						<h3 class="box-title">Descripción de Documentos</h3>
+						<div class="box-tools pull-right">
+							<button type="button" class="btn btn-box-tool"
+								data-widget="collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+						</div>
+					</div>
+					<div class="box-body">
+						<div class="table-responsive">
+							<table class="table tblsnborder">
+								<tr>
+									<td>Tarjeta de Débito</td>
+									<td><input type="text" ng-model="cajaPrep.p_total_cheques" class="form-control" disabled></td>
+								</tr>
+								<tr>
+									<td>Tarjeta de Crédito</td>
+									<td><input type="text" ng-model="cajaPrep.p_total_tar_credito" class="form-control" disabled></td>
+								</tr>
+								<tr>
+									<td>Subtotal</td>
+									<td><input type="text" class="form-control" disabled></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="box box-danger">
+					<div class="box-header with-border">
+						<h3 class="box-title">Valor de Recolección</h3>
+						<div class="box-tools pull-right">
+							<button type="button" class="btn btn-box-tool"
+								data-widget="collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+						</div>
+					</div>
+					<div class="box-body">
+						<div class="table-responsive">
+							<table class="table tblsnborder">
+								<tr>
+									<td>Tarjeta de Débito</td>
+									<td><input type="text" ng-model="cajaPrep.p_total_cheques" class="form-control" disabled></td>
+								</tr>
+								<tr>
+									<td>Tarjeta de Crédito</td>
+									<td><input type="text" ng-model="cajaPrep.p_total_tar_credito" class="form-control" disabled></td>
+								</tr>
+								<tr>
+									<td>Efectivo</td>
+									<td><input type="text" ng-model="cajaPrep.p_total_efectivo" class="form-control" disabled></td>
+								</tr>
+								<tr>
+									<td>Documentos</td>
+									<td><input type="text" ng-model="cajaPrep.p_total_otros" class="form-control" disabled></td>
+								</tr>
+								<tr>
+									<td>Total Concentrado:</td>
+									<td><input type="text" ng-model="cajaPrep.p_total_corte" class="form-control" disabled></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>		
+			
+				<div class="box box-danger">
+					<div class="box-header with-border">
+						<h3 class="box-title">Resumen de Operaciones</h3>
+						<div class="box-tools pull-right">
+							<button type="button" class="btn btn-box-tool"
+								data-widget="collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+						</div>
+					</div>
+					<div class="box-body">
+						<div class="table-responsive">
+							<table class="table tblsnborder">
+								<tr>
+									<td>Partida Inicial</td>
+									<td><input type="text" ng-model="cajaPrep.resumenPartidaInicial" class="form-control" disabled></td>
+								</tr>
+								<tr>
+									<td>Partida Final</td>
+									<td><input type="text" ng-model="cajaPrep.resumenPartidaFinal" class="form-control" disabled></td>
+								</tr>
+								<tr>
+									<td>Operaciones Efectuadas</td>
+									<td><input type="text" ng-model="cajaPrep.p_num_operaciones" class="form-control" disabled></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>		
+				<div class="box box-danger">
+					<div class="box-header with-border">
+						<h3 class="box-title">Recibos</h3>
+						<div class="box-tools pull-right">
+							<button type="button" class="btn btn-box-tool"
+								data-widget="collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+						</div>
+					</div>
+					<div class="box-body">
+						<div class="table-responsive">
+							<table class="table tblsnborder">
+								<tr>
+									<td>Folio Inicial</td>
+									<td><input type="text" ng-model="cajaPrep.p_RECIBO_FOL_INI" class="form-control"></td>
+								</tr>
+								<tr>
+									<td>Folio Final</td>
+									<td><input type="text" ng-model="cajaPrep.p_RECIBO_FOL_FIN" class="form-control"></td>
+								</tr>
+								<tr>
+									<td>Total</td>
+									<td><input type="text" ng-model="cajaPrep.p_RECIBO_TOTAL" class="form-control"></td>
+								</tr>
+								<tr>
+									<td>Utilizados</td>
+									<td><input type="text" ng-model="cajaPrep.p_RECIBO_UTILIZADOS" class="form-control"></td>
+								</tr>
+								<tr>
+									<td>Cancelados</td>
+									<td><input type="text" ng-model="cajaPrep.p_RECIBO_CANCELADOS" class="form-control"></td>
+								</tr>
+								<tr>
+									<td>Inutlizados</td>
+									<td><input type="text" ng-model="cajaPrep.p_RECIBO_INUTILIZADOS" class="form-control"></td>
+								</tr>
+								<tr>
+									<td>Faltantes</td>
+									<td><input type="text" ng-model="cajaPrep.p_RECIBO_FALTANTES" class="form-control"></td>
+								</tr>
+							</table>
+							<div class="row">
+									<div class="col-xs-5"></div>
+									<div class="col-xs-1">
+										<button class="btn btn-danger" id="btnGuardarDatos"
+											type="button" ng-click="DoNuevaInfraccionVO()">Guardar</button>
+									</div>
+									<div class="col-xs-6"></div>
+								</div>
+						</div>
+					</div>
+				</div>		
+			</section>
+		</div>
+		
+		<div class="row" ng-show="consultaByEmp == null">
+			<section class="col-lg-offset-3 col-lg-6 connectedSortable">
+				<div class="box box-danger">
+					<div class="box-header with-border">
+						<h3 class="box-title">Búsqueda</h3>
+						<div class="box-tools pull-right">
+							<button type="button" class="btn btn-box-tool"
+								data-widget="collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+						</div>
+					</div>
+					<div class="box-body" style="padding-left:40px;">
+						<form class="form-inline">
+							<div class="table-responsive">
+								<table>
+									<tr class="spaceUnder">
+										<td><dt>Tipo de Búsqueda:<dt></td>
+										<td>
+											<select class="form-control inputs"
+												ng-options="tipo.codigoString as tipo.descripcion for tipo in catalogoTipoBusqueda"
+												ng-model="consulta.tipoBusqueda"
+												ng-change="changeBusqueda()"
+												style="width:100%">
+											</select>
+										</td>
+										<td>
+											<input ng-show="showNormalInputForParam" type="text" class="form-control inputs" ng-model="consulta.parametroBusqueda" placeholder="">
+											<select ng-show="!showNormalInputForParam" class="form-control inputs"
+												ng-options="caja.codigoString as caja.descripcion for caja in catalogoTipoCajas"
+												ng-model="consulta.perfilId"
+												style="width:100%">
+											</select>
+										</td>
+									</tr>
+									<tr class="spaceUnder">
+										<td><dt>Mostrar en Resultado:<dt></td>
+										<td>
+											<select class="form-control inputs"
+												ng-options="resultado.codigoString as resultado.descripcion for resultado in catalogoTipoResultado"
+												ng-model="consulta.tipoResultado"
+												style="width:100%">
+											</select>
+										</td>
+										<td>
+											<button class="btn btn-danger" id="btnBuscar"
+											type="button" ng-click="buscarActual()">Buscar</button>
+										</td>
+									</tr>
+								</table>
+								
+							</div>
+						</form>
+					</div>
+				</div>
+			</section>
+		</div>
+		
+		
+	</section>
+	<!--{{consulta}}  {{error}} 
+	
+	{{detalleRecords}}{{records}} -->
+	{{consultaByEmp}}
+	<br>
+	{{cajaPrep}}
+	<div class="control-sidebar-bg"></div>
+	
+	<style type="text/css">
+	
+		legend.scheduler-border {
+			font-size: 1em !important;
+			font-weight: bold !important;
+			text-align: left !important;
+			width: auto;
+			padding: 0 10px;
+			border-bottom: none;
+		}
+
+		fieldset.scheduler-border {
+			border-radius: 0.5em; /* applied border radius */
+			border: 1px solid #ccc !important;
+			padding: 0 1.4em 1.4em 1.4em !important;
+			margin: 0 0 1.5em 0 !important;
+		}
+		
+		tr.spaceUnder > td
+		{
+		  padding-bottom: 1em;
+		  padding-left: 1em;
+		}
+
+		.inputs{
+			width: 100%;
+		}
+		
+		select{
+		    -moz-appearance: none;
+		    appearance: none;
+		    padding: 2px;
+		}
+</style>
+
+</body>
+</html>

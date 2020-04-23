@@ -1,0 +1,204 @@
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+	.cont-scroll{  
+		height: 300px !important;  
+	}  
+</style>
+<title>Complementación de Detecciones</title>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+	<section class="content-header">
+		<h1>Complementación de Detecciones</h1>
+		<ol class="breadcrumb">
+			<li><a><i class="fa fa-book"></i>Dispositivos Fijos</a></li>
+			<li class="active">Complementación</li>
+		</ol>
+	</section>
+	<section>
+		<form role="form" name="formComplementarArchivoRadares">
+		<div class="row" ng-if="!loteEnProceso">
+			<br/>
+				<div class="col-md-2"></div>
+				<div class="col-md-8">
+					<div class="alert alert-teclo  alert-dismissable text-center">
+	<!-- 				<button type="button" class="close" data-dismiss="alert">×</button> -->
+						<strong class="mensajeAutorizacion ng-binding">No hay un lote de detecciones de dispositivos fijos actualmente en proceso.</strong>
+					</div>
+					<!-- div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title"></h3>
+						</div>
+					</div-->
+				</div>
+			</div>
+		<div class="row" ng-if="loteEnProceso">
+			<br>
+				<div class="col-md-2"></div>
+				<div class="col-md-8">
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Complementando Lote de Detecciones</h3>
+						</div>
+						<div class="box-body">
+							<div class="form-group">
+								<div class="row">
+									<div class="box-body no-padding table-responsive">
+										<div class="row centerCol">
+											<div class="col-xs-11">
+												<table class="table">
+													<tr>
+														<th>ARCHIVO:</th>
+														<td>{{dispFijoLoteVO.loteNombre}}</td>
+														<th>ID DE ARCHIVO:</th>
+														<td>{{dispFijoLoteVO.radarArchivoId}}</td>
+													</tr>
+													<tr>
+														<th>FECHA EMISION:</th>
+														<td>{{dispFijoLoteVO.fechaEmision | date :
+															'dd/MM/yyyy'}}</td>
+														<th>ESTATUS ARCHIVO:</th>
+														<td>{{dispFijoLoteVO.estatusProceso}}</td>
+													</tr>
+													<tr>
+														<th>EN PROCESO? :</th>
+														<td>{{dispFijoLoteVO.enProceso}}</td>
+														<th>TOTAL DE DETECCIONES :</th>
+														<td><span class="badge bg-green col-md-2"
+															data-toggle="tooltip" data-placement="top"
+															title="Detecciones Activas">{{dispFijoLoteVO.totalValidas}}</span>
+															<span class="col-md-2" data-toggle="tooltip"></span> <span
+															class="badge bg-red col-md-2" data-toggle="tooltip"
+															data-placement="top" title="Detecciones Canceladas">{{dispFijoLoteVO.totalInvalidas}}</span>
+														</td>
+													</tr>
+												</table>
+											</div>
+										</div>
+									</div>
+									
+								</div>
+								<div class="col-md-12"></div>
+								<div class="col-md-12"></div>
+								<div class="col-xs-12">
+									<div class="col-xs-12 "
+										ng-if="idEstatus == 5 || idEstatus == 8 || idEstatus == 10 || idEstatus == 13 || idEstatus == 21"></div>
+									<div ng-if="idEstatus == 0">
+										<a class="col-md-4 text-center"
+											ng-click="glypgicon glyphicon-repeat"><span
+											class="glyphicon glyphicon-repeat btn-lg"></span> Cargar
+											archivo</a><br>
+										<div class="col-md-8 alert alert-warning text-center ">No
+											hay un archivo de detecciones de radar actualmente en
+											proceso. Presione el botón para cargar un archivo de
+											detecciones a la base de datos.</div>
+									</div>
+									<div class="col-md-12"></div>
+									<div ng-if="idEstatus == 8 || idEstatus == 10">
+										<a class="col-md-4 text-center" ng-click="showDialogCP()"><span
+											class="glyphicon glyphicon-tasks btn-lg"></span>Reasignar
+											Código Postal</a>
+										<div class="col-md-8 text-center alert alert-warning">
+											Puede modificar el Código Postal de las detecciones para
+											reasignarlos a <br> otro Centro de Reparto
+										</div>
+									</div>
+									<div ng-if="idEstatus == 13">
+										<a class="col-md-4 text-center" ng-click="showDialogVC()">
+											<img src='static/dist/img/certificado.png' width="19" height="15"/>
+											Validar Certificado
+										</a>
+										<div class="col-md-8 text-center alert alert-warning" >
+											Validacion de certificado para generacion de firmas electronicas para infracciones
+										</div>
+									</div>
+									<br>
+									<div ng-if="idEstatus == 21">
+										<a class="col-md-4 text-center" ng-click="asignarLineasCapt()"><span
+											class="glyphicon glyphicon-refresh btn-lg"></span> Reintentar
+										</a><br>
+										<div class="col-md-8 text-center alert alert-warning">Error
+											al Asignar Lineas de Captura</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-12">
+										<div class="box boxBorder-none">
+											<label class="text-center col-md-8 col-xs-8">ESTATUS</label>
+											<label class="text-center col-md-4 col-xs-4">FECHA</label>
+										</div>
+									</div>
+
+									<div class="col-xs-12">
+										<div class="box-body table-responsive no-padding">
+											<div class="cont-scroll" id="tableScrollI">
+												<table class="table table-hover">
+													<tbody>
+
+														<tr dir-paginate="estatus in listaEstatusVO | itemsPerPage: listaEstatusVO.lenght ">
+															<td>
+																<div class="progress-group"
+																	ng-if="estatus.idEstatusProceso == 18 || estatus.idEstatusProceso == 21 || estatus.idEstatusProceso == 24 ">
+
+
+																	<span class="progress-text">{{estatus.estatusNombre}}</span>
+																	<span class="progress-number"></span>
+																	<div class="progress">
+
+																		<div class="progress-bar progress-bar-danger"
+																			role="progressbar" aria-valuenow="40"
+																			aria-valuemin="0" aria-valuemax="100"
+																			style="width: 50%">50% En Proceso</div>
+																	</div>
+																</div>
+
+																<div class="progress-group"
+																	ng-if="estatus.idEstatusProceso != 18 && estatus.idEstatusProceso != 21 && estatus.idEstatusProceso != 24 ">
+
+
+																	<span class="progress-text">{{estatus.estatusNombre}}</span>
+																	<span class="progress-number"></span>
+																	<div class="progress">
+																		<div class="progress-bar progress-bar-success"
+																			role="progressbar" aria-valuenow="40"
+																			aria-valuemin="0" aria-valuemax="100"
+																			style="width: 100%">100% Completo</div>
+
+																	</div>
+																</div>
+
+															</td>
+															<td>
+																<div class="form-group text-center">
+																	<br> <label for="example3">{{estatus.fechaProceso
+																		| date:'dd/MM/yyyy hh:mm:ss'}}</label>
+																</div>
+															</td>
+														</tr>
+
+													</tbody>
+												</table>
+												<!-- 													<dir-pagination-controls></dir-pagination-controls> -->
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="btnCenter">
+										<div class="col-md-3">
+											<button data-toggle="tooltip" data-placement="top"
+												title="Puede cancelar el proceso en cualquier momento. Presione el botón para cancelar la complementación del archivo de detecciones."
+												type="button" class="btn btn-danger	"
+												ng-click="cancelarArchivo(dispFijoLoteVO.radarArchivoId)">
+												Cancelar proceso</button>
+										</div>
+									</div>
+						</div>
+					</div>
+				</div>
+		</div>
+		</form>
+	</section>
+</body>
+</html>

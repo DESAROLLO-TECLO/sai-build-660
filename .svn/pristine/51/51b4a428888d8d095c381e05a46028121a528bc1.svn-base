@@ -1,0 +1,54 @@
+<div class="modal fade" id="confirmacion"  data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header"></div>
+			<div class="modal-body">
+				<form id="form1" role="form" name="confirmacionCambioTP">
+					<div class="container">
+						<div class="icono">
+							<span class="glyphicon glyphicon-warning-sign"></span>
+						</div>
+						<div class="mensaje">
+							<label>{{message}}</label>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-10 col-md-offset-1">
+							<div class="form-group"
+								ng-class="{'has-error':confirmacionCambioTP.DTMCambio.$invalid && confirmacionCambioTP.DTMCambio.$dirty}">
+								<label for="DTMCambio">*Motivo de Cambio: </label>
+								<div class="input-group">
+									<span class="input-group-addon"><i class="fa fa-user-plus"></i></span>
+									<textarea type="text" class="form-control"
+										id="hechos" ng-model="DTMCambio" maxlength="180"
+										rows="4" name="DTMCambio" id="DTMCambio" ng-required="true" 
+										style="resize: none;">
+									</textarea>
+								</div>
+								<div ng-if="confirmacionCambioTP.DTMCambio.$invalid && confirmacionCambioTP.DTMCambio.$dirty"
+									ng-style="{color:'red'}"> Es necesario describir el motivo del cambio 
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<div class="container">
+					<span>
+						<button type="button" class="btn btn-danger btnMargin"
+							ng-click="realizarCambioDePersona(); close(true)"
+							data-dismiss="modal">
+							Aceptar
+						</button>
+						<button type="button" class="btn btn-danger btnMargin"
+						   ng-click="close(false)"
+							data-dismiss="modal">
+							Cancelar
+						</button>
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

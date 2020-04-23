@@ -1,0 +1,253 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>Consulta Certificado</title>
+</head>
+<body>
+	
+	<section class="content-header">
+		<h1>Consulta Certificado</h1>
+		<ol class="breadcrumb">
+			<li><a ><i class="fa fa-book"></i>Certificado SAT</a></li>
+			<li class="active">Consulta</li>
+		</ol>
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<div class="row"></div>
+		<!-- /.row -->
+		<div class="row centerCol">
+			<div class="col-xs-12 col-sm-8">
+			<form role="form" name="formCertificado">
+				<!-- Datos Del Infractor -->
+				<div class="box box-danger">
+					<div class="box-header with-border text-center">
+						<h3 class="box-title">Búsqueda</h3>
+					</div>
+					<!-- /.box-header -->
+					<div class="box-body">
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="example3">Tipo Búsqueda:</label>
+								<div class="input-group">
+									<span class="input-group-addon"> <i
+										class="fa fa-list"></i></span>
+									<select 
+										ng-options="option.name for option in opc.availableOptions track by option.id"
+										ng-model="opc.tipoBusqueda" class="form-control"
+										class="form-control" id="estatusBloqueo">
+									</select>
+								</div>
+							</div>									
+							<div class="form-group">
+								<label>Fecha Inicio:</label>
+
+								<div class="input-group date">
+									<div class="input-group-addon">
+										<i class="fa fa-calendar"></i>
+									</div>
+									<input type="text" class="form-control pull-right"  ng-model="fechaInicio" 
+										id="fechaInicio" data-date-format="dd/mm/yyyy"
+										style="background: white; cursor: pointer;" readonly="true">
+								</div>
+								<!-- /.input group -->
+							</div>
+						</div>	
+						<div class="col-md-4">
+							<!-- Date -->
+							<label>Valor:</label>
+							<div class="form-group input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-pencil"></i>
+									</div>							
+										<input type="text" ng-model="paramBusqueda" 
+									class="form-control" ng-disabled="opc.tipoBusqueda.name=='Todos'">
+							</div>
+
+							<div class="form-group">
+								<label>Fecha Fin:</label>
+
+								<div class="input-group date">
+									<div class="input-group-addon">
+										<i class="fa fa-calendar"></i>
+									</div>
+									<input type="text"  ng-model="fechaFin" class="form-control pull-right" 
+										id="fechaFin" data-date-format="dd/mm/yyyy"
+										style="background: white; cursor: pointer;" readonly="true">
+								</div>
+								<!-- /.input group -->
+							</div>
+						</div>
+						<div class="col-md-4">
+							<label>Estatus:</label>
+							<div class="form-group">
+							  <div class="input-group"> 
+								 	<span class="input-group-addon"> <i
+										class="fa fa-ellipsis-v"></i></span> 
+								 <select
+								  ng-options="option.name for option in opc2.availableOptions track by option.id"
+							       ng-model="opc2.comboValidado"
+								  class="form-control" id="tipoBLoqueohh">
+								</select>
+								</div>
+							</div>
+						</div> 
+								
+<!-- 					</div> -->
+						<div class="row">
+							<div class="col-xs-12 btnCenter">
+								<button type="button" class="btn btn-danger" ng-click="consultaCertificadosPorVencer()" id="btnConsultarhh" >
+									Buscar
+								</button>
+							</div>
+						</div> 
+					</div>
+				</div>
+				</form>
+			</div>
+		</div>
+		<br>
+		<div class="row" ng-if="mostrarTabla">
+			<div class="col-sm-12">
+
+				<div class="box box-danger">
+					<div class="box-header row">
+							<div class="col-sm-6 col-xs-12">
+								<h3 class="box-title">Registros Encontrados: {{ (certificadosVO | filter:view.certificados).length }}</h3>
+							</div>
+							
+							<div class="col-md-offset-3 col-md-3 col-xs-10">
+				      			<div class="input-group pull-right">
+				        			<input id="searchsomething" type="text" class="form-control" placeholder="Buscar por filtro" ng-model="view.certificados">
+									<div class="input-group-addon"><i class="fa fa-search"></i></div>
+				     			</div>
+				     		</div>
+					     		
+						</div>
+				
+				
+					<!-- /.box-header -->
+					<div class="box-body table-responsive">
+						<div class="col-md-12" >
+							<table id="tabla_infracciones" class="table table-striped table-hover header-fixed">
+								<thead align="center">
+									<tr align="center">
+										<th sort order="'empPlaca'" by="order" reverse="reverse" class="text-center">PLACA</th>
+										<th sort order="'empApePaterno'" by="order" reverse="reverse" class="text-center">NOMBRE COMPLETO</th>
+										<th sort order="'certValidoDesdeOrder'" by="order" reverse="reverse" class="text-center">VÁLIDO DESDE</th>
+										<th sort order="'certValidoHastaOrder'" by="order" reverse="reverse" class="text-center">VÁLIDO HASTA</th>
+										<th sort order="'numDias'" by="order" reverse="reverse" class="text-center">DÍAS A VENCER</th>
+										<th sort order="'validado'" by="order" reverse="reverse" class="text-center">VALIDADO</th>
+										<th class="text-center">DESCARGAR</th>
+
+									</tr>
+								</thead >
+								<tbody >
+									<tr ng-if="(certificadosVO | filter:view.certificados).length < 1"><td colspan="7" class="text-center"><h4>No se encontraron coincidencias</h4></td></tr>
+									<tr dir-paginate="cer in certificadosVO | orderBy:order:reverse | filter:view.certificados | itemsPerPage: view.rowsPerPage" >
+								      <td class="text-center">{{cer.empleadoVO.empPlaca}}</td>
+									 <td>{{cer.empleadoVO.empApePaterno}}  {{cer.empleadoVO.empApeMaterno}} {{cer.empleadoVO.empNombre}}</td>
+									 <td class="text-center" align="center">{{cer.certValidoDesde}}</td>
+									 <td align="center" class="text-center">{{cer.certValidoHasta}}</td>
+									 <td align="center" class="text-center">
+									 
+									 <span ng-if="cer.numDias > 30" style= "color: green">{{cer.numDias}} días</span>
+									 <span ng-if="cer.numDias < 0" ><a  style= "color: red"  href= "" ng-click="actualizarCertificado(cer.empleadoVO.empId)"> {{cer.numDias}} días</a></span>
+									 <span ng-if="cer.numDias > 0 && cer.numDias <30" ><a  style= "color: orange"  href= "" ng-click="actualizarCertificado(cer.empleadoVO.empId)"> {{cer.numDias}} días</a></span>
+									 </td>
+									 		 
+									 <td align="center" class="text-center">
+									 <span ng-if="cer.empleadoVO.empStatus=='A'">
+									 <img align="middle" ng-if="cer.validado==1" title='Certificado Validado' src="static/dist/img/green-circle.png" width='20' height='20'/>
+		                             <a ng-if="cer.validado!=1" style='text-decoration:none;' ng-click="actualizarCertificado(cer.empleadoVO.empId)"  href=""><img title='Es necesario validar el certificado' src="static/dist/img/red-circle.jpg" width="20" height="20"/></a>
+									 </span>
+									  <span ng-if="cer.empleadoVO.empStatus!='A'">
+									 <img align="middle" ng-if="cer.validado==1" title='Certificado Validado' src="static/dist/img/green-circle.png" width='20' height='20'/>
+		                             <a ng-if="cer.validado!=1" style='text-decoration:none;' href="" data-toggle="modal" data-target="#modalUsuarioDeshabilitado"><img title='Usuario deshabilitado' src="static/dist/img/red-circle.jpg" width="20" height="20"
+		                             ng-click="cargarUsuarioDeshabilitado(certificadosVO.indexOf(cer))"/></a>
+									 </span>
+									</td>								 
+									<td lign="center" class="text-center">
+									
+									<span data-toggle="tooltip" data-placement="left" title="Descargar certificado y key">
+										<a  ng-click="descargarCertificados(cer.certArchivo,cer.certNombre,cer.keyArchivo,cer.keyNombre)"  class="btn btn-danger btn-sm">
+											<i class="fa fa-download"></i>
+										</a>
+									</span>
+									 </td> 
+						 
+									</tr>
+								
+								<tbody>
+							</table>
+						</div>
+					</div>
+					<div class="container-fluid">
+						<div class="fixed-table-pagination" style="display:block;">
+							<rows-per-page rows="view.rowsPerPage" filtro="view.certificados" array="certificadosVO"></rows-per-page>
+							
+							<div class="pull-right pagination">
+								<dir-pagination-controls class="pagination"></dir-pagination-controls>
+							</div>
+						</div>
+					</div>
+                  </div>
+                       
+				</div>
+				<!-- /.box -->
+				
+			</div>
+	
+	</section>
+	<!-- /.content -->
+
+	<!-- Page script -->
+	<script>
+	$(function() {
+		$("#fechaInicio").datepicker({
+			format : 'dd/mm/yyyy',
+			//language: 'es',
+			todayHighlight : true,
+			autoclose : true
+		}).on('changeDate', function(selected) {
+			var minDate = new Date(selected.date.valueOf());
+			$('#fechaFin').datepicker('setStartDate', minDate);
+		});
+
+		$("#fechaFin").datepicker({
+			format : 'dd/mm/yyyy',
+			//language: 'es',
+			todayHighlight : true,
+			autoclose : true
+		}).on('changeDate', function(selected) {
+			var maxDate = new Date(selected.date.valueOf());
+			$('#fechaInicio').datepicker('setEndDate', maxDate);
+		});
+	});
+	</script>
+	
+	
+	<!-- Modal usuario deshabilitado -->
+	<div class="modal fade" id="modalUsuarioDeshabilitado" tabindex="-1" data-keyboard="false" data-backdrop="static" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-md">
+			<div class="modal-content">
+				<div class="modal-header"></div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-1 center">
+							<span class="glyphicon glyphicon-info-sign"></span>
+						</div>
+						<div class="col-md-10">
+							<label align="center">El empleado con placa: {{placaUsuarioActual}} está deshabilitado, por favor habilítelo para continuar</label>
+						</div>
+        			</div>
+        		</div>
+         		<div class="modal-footer center ">
+           			<button class="btn btn-danger " type="button"  data-dismiss="modal">Aceptar</button>
+            	</div>
+			</div>
+    	</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,99 @@
+.estiloCorreo {
+     border: 1px solid #dadce0;
+   border-radius: 10px;
+   display: inline-flex;
+   height: 20px;
+   line-height: 15px;
+   padding-left: 8px;
+   padding-right: 20px;
+   font-size: .90rem;
+   letter-spacing: .3px;
+   color: #5f6368;
+   font-weight: 500;
+    margin: 0;
+    background-image: url(https://www.gstatic.com/images/icons/material/system/1x/close_black_16dp.png);
+    background-position: right;
+    background-repeat: no-repeat;
+    background-size: 16px;
+    margin-left: 4px;
+    align: rigth;
+    display: inline-block;
+    color: #222;
+    margin: 2px 5px;
+    max-width: 325px;
+    max-height: 17px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    direction: ltr;
+    cursor: pointer;
+}
+
+.estiloInfraccion {
+     border: 1px solid #dadce0;
+   border-radius: 10px;
+   display: inline-flex;
+   height: 20px;
+   line-height: 15px;
+   padding-left: 8px;
+   padding-right: 20px;
+   font-size: .90rem;
+   letter-spacing: .3px;
+   color: #5f6368;
+   font-weight: 500;
+    margin: 0;
+    background-image: url(https://www.gstatic.com/images/icons/material/system/1x/close_black_16dp.png);
+    background-position: right;
+    background-repeat: no-repeat;
+    background-size: 16px;
+    margin-left: 4px;
+    align: rigth;
+    display: inline-block;
+    color: #222;
+    margin: 2px 5px;
+    max-width: 325px;
+    max-height: 17px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    direction: ltr;
+    cursor: pointer;
+}
+
+.estiloInfraccion2 {
+     border: 1px solid #dadce0;
+   border-radius: 10px;
+   display: inline-flex;
+   height: 20px;
+   line-height: 15px;
+   padding-left: 10px;
+   padding-right: 10px;
+   font-size: .90rem;
+   letter-spacing: .3px;
+   color: #5f6368;
+   font-weight: 500;
+   margin: 2px 5px;
+}
+
+.estiloCorreo2 {
+     border: 1px solid #dadce0;
+   border-radius: 10px;
+   display: inline-flex;
+   height: 20px;
+   line-height: 15px;
+   padding-left: 10px;
+   padding-right: 10px;
+   font-size: .90rem;
+   letter-spacing: .3px;
+   color: #5f6368;
+   font-weight: 500;
+   margin: 2px 5px;
+}
+.divTextArea {
+	display: table-cell;
+	border: 1px solid #ccc;
+	border-radius: 0;
+    box-shadow: none;
+    border-color: #d2d6de;
+    height: 150px;
+	
+}
+

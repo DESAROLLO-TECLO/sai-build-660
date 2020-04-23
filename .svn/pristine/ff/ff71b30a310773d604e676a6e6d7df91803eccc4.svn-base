@@ -1,0 +1,338 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>Articulos Agrega</title>
+</head>
+<body>	
+	<section class="content-header">
+		<h1>Alta de Artículo</h1>
+		<ol class="breadcrumb">
+			<li>
+				<a><i class="{{breadCrumbs.icono}}"></i>{{breadCrumbs.modulo}}</a>
+			</li>
+			<li>
+				<a href="">{{breadCrumbs.servicio}}</a>
+			</li>
+			<li class="active">
+				Alta de Artículo
+			</li>
+		</ol>
+	</section>	
+	
+	<section class="content">
+		<form id="formAltaArticulo" role="form" name="frmAltaArticulo">
+			<div class="row">
+				<section class="col-md-6 connectedSortable">					
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Clasificación</h3>
+							<div class="box-tools pull-right">
+								<button type="button" class="btn btn-box-tool"
+									data-widget="collapse">
+									<i class="fa fa-minus"></i>
+								</button>
+							</div>
+						</div>
+						<div class="box-body">
+							<div class="row">
+								<div class="col-sm-6 form-group"  ng-class="{'has-error': frmAltaArticulo.programa.$invalid && frmAltaArticulo.programa.$dirty}">
+									<label for="programa" >*Programa: </label>
+									<div class="input-group">
+										<div class="input-group-addon">
+											<span class="fa fa-book"></span>
+										</div>
+										<select class="form-control" name="programa" ng-required="true" 
+											id="programa"
+											ng-options="programa.programaId as programa.programaNombre for programa in programas"
+											ng-model="crudArticulo.progId">
+											<option value="">Seleccionar</option>
+										</select>
+									</div>	
+									<div ng-show="frmAltaArticulo.programa.$error.required && frmAltaArticulo.programa.$dirty" ng-style="{color:'red'}">
+										El programa es requerido
+									</div>								
+								</div>
+								<div class="col-sm-6 form-group" ng-class="{'has-error': frmAltaArticulo.categoria.$invalid && frmAltaArticulo.categoria.$dirty}">
+									<label for="categoria" >*Categoría: </label>
+									<div class="input-group">
+										<div class="input-group-addon">
+											<span class="fa fa-hand-o-right"></span>
+										</div>
+										<select class="form-control" name="categoria"
+											id="categoria" ng-required="true" 
+											ng-options="categoria.categoriaId as categoria.categoriaDesc for categoria in categorias"
+											ng-model="crudArticulo.categId">
+											<option value="">Seleccionar</option>
+										</select>
+									</div>
+									<div ng-show="frmAltaArticulo.categoria.$error.required && frmAltaArticulo.categoria.$dirty" ng-style="{color:'red'}">
+										La categoría es requerida
+									</div>	
+								</div>
+							</div>
+							<br>
+							<div class="row">
+								<div class="col-sm-6">
+									<label for="causal">Causal: </label>
+									<div class="input-group">
+										<div class="input-group-addon">
+											<span class="fa fa-exclamation-circle"></span>
+										</div>
+										<select class="form-control" name="causal"
+											id="causal"
+											ng-options="causal.causalId as causal.causalNombre for causal in causales"
+											ng-model="crudArticulo.causalId">
+											<option value="">Seleccionar</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>	
+					</div>
+				</section>
+				<section class="col-md-6 connectedSortable">	
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Motivación</h3>
+							<div class="box-tools pull-right">
+								<button type="button" class="btn btn-box-tool"
+									data-widget="collapse">
+									<i class="fa fa-minus"></i>
+								</button>
+							</div>
+						</div>
+						<!-- /.box-header -->
+						<div class="box-body">
+							<div class="row">
+								<div class="col-xs-12 col-md-12  form-group" ng-class="{'has-error': (frmAltaArticulo.motivacion.$invalid && frmAltaArticulo.motivacion.$dirty) || crudArticulo.artMotivacion.length > 1000 }">
+									<label for="motivacion">*Motivación:(máximo 1000 caracteres)</label>
+									<div class="input-group">
+										<textarea capitalize ng-required="true" ng-model="crudArticulo.artMotivacion" cols="120" rows="5" class="col-xs-12 col-md-12" id="motivacion" name="motivacion" style="resize: none;"></textarea>
+									</div>
+									<div ng-show="frmAltaArticulo.motivacion.$error.required && frmAltaArticulo.motivacion.$dirty" ng-style="{color:'red'}">
+										La motivación es requerida
+									</div>
+									<div ng-if="crudArticulo.artMotivacion.length > 1000" ng-style="{color:'red'}">
+										La longitud maxima de la descripción es de 300 caracteres
+									</div>
+								</div>	
+							</div>						
+						</div>
+					</div>
+				</section>
+			</div>
+			<div class="row">
+				<section class="col-md-6 connectedSortable">
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Fundamentación</h3>
+							<div class="box-tools pull-right">
+								<button type="button" class="btn btn-box-tool"
+									data-widget="collapse">
+									<i class="fa fa-minus"></i>
+								</button>
+							</div>
+						</div>
+						<div class="box-body">
+							<div class="col-xs-12">
+								<div class="row">
+									<div class="col-md-6 form-group" ng-class="{'has-error': frmAltaArticulo.articulo.$invalid && frmAltaArticulo.articulo.$dirty}">
+										<label for="articulo">*Artículo:(Solo numeros arabigos)</label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<span class="fa fa-gavel"></span>
+											</div>
+											<input  maxlength="10"  ng-required="true" name="articulo" id="articulo" class="form-control" integer-number type="text" ng-model="crudArticulo.artNumero" />
+										</div>
+										<div ng-show="frmAltaArticulo.articulo.$error.required && frmAltaArticulo.articulo.$dirty" ng-style="{color:'red'}">
+										El artículo es requerido
+										</div>
+									</div>					
+									<div class="col-md-6" >
+										<label>Fracción:(Solo numeros arabigos)</label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<span class="fa fa-hand-o-right"></span>
+											</div>
+											<input maxlength="20" class="form-control" integer-number  type="text" ng-model="crudArticulo.artFraccionInt" />
+										</div>
+									</div>
+								</div>
+								<br>
+								<div class="row">	
+									<div class="col-md-6">
+										<label>Parrafo:(Solo ordinales)</label><!-- (Solo numeros arabigos) -->
+										<div class="input-group">
+											<div class="input-group-addon">
+												<span class="fa fa-hand-o-right"></span>
+											</div>
+											<input maxlength="20" class="form-control" integer-number  maxlength="3" type="text" ng-model="crudArticulo.parrafo" ng-change="formatParrafo(crudArticulo.parrafo)" />																								
+											
+										</div>
+									</div>					
+									<div class="col-md-6">
+										<br>
+										<input type="radio" ng-model="crudArticulo.parrafoTipo" value="ultimo"> Último 
+										<input type="radio" ng-model="crudArticulo.parrafoTipo" value="penultimo"> Penúltimo
+										<input type="radio" ng-model="crudArticulo.parrafoTipo" ng-show="crudArticulo.parrafo" > {{crudArticulo.artParrafoOrd}}
+									</div>						
+								</div>
+								<br>
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group"
+											ng-class="{'has-error': frmAltaArticulo.inciso.$error.pattern && frmAltaArticulo.inciso.$dirty}">
+											<label>Inciso:(Solo letras)</label><!-- ((Solo letras)) -->
+											<div class="input-group">
+												<div class="input-group-addon">
+													<span class="fa fa-hand-o-right"></span>
+												</div>
+												<input  maxlength="20" class="form-control" name="inciso" type="text" ng-pattern="/^[A-zÀ-ú\s]*$/" maxlength="20" ng-model="crudArticulo.artInciso" />
+											</div>
+											<div ng-show="frmAltaArticulo.inciso.$error.pattern && frmAltaArticulo.inciso.$dirty" ng-style="{color:'red'}">
+													Los números no son permitidos
+											</div>
+										</div>
+									</div>	
+								</div>																			
+							</div>									
+					   </div>
+					</div>
+				</section>
+				<section class="col-md-6 connectedSortable">
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Sanción</h3>
+							<div class="box-tools pull-right">
+								<button type="button" class="btn btn-box-tool"
+									data-widget="collapse">
+									<i class="fa fa-minus"></i>
+								</button>
+							</div>
+						</div>						
+						<div class="box-body">
+							<div class="col-xs-12">
+								<div class="row">	
+									<div class="col-md-6 form-group"  ng-class="{'has-error': frmAltaArticulo.diaSancion.$invalid && frmAltaArticulo.diaSancion.$dirty}">
+										<label for="diaSancion">*Dias de Sanción:</label><!-- (Solo numeros arabigos) -->
+										<div class="input-group">
+											<div class="input-group-addon">
+												<span class="fa fa-map"></span>
+											</div>
+											<input ng-required="true" maxlength="5" name="diaSancion" id="diaSancion" class="form-control" integer-number type="text" ng-model="crudArticulo.artDias" />
+										</div>
+										<div ng-show="frmAltaArticulo.diaSancion.$error.required && frmAltaArticulo.diaSancion.$dirty" ng-style="{color:'red'}">
+										Los dias de sanción son requeridos
+										</div>
+									</div>
+									
+									<div class="col-md-6 form-group"  ng-class="{'has-error': frmAltaArticulo.descuento.$invalid && frmAltaArticulo.descuento.$dirty}">								
+										<label for="descuento">*Descuento (S) o (N):</label>
+										<!--input class="col-xs-5"  maxlength="1" type="text" ng-model="" /-->
+										<div class="input-group">
+											<input type="radio" name="descuento" ng-model="crudArticulo.artDescuento" value="S"> SI
+											<input type="radio" name="descuento" ng-model="crudArticulo.artDescuento" value="N"> NO
+										</div>
+										<div ng-show="frmAltaArticulo.descuento.$error.required && frmAltaArticulo.descuento.$dirty" ng-style="{color:'red'}">
+											El descuento es requerido
+										</div>
+									</div>
+								</div>
+								<br>
+								<div class="row">
+									<div class="col-md-6 form-group" ng-class="{'has-error': frmAltaArticulo.descuentoPorcent.$invalid && frmAltaArticulo.descuentoPorcent.$dirty}">
+										<label for="descuentoPorcent">* % Descuento:</label><!-- (Solo numeros arabigos) -->
+										<div class="input-group">
+											<div class="input-group-addon">
+												<span class="fa fa-percent"></span>
+											</div>
+											<input maxlength="5" ng-disabled="crudArticulo.artDescuento != 'S'" ng-required="crudArticulo.artDescuento != 'N'" name="descuentoPorcent" class="form-control" integer-number type="text" ng-model="crudArticulo.artPorcenDesc" />
+										</div>
+										<div ng-show="frmAltaArticulo.descuentoPorcent.$error.required && frmAltaArticulo.descuentoPorcent.$dirty" ng-style="{color:'red'}">
+											El porcentaje de descuento es requerido
+										</div>
+									</div>
+								</div>						
+							</div>						
+						</div>
+					</div>				
+				</section>
+				<section class="col-md-6 connectedSortable">
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Tipo y Estatus</h3>
+							<div class="box-tools pull-left">
+								<button type="button" class="btn btn-box-tool"
+									data-widget="collapse">
+									<i class="fa fa-minus"></i>
+								</button>
+							</div>
+						</div>
+						<!-- /.box-header -->
+						<div class="box-body">
+							<div class="row">
+								<div class="col-md-6 form-group" ng-class="{'has-error': frmAltaArticulo.tipo.$invalid && frmAltaArticulo.tipo.$dirty}">
+									<label for="tipo">*Tipo:</label>
+									<div class="input-group">
+										<div class="input-group-addon">
+											<span class="fa fa-tachometer"></span>
+										</div>
+										<select class="form-control" name="tipo" id="tipo"									
+											ng-model="crudArticulo.artTipo" ng-required="true">
+											<option value="">Seleccionar</option>
+											<option value="M">M</option>
+											<option value="S">S</option>
+										</select>									
+									</div>
+									<div ng-show="frmAltaArticulo.tipo.$error.required && frmAltaArticulo.tipo.$dirty" ng-style="{color:'red'}">
+											El tipo es requerido
+									</div>
+								</div>
+								<div class="col-md-6 form-group" ng-class="{'has-error': frmAltaArticulo.estatus.$invalid && frmAltaArticulo.estatus.$dirty}">
+									<label for="estatus">*Estatus (A) o (E):</label>
+									<div class="input-group">
+										<div class="input-group-addon">
+											<span class="fa fa-cog"></span>
+										</div>
+										<select class="form-control" name="estatus"
+										ng-model="crudArticulo.artEstatus" ng-required="true"
+											id="estatus">
+											<option value="">Seleccionar</option>
+											<option value="A">A</option>
+											<option value="E">E</option>
+										</select>
+									</div>
+									<div ng-show="frmAltaArticulo.estatus.$error.required && frmAltaArticulo.estatus.$dirty" ng-style="{color:'red'}">
+											El estatus es requerido
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+			
+<!-- 			<div class="row"> -->
+<!-- 					<div class="col-xs-5 text-left"> -->
+<!--                                     <a ng-click="regresarMod()" href="" class="btn pull-left"> -->
+<!-- 										 Realizar otra búsqueda -->
+<!-- 									</a> -->
+<!--                      </div> -->
+<!-- 					<div class="col-xs-5 text-left"> -->
+<!-- 						<button class="btn btn-danger" ng-click="altaArticulo(crudArticulo)" id="btnGuardarDatos" type="button" >Guardar</button> -->
+<!-- 					</div> -->
+<!-- 			</div> -->
+				<div class="row itemsBox">
+                                <a ng-click="regresarMod()" class="btn">
+									<i class="fa fa-arrow-circle-left"></i>
+									<span>Regresar</span>
+								</a>
+								<button class="btn btn-danger" id="btnGuardarDatos" ng-click="altaArticulo(crudArticulo)" type="button" >
+									<span>Guardar</span>
+								</button>
+				</div>
+		</form>
+	</section>
+	<div class="control-sidebar-bg"></div>	
+</body>
+</html>

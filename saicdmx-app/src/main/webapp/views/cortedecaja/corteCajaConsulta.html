@@ -1,0 +1,474 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>Consulta de Caja</title>
+</head>
+<body>
+	<div ng-show="error" class="alert alert-warning">
+		{{error.message}}</div>
+	<section class="content-header">
+		<h1>Corte de Caja Consulta</h1>
+		<ol class="breadcrumb">
+			<li><a><i class="fa fa-book"></i>Corte de Caja</a></li>
+			<li class="active">Consulta</li>
+		</ol>
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+	
+		<form class="form"  name="busq">
+			<div class="row" ng-show="isTipoBusquedaVisible">
+				<div class="col-md-3"></div>
+				<div class="col-md-6">
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title" align="center">Búsqueda</h3>
+						</div>
+					
+					
+						<div class="box-body">
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<div class="input-group">
+											<span class="input-group-addon"><i class="fa fa-list"></i></span>
+											<select class="form-control"
+												ng-options="tipo.codigoString as tipo.descripcion for tipo in catalogoTipoBusqueda"
+												ng-model="consulta.tipoBusqueda">
+												<!-- ng-change="changeBusqueda()" -->
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group" 
+										ng-class="{'has-error': busq.param.$invalid && busq.param.$dirty}">
+										<div class="input-group">
+											<span class="input-group-addon"><i class="fa fa-pencil"></i></span>
+											<input type="text" class="form-control" ng-model="consulta.parametroBusqueda" name="param" ng-required="true">
+											<span class="input-group-btn">
+												<button type="button" class="btn btn-danger btn-flat" ng-click="buscarCaja()">Buscar</button>
+											</span>
+										</div>	
+										<div ng-show="busq.param.$invalid && busq.param.$dirty"
+											ng-style="{color:'red'}">El valor es requerido
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+		
+		
+		
+		<div class="row centerCol" ng-show="consultaByEmp.length > 0">
+			<section class="col-xs-12 col-sm-10 col-md-7 connectedSortable">
+				<div class="box box-danger">
+					<div class="box-header with-border text-center">
+						<h3 class="box-title">Información de la Caja</h3>
+					</div>
+					<div class="box-body table-responsive">
+						<table class="table tblsnborder" ng-show="showScreenBy == 'both'">
+							<tr>
+								<td>Número de Caja:</td>
+								<td>{{consultaByEmp[0].cajaCod}}</td>
+							</tr>
+							<tr>
+								<td>Usuario Asignado:</td>
+								<td>{{consultaByEmp[0].empNombre}}</td>
+								<td>Placa Usuario:</td>
+								<td>{{consultaByEmp[0].empPlaca}}</td>
+							</tr>
+							<tr>
+								<td class="alignMiddle">Fecha Corte:</td>
+								<td>
+									<div class="input-group">
+										<div class="input-group-addon">
+											<i class="fa fa-calendar-o"></i>
+										</div>
+									
+										<select 
+											class="form-control"	
+											ng-options = "fechaCaja.codigoString as fechaCaja.descripcion for fechaCaja in catalogoFechaCaja" 
+											ng-model = "consulta.fechaCaja"
+											ng-change="consultaCaja()">
+											<option value="">
+											Seleccione
+											</option>
+										</select>
+									</div>
+								</td>
+							</tr>
+						</table>
+						
+						<table class="table tblsnborder" ng-show="showScreenBy == 'buscaPorPlaca'">
+							<tr>
+								<td><strong>Usuario:</strong></td>
+								<td>{{consultaByEmp[0].empNombre}}</td>
+							</tr>
+							<tr>
+								<td class="alignMiddle"><strong>Fecha Corte:</strong></td>
+								<td>
+								<div class="input-group">
+										<div class="input-group-addon">
+											<i class="fa fa-calendar-o"></i>
+										</div>
+									<select 
+										class="form-control"	
+										ng-options = "fechaCaja.codigoString as fechaCaja.descripcion for fechaCaja in catalogoFechaCaja" 
+										ng-model = "consulta.fechaCaja"
+										ng-change="consultaCaja()">
+										<option value="">
+										Seleccione
+										</option>
+									</select>
+								</div>
+								</td>
+							</tr>
+						</table>
+						
+						<table class="table tblsnborder" ng-show="showScreenBy == 'buscaPorCaja'">
+							<tr>
+								<td><strong>Número de Caja:</strong></td>
+								<td>{{consultaByEmp[0].cajaCod}}</td>
+							</tr>
+							<tr>
+								<td><strong>Fecha Corte:</strong></td>
+								<td>
+									<select 
+										class="form-control"	
+										ng-options="fechaCaja.codigoString as fechaCaja.descripcion for fechaCaja in catalogoFechaCaja" 
+										ng-model="consulta.fechaCaja"
+										ng-change="consultaCaja()">
+										<option value="">
+										Seleccione
+										</option>
+									</select>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</section>
+		</div>
+		<div class="row" ng-show="isCajaPreparada">
+			<section class="col-lg-12 connectedSortable">
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Descripción de Documentos </h3><br>
+							<h3 class="box-title">Caja: {{cajaSplit}} Fecha: {{fechaSplit}} </h3>
+							<div class="box-tools pull-right">
+								<button type="button" class="btn btn-box-tool"
+									data-widget="collapse">
+									<i class="fa fa-minus"></i>
+								</button>
+							</div>
+						</div>
+						<div class="box-body">
+							<div class="row">
+								<div class="col-md-4">
+									<div class="table-responsive">
+										<table class="table tblsnborder table-bordered">
+											<thead>
+												<tr>
+													<td colspan="2" style="text-align:center;"><strong>DESCRIPCIÓN DE DOCUMENTOS</strong></td>
+												</tr>
+											</thead>
+											<tr>
+												<td width="57%"><strong>TARJETA DE DÉBITO</strong></td>
+												<td width="43%"><input type="text" ng-model="cajaPrep.p_total_cheques" class="form-control" disabled></td>
+											</tr>
+											<tr>
+												<td><strong>TARJETA DE CRÉDITO</strong></td>
+												<td><input type="text" ng-model="cajaPrep.p_total_tar_credito" class="form-control" disabled></td>
+											</tr>
+											<tr>
+												<td><strong>SUBTOTAL</strong></td>
+												<td><input type="text" ng-model="cajaPrep.totalDoc" class="form-control" disabled></td>
+											</tr>
+										</table>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="table-responsive">
+										<table class="table tblsnborder table-bordered">
+											<thead>
+												<tr>
+													<td colspan="2" style="text-align:center;"><strong>VALOR DE RECOLECCIÓN</strong></td>
+												</tr>
+											</thead>
+											<tr>
+												<td width="60%"><strong>TARJETA DE DÉBITO</strong></td>
+												<td width="40%"><input type="text" ng-model="cajaPrep.p_total_cheques" class="form-control" disabled></td>
+											</tr>
+											<tr>
+												<td><strong>TARJETA DE CRÉDITO</strong></td>
+												<td><input type="text" ng-model="cajaPrep.p_total_tar_credito" class="form-control" disabled></td>
+											</tr>
+											<tr>
+												<td><strong>EFECTIVO</strong></td>
+												<td><input type="text" ng-model="cajaPrep.p_total_efectivo" class="form-control" disabled></td>
+											</tr>
+											<tr>
+												<td><strong>DOCUMENTOS</strong></td>
+												<td><input type="text" ng-model="cajaPrep.p_total_otros" class="form-control" disabled></td>
+											</tr>
+											<tr>
+												<td><strong>TOTAL CONCENTRADO</strong></td>
+												<td><input type="text" ng-model="cajaPrep.p_total_corte" class="form-control" disabled></td>
+											</tr>
+										</table>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="table-responsive">
+										<table class="table tblsnborder table-bordered">
+											<thead>
+												<tr>
+													<td colspan="2" style="text-align:center;"><strong>RESUMEN DE OPERACIONES</strong></td>
+												</tr>
+											</thead>
+											<tr>
+												<td width="55"><strong>PARTIDA INICIAL</strong></td>
+												<td width="45"><input type="text" ng-model="cajaPrep.resumenPartidaInicial" class="form-control" disabled></td>
+											</tr>
+											<tr>
+												<td><strong>PARTIDA FINAL</strong></td>
+												<td><input type="text" ng-model="cajaPrep.resumenPartidaFinal" class="form-control" disabled></td>
+											</tr>
+											<tr>
+												<td><strong>OPERACIONES EFECTUADAS</strong></td>
+												<td><input type="text" ng-model="cajaPrep.p_num_operaciones" class="form-control" disabled></td>
+											</tr>
+										</table>
+									</div>
+								</div>
+								<div class="col-md-3" style="margin-left:50px;">
+								</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section class="col-lg-12 connectedSortable">
+				<div class="box box-danger">
+					<div class="box-header with-border text-center">
+						<h3 class="box-title">Ingreso de Importes</h3>
+						<div class="box-tools pull-right">
+							<button type="button" class="btn btn-box-tool"
+								data-widget="collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+						</div>
+					</div>
+					<div class="box-body">
+						
+						<div class="row">
+							<div class="col-md-4">
+								<div class="table-responsive">
+									<table class="table table-hover table-bordered">
+										<thead>
+											<tr>
+												<td style="text-align:center;"><strong>MONEDAS</strong></td>
+												<td style="text-align:center;"><strong>CANTIDAD</strong></td>
+												<td style="text-align:center;"><strong>IMPORTE</strong></td>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td width="10%"><strong>$20.00</strong></td>
+												<td width="20%"><input type="number" min="0" ng-model="veinMon" ng-change="modificaMoneda(20, veinMon)" class="form-control" disabled></td>
+												<td width="20%"><input type="text" ng-model="veinMonTot" class="form-control" style="text-align:right;" disabled></td>
+											</tr>
+											<tr>
+												<td><strong>$10.00</strong></td>
+												<td><input type="number" min="0" ng-model="diezMon" ng-change="modificaMoneda(10, diezMon)" class="form-control" disabled></td>
+												<td><input type="text" ng-model="diezMonTot" class="form-control" style="text-align:right;" disabled></td>
+											</tr>
+											<tr>
+												<td><strong>$5.00</strong></td>
+												<td><input type="number" min="0" ng-model="cincMon" ng-change="modificaMoneda(5, cincMon)" class="form-control" disabled></td>
+												<td><input type="text" ng-model="cincMonTot" class="form-control" style="text-align:right;" disabled></td>
+											</tr>
+											<tr>
+												<td><strong>$2.00</strong></td>
+												<td><input type="number" min="0" ng-model="dosMon" ng-change="modificaMoneda(2, dosMon)" class="form-control" disabled></td>
+												<td><input type="text" ng-model="dosMonTot" class="form-control" style="text-align:right;" disabled></td>
+											</tr>
+											<tr>
+												<td><strong>$1.00</strong></td>
+												<td><input type="number" min="0" ng-model="UnoMon" ng-change="modificaMoneda(1, UnoMon)" class="form-control" disabled></td>
+												<td><input type="text" ng-model="UnoMonTot" class="form-control" style="text-align:right;" disabled></td>
+											</tr>
+											<tr>
+												<td><strong>$0.50</strong></td>
+												<td><input type="number" min="0" ng-model="cincCent" ng-change="modificaCent(.5, cincCent)" class="form-control" disabled></td>
+												<td><input type="text" ng-model="cincCentTot" class="form-control" style="text-align:right;" disabled></td>
+											</tr>
+											<tr>
+												<td><strong>$0.20</strong></td>
+												<td><input type="number" min="0" ng-model="veinCent" ng-change="modificaCent(.2, veinCent)" class="form-control" disabled></td>
+												<td><input type="text" ng-model="veinCentTot" class="form-control" style="text-align:right;" disabled></td>
+											</tr>
+											<tr>
+												<td><strong>$0.10</strong></td>
+												<td><input type="number" min="0" ng-model="diezCent" ng-change="modificaCent(.1, diezCent)" class="form-control" disabled></td>
+												<td><input type="text" ng-model="diezCentTot" class="form-control" style="text-align:right;" disabled></td>
+											</tr>
+											<tr>
+												<td><strong>$0.05</strong></td>
+												<td><input type="number" min="0" ng-model="cinCent" ng-change="modificaCent(.05, cinCent)" class="form-control" disabled></td>
+												<td><input type="text" ng-model="cinCentTot" class="form-control" style="text-align:right;" disabled></td>
+											</tr>
+											<tr>
+												<td colspan="2" style="text-align:right;"><strong>SUBTOTAL</strong></td>
+												<td><input type="text" ng-model="totMonDenom" class="form-control" style="text-align:right;" disabled></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="table-responsive">
+									<table class="table table-hover table-bordered">
+										<thead>
+											<tr>
+												<td style="text-align:center;"><strong>BILLETES</strong></td>
+												<td style="text-align:center;"><strong>CANTIDAD</strong></td>
+												<td style="text-align:center;"><strong>IMPORTE</strong></td>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td><strong>$1000.00</strong></td>
+												<td><input type="number" min="0" ng-model="cajaPrep.p_EFE_B1000" ng-change="modificaBillete(1000, cajaPrep.p_EFE_B1000)" class="form-control" disabled></td>
+												<td><input type="text" ng-model="milBillTot"   class="form-control" style="text-align:right;" disabled></td>
+											</tr>
+											<tr>
+												<td><strong>$500.00</strong></td>
+												<td><input type="number" min="0" ng-model="quinBill" ng-change="modificaBillete(500, quinBill)" class="form-control" disabled></td>
+												<td><input type="text" ng-model="quinBillTot" class="form-control" style="text-align:right;" disabled></td>
+											</tr>
+											<tr>
+												<td><strong>$200.00</strong></td>
+												<td><input type="number" min="0" ng-model="dosBill" ng-change="modificaBillete(200, dosBill)" class="form-control" disabled></td>
+												<td><input type="text" ng-model="dosBillTot" class="form-control" style="text-align:right;" disabled></td>
+											</tr>
+											<tr>
+												<td><strong>$100.00</strong></td>
+												<td><input type="number" min="0" ng-model="cienBill" ng-change="modificaBillete(100, cienBill)" class="form-control" disabled></td>
+												<td><input type="text" ng-model="cienBillTot" class="form-control" style="text-align:right;" disabled></td>
+											</tr>
+											<tr>
+												<td><strong>$50.00</strong></td>
+												<td><input type="number" min="0" ng-model="cincBill" ng-change="modificaBillete(50, cincBill)" class="form-control" disabled></td>
+												<td><input type="text" ng-model="cincBillTot" class="form-control" style="text-align:right;" disabled></td>
+											</tr>
+											<tr>
+												<td><strong>$20.00</strong></td>
+												<td><input type="number" min="0" ng-model="veinBill" ng-change="modificaBillete(20, veinBill)" class="form-control" disabled></td>
+												<td><input type="text" ng-model="veinBillTot" class="form-control" style="text-align:right;" disabled></td>
+											</tr>
+											<tr>
+												<td colspan="2" style="text-align:right;"><strong>SUBTOTAL</strong></td>
+												<td><input type="text" ng-model="totBillDenom" class="form-control" style="text-align:right;" disabled></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="table-responsive">
+									<table class="table table-hover table-bordered">
+										<thead>
+											<tr>
+												<td style="text-align:center;"><strong>RECIBOS</strong></td>
+												<td style="text-align:center;"><strong>CANTIDAD</strong></td>
+											</tr>
+										</thead>
+										<tr>
+											<td width="10%"><strong>FOLIO INICIAL</strong></td>
+											<td width="20%"><input type="text" ng-model="cajaPrep.p_RECIBO_FOL_INI" class="form-control" disabled></td>
+										</tr>
+										<tr>
+											<td><strong>FOLIO FINAL</strong></td>
+											<td><input type="text" ng-model="cajaPrep.p_RECIBO_FOL_FIN" class="form-control" disabled></td>
+										</tr>
+										<tr>
+											<td><strong>TOTAL</strong></td>
+											<td><input type="text" ng-model="cajaPrep.p_RECIBO_TOTAL" class="form-control" disabled></td>
+										</tr>
+										<tr>
+											<td><strong>UTILIZADOS</strong></td>
+											<td><input type="text" ng-model="cajaPrep.p_RECIBO_UTILIZADOS" class="form-control" disabled></td>
+										</tr>
+										<tr>
+											<td><strong>CANCELADOS</strong></td>
+											<td><input type="text" ng-model="cajaPrep.p_RECIBO_CANCELADOS" class="form-control" disabled></td>
+										</tr>
+										<tr>
+											<td><strong>INUTILIZADOS</strong></td>
+											<td><input type="text" ng-model="cajaPrep.p_RECIBO_INUTILIZADOS" class="form-control" disabled></td>
+										</tr>
+										<tr>
+											<td><strong>FALTANTES</strong></td>
+											<td><input type="text" ng-model="cajaPrep.p_RECIBO_FALTANTES" class="form-control" disabled></td>
+										</tr>
+									</table>
+								</div>
+							</div>
+						</div>
+						<div class="row" ng-show="isCajaPreparada && (cajaPrep.p_total_cheques > 0)">
+							<div class="col-md-3 text-center" style="padding-top:5px;">
+								<button class="btn btn-danger" ng-click="imprimirCaratula()">
+									<i class="fa fa-file-pdf-o"></i> Imprimir carátula
+								</button>
+							</div>
+							<div class="col-md-3 text-center" style="padding-top:5px;">
+								<button class="btn btn-danger" ng-click="imprimirPartidas()">
+									<i class="fa fa-file-pdf-o"></i> Imprimir partidas
+								</button>
+							</div>
+							<div class="col-md-3 text-center" style="padding-top:5px;">
+								<button class="btn btn-danger" ng-click="imprimirInfracciones()">
+									<i class="fa fa-file-pdf-o"></i> Imprimir infracciones
+								</button>
+							</div>
+							<div class="col-md-3 text-center" style="padding-top:5px;">
+								<button class="btn btn-danger" ng-click="imprimirPartidastTar()">
+									<i class="fa fa-file-pdf-o"></i> Imprimir cobros con tarjeta
+								</button>
+							</div>
+						</div>
+						
+						<div class="row" ng-show="isCajaPreparada && (cajaPrep.p_total_cheques <= 0)">
+							<div class="col-md-offset-3 col-md-2 text-center" style="padding-top:5px;">
+								<button class="btn btn-danger" ng-click="imprimirCaratula()">
+									<i class="fa fa-file-pdf-o"></i> Imprimir carátula
+								</button>
+							</div>
+							<div class="col-md-2 text-center" style="padding-top:5px;">
+								<button class="btn btn-danger" ng-click="imprimirPartidas()">
+									<i class="fa fa-file-pdf-o"></i> Imprimir partidas
+								</button>
+							</div>
+							<div class="col-md-2 text-center" style="padding-top:5px;">
+								<button class="btn btn-danger" ng-click="imprimirInfracciones()">
+									<i class="fa fa-file-pdf-o"></i> Imprimir infracciones
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</section>
+
+	<div class="control-sidebar-bg"></div>
+	
+
+</body>
+</html>

@@ -1,0 +1,382 @@
+<html>
+	<head>  
+		<meta charset="utf-8">
+		<title>Complementación de Detecciones</title>
+	</head>
+	<body>
+		<section class="content-header">
+			<h1>Complementación de Archivo de Detecciones</h1>
+			<ol class="breadcrumb">
+				<li><a><i class="fa fa-book"></i>Radares</a></li>
+				<li class="active">Complementación</li>
+			</ol>
+		</section>
+		<section class="content">
+			<form role="form" name="formComplementarArchivoRadares">
+				<div class="row">
+					<div class="col-md-2"></div>
+					<div class="col-md-8">
+						<div class="box box-danger">
+							<div class="box-header with-border text-center">
+								<h3 class="box-title">Complementación de Archivo Detecciones</h3>
+							</div>          
+							<div class="box-body">
+								<div class="form-group">
+									<div class="row">
+										<div class="col-sm-4">
+											<div class="form-group" ng-class="{'has-error': formComplementarArchivoRadares.datepickerComplementacion.$error.required && formComplementarArchivoRadares.datepickerComplementacion.$dirty}">
+												<label for="datepickerFechaComplementacion">Fecha de Emis&oacute;n:</label>
+												<div class="input-group">
+													<div class="input-group-addon">
+														<i class="fa fa-calendar"></i>
+													</div>
+														<input class="form-control inputFecha" id="datepickerComplementacion" name="datepickerComplementacion"
+															date-picker	idioma-dp="{{currentLanguage}}"
+															elemento="'fechaFin'" mindate="fechaInicio"
+															ng-model="archivoVO.fechaEmision" readonly required/> 
+<!-- 															ng-model="archivoVO.fechaEmision" readonly ng-required="parametroReqB" /> -->
+																
+												</div>
+												<div ng-show="formComplementarArchivoRadares.datepickerComplementacion.$error.required && formComplementarArchivoRadares.datepickerComplementacion.$dirty"
+	                     								ng-style="{color:'red'}">La fecha de emisi&oacute;n es requerida</div>
+	                     					</div>
+										</div>
+										<div class="col-sm-4">
+											<div class="form-group">
+												<label for="example3">Año de Emisi&oacute;n:</label>
+												<div class="input-group">
+													<div class="input-group-addon">
+														<i class="fa fa-list"></i>
+													</div>
+													<select class="form-control"  id="anioEmisiom" name="anioEmisiom" style="width: 100%;"
+														ng-options="potion.descripcion for potion in aniosVO" ng-required="true" ng-model="archivoVO.comboValuesVO">
+													</select>
+												</div>
+											</div>
+										</div>
+										<div class="col-sm-4">
+											<label for="example3">Tipo de Archivo:</label>
+											<div class="input-group">
+												<div class="input-group-addon">
+													<i class="fa fa-file-code-o"></i>
+												</div>
+												<select class="form-control"  id="example3" style="width: 100%;" 
+													ng-required="true" ng-model="archivoVO.radaresCatArchivoTipoVO"
+													ng-change="buscaResp(archivoVO.radaresCatArchivoTipoVO)"
+													ng-options="option.nombre for option in catArchivoTipo" >
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+								<form>
+									<div class="row"> 
+										<div class="col-sm-4 col-xs-1">
+											<label for="example3">Responsable de Proceso:</label>
+											<div class="input-group">
+												<div class="input-group-addon">
+													<i class="fa fa-address-card"></i>
+												</div>
+												<select class="form-control"  id="respArchivo" style="width: 100%;" 
+													ng-options="option.responsable for option in cargaResp" 
+													ng-required="true" ng-disabled="disabledResp"
+													ng-model="archivoVO.responsableProceso">
+												</select>
+											</div>
+										</div>
+										<div class="col-sm-7 col-xs-12">				
+											<div class="form-group" ng-class="{'has-error': formComplementarArchivoRadares.exampleInputFile.$error.required && formComplementarArchivoRadares.exampleInputFile.$dirty}">
+												<label for="example3">Cargar Archivo:</label>
+												<div class="input-group">
+													<div class="input-group-addon">
+														<i class="fa fa-file-text"></i>
+													</div>
+													<input class="form-control inputFile" disabled value="{{file.name}}">
+<!-- 													<input type="reset" class="resetearInput" value="x"> -->
+													<span class="input-group-btn">
+														<label class="btn btn-danger btn-flat" for="exampleInputFile">
+															<input style="display:none;" ng-required="true" file-name="fileName" type="file" id="exampleInputFile" name="exampleInputFile" value="Examinar" onchange="angular.element(this).scope().addFile(this) " accept=".xml"/>
+															<i class="fa fa-upload"></i>
+														</label>
+													</span>
+												</div>
+												
+												<div ng-show="fileEmpty" ng-style="{color:'red'}">El archivo XML es requerido</div>
+	                     					</div>
+										</div>
+										<div class="col-sm-3"></div>	
+									</div>
+								</form>
+									<br/>
+									<div class="row" >
+										<div class="col-xs-4"></div>
+
+										<div class="col-xs-4 text-center">
+											
+												<button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="cargarArchivosDeInfracciones(archivoVO)">Cargar</button>
+											
+										</div>
+										
+										<div class="col-xs-4"></div>
+									</div>
+								</div>     
+							</div> 
+						</div>
+					</div>
+					<div class="col-md-2"></div>
+				</div>
+
+				<div class="modal fade" id="tablaErrores" role="dialog" data-keyboard="false" data-backdrop="static">
+
+				<div class="modal-dialog modal-lg" role="document">
+
+					<!-- Modal content-->
+					<div class="modal-content">
+
+						<div class="modal-header bg-red-active">
+							<button type="button" class="close" data-dismiss="modal" ng-click="proConsult()" style="color: blue;">&times;</button>
+							<h3 class="text-center">Errores encontrados</h3>
+						</div>
+					
+						<div class="modal-body"  > 
+							<div class="row" id="form">
+								<div class="col-md-12 text-right">
+									
+									
+
+								</div>
+								
+								<div class="row" >
+									<div class="col-md-2"></div>
+									<div class="col-md-12">
+									
+											<div class="pull-right" style="margin:5px;">
+															<a class="img-rounded" title="Descarga Detecciones Aceptadas" ng-click="generaDescargaArchivoZIP2()"> 
+																<span data-toggle="tooltip" data-placement="left" title="" data-original-title="Descargar reporte de errores">
+																<img width="25px" height="25px" src="static/dist/img/excel.png">
+																</span>
+																
+															</a>
+														</div>
+														
+											<div class="row">
+												<div class="col-xs-12">
+													<div class="box box-danger" ng-show='MostrarTabla'>
+														
+														
+														
+														<div class="box-header">
+															<h3 class="box-title">Registros encontrados: {{errores.length}}</h3>
+							<!-- 								<a href="#/consultaHandHeld" ng-show= 'listaBloqueohhVO.length > 0' ng-click="downloadReporte()"> <span class="pull-right "><img src="static/dist/img/excel.png"></span></a> -->
+							 							</div> 
+														<div class="box-body table-responsive no-padding">
+															<div style="display: block; overflow: auto;">
+															<table class="table table-hover">
+																<thead>
+																	<tr>
+																		<td>TIPO DETECCIÓN</td>
+																		<td>ORIGEN</td>
+																		<td>PLACA</td>
+																		<td>FECHA</td>
+																		<td>HORA</td>
+																		<td>TDSKUID</td>
+																		<td>UT</td>
+																		<td>VELOCIDAD DETECTADA</td>
+																		<td>NOMBRE</td>
+																		<td>APELLIDO PATERNO</td>
+																		<td>APELLIDO MATERNO</td>
+																		<td>CALLE</td>
+																		<td>NUMERO EXTERIOR</td>
+																		<td>NUMERO INTERIOR</td>
+																		<td>COLONIA</td>
+																		<td>CODIGO POSTAL</td>
+																		<td>ENTIDAD FEDERATIVA</td>
+																		<td>MUNICIPIO/DELEGACION</td>
+																		<td>TELEFONO</td>
+																		<td>MARCA</td>
+																		<td>SUBMARCA</td>
+																		<td>MODELO</td>
+																		<td>SERIE</td>
+																		<td>PLACA DEL OFICIAL</td>
+																		<td>MOTOR</td>
+																		<td>ARTÍCULO ID</td>
+<!-- 																		<td>ARTÍCULO FRACCIÓN</td> -->
+<!-- 																		<td>ARTÍCULO PARRAFO</td> -->
+<!-- 																		<td>ARTÍCULO INCISO</td> -->
+<!-- 																		<td>ARTÍCULO UNIDAD CUENTA</td> -->
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr dir-paginate="error in errores | itemsPerPage: 5 track by errores.indexOf(error)+1">
+																	
+																		<td>
+																			<span class="label label-danger" ng-if="datas_err[errores.indexOf(error)].tipodeteccion.error">{{datas_err[errores.indexOf(error)].tipodeteccion.valor}} {{datas_err[errores.indexOf(error)].tipodeteccion.descripcion}}</span>
+																			<span ng-if="!datas_err[errores.indexOf(error)].tipodeteccion.error">{{datas_err[errores.indexOf(error)].tipodeteccion.valor}}</span>
+																		</td>
+																		<td>
+																			<span class="label label-danger" ng-if="datas_err[errores.indexOf(error)].origenplaca.error">{{datas_err[errores.indexOf(error)].origenplaca.valor}} {{datas_err[errores.indexOf(error)].origenplaca.descripcion}}</span>
+																			<span ng-if="!datas_err[errores.indexOf(error)].origenplaca.error">{{datas_err[errores.indexOf(error)].origenplaca.valor}}</span>
+																		</td>
+																		
+																		<td>
+																			<span class="label label-danger" ng-if="datas_err[errores.indexOf(error)].placa.error">{{datas_err[errores.indexOf(error)].placa.valor}} {{datas_err[errores.indexOf(error)].placa.descripcion}}</span>
+																			<span ng-if="!datas_err[errores.indexOf(error)].placa.error">{{datas_err[errores.indexOf(error)].placa.valor}}</span>
+																		</td>
+																		
+																		<td>
+																			<span class="label label-danger" ng-if="datas_err[errores.indexOf(error)].fecha.error">{{datas_err[errores.indexOf(error)].fecha.valor}} {{datas_err[errores.indexOf(error)].fecha.descripcion}}</span>
+																			<span ng-if="!datas_err[errores.indexOf(error)].fecha.error">{{datas_err[errores.indexOf(error)].fecha.valor}}</span>
+																		</td>
+																		
+																		<td>
+																			<span class="label label-danger" ng-if="datas_err[errores.indexOf(error)].hora.error">{{datas_err[errores.indexOf(error)].hora.valor}} {{datas_err[errores.indexOf(error)].hora.descripcion}}</span>
+																			<span ng-if="!datas_err[errores.indexOf(error)].hora.error">{{datas_err[errores.indexOf(error)].hora.valor}}</span>
+																		</td>
+																		
+																		<td>
+																			<span class="label label-danger" ng-if="datas_err[errores.indexOf(error)].tdskuid.error">{{datas_err[errores.indexOf(error)].tdskuid.valor}} {{datas_err[errores.indexOf(error)].tdskuid.descripcion}}</span>
+																			<span ng-if="!datas_err[errores.indexOf(error)].tdskuid.error">{{datas_err[errores.indexOf(error)].tdskuid.valor}}</span>
+																		</td>
+																		
+																		<td>
+																			<span class="label label-danger" ng-if="datas_err[errores.indexOf(error)].ut.error">{{datas_err[errores.indexOf(error)].ut.valor}} {{datas_err[errores.indexOf(error)].ut.descripcion}}</span>
+																			<span ng-if="!datas_err[errores.indexOf(error)].ut.error">{{datas_err[errores.indexOf(error)].ut.valor}}</span>
+																		</td>
+																		
+																		<td>
+																			<span class="label label-danger" ng-if="datas_err[errores.indexOf(error)].velocidaddetectada.error">{{datas_err[errores.indexOf(error)].velocidaddetectada.valor}} {{datas_err[errores.indexOf(error)].velocidaddetectada.descripcion}}</span>
+																			<span ng-if="!datas_err[errores.indexOf(error)].velocidaddetectada.error">{{datas_err[errores.indexOf(error)].velocidaddetectada.valor}}</span>
+																		</td>
+																		
+																		<td>
+																			<span class="label label-danger" ng-if="datas_err[errores.indexOf(error)].nombre.error">{{datas_err[errores.indexOf(error)].nombre.valor}} {{datas_err[errores.indexOf(error)].nombre.descripcion}}</span>
+																			<span ng-if="!datas_err[errores.indexOf(error)].nombre.error">{{datas_err[errores.indexOf(error)].nombre.valor}}</span>
+																		</td>
+																		
+																		<td>
+																			<span class="label label-danger" ng-if="datas_err[errores.indexOf(error)].apellidopat.error">{{datas_err[errores.indexOf(error)].apellidopat.valor}} {{datas_err[errores.indexOf(error)].apellidopat.descripcion}}</span>
+																			<span ng-if="!datas_err[errores.indexOf(error)].apellidopat.error">{{datas_err[errores.indexOf(error)].apellidopat.valor}}</span>
+																		</td>
+																		
+																		<td>
+																			<span class="label label-danger" ng-if="datas_err[errores.indexOf(error)].apellidomat.error">{{datas_err[errores.indexOf(error)].apellidomat.valor}} {{datas_err[errores.indexOf(error)].apellidomat.descripcion}}</span>
+																			<span ng-if="!datas_err[errores.indexOf(error)].apellidomat.error">{{datas_err[errores.indexOf(error)].apellidomat.valor}}</span>
+																		</td>
+																		
+																		<td>
+																			<span class="label label-danger" ng-if="datas_err[errores.indexOf(error)].calle.error">{{datas_err[errores.indexOf(error)].calle.valor}} {{datas_err[errores.indexOf(error)].calle.descripcion}}</span>
+																			<span ng-if="!datas_err[errores.indexOf(error)].calle.error">{{datas_err[errores.indexOf(error)].calle.valor}}</span>
+																		</td>
+																		
+																		<td>
+																			<span class="label label-danger" ng-if="datas_err[errores.indexOf(error)].numext.error">{{datas_err[errores.indexOf(error)].numext.valor}} {{datas_err[errores.indexOf(error)].numext.descripcion}}</span>
+																			<span ng-if="!datas_err[errores.indexOf(error)].numext.error">{{datas_err[errores.indexOf(error)].numext.valor}}</span>
+																		</td>
+																		
+																		<td>
+																			<span class="label label-danger" ng-if="datas_err[errores.indexOf(error)].numint.error">{{datas_err[errores.indexOf(error)].numint.valor}} {{datas_err[errores.indexOf(error)].numint.descripcion}}</span>
+																			<span ng-if="!datas_err[errores.indexOf(error)].numint.error">{{datas_err[errores.indexOf(error)].numint.valor}}</span>
+																		</td>
+																		
+																		<td>
+																			<span class="label label-danger" ng-if="datas_err[errores.indexOf(error)].colonia.error">{{datas_err[errores.indexOf(error)].colonia.valor}} {{datas_err[errores.indexOf(error)].colonia.descripcion}}</span>
+																			<span ng-if="!datas_err[errores.indexOf(error)].colonia.error">{{datas_err[errores.indexOf(error)].colonia.valor}}</span>
+																		</td>
+																		
+																		<td>
+																			<span class="label label-danger" ng-if="datas_err[errores.indexOf(error)].cp.error">{{datas_err[errores.indexOf(error)].cp.valor}} {{datas_err[errores.indexOf(error)].cp.descripcion}}</span>
+																			<span ng-if="!datas_err[errores.indexOf(error)].cp.error">{{datas_err[errores.indexOf(error)].cp.valor}}</span>
+																		</td>
+																		
+																		<td>
+																			<span class="label label-danger" ng-if="datas_err[errores.indexOf(error)].entidad.error">{{datas_err[errores.indexOf(error)].entidad.valor}} {{datas_err[errores.indexOf(error)].entidad.descripcion}}</span>
+																			<span ng-if="!datas_err[errores.indexOf(error)].entidad.error">{{datas_err[errores.indexOf(error)].entidad.valor}}</span>
+																		</td>
+																		
+																		<td>
+																			<span class="label label-danger" ng-if="datas_err[errores.indexOf(error)].delegacion.error">{{datas_err[errores.indexOf(error)].delegacion.valor}} {{datas_err[errores.indexOf(error)].delegacion.descripcion}}</span>
+																			<span ng-if="!datas_err[errores.indexOf(error)].delegacion.error">{{datas_err[errores.indexOf(error)].delegacion.valor}}</span>
+																		</td>
+																		
+																		<td>
+																			<span class="label label-danger" ng-if="datas_err[errores.indexOf(error)].telefono.error">{{datas_err[errores.indexOf(error)].telefono.valor}} {{datas_err[errores.indexOf(error)].telefono.descripcion}}</span>
+																			<span ng-if="!datas_err[errores.indexOf(error)].telefono.error">{{datas_err[errores.indexOf(error)].telefono.valor}}</span>
+																		</td>
+																		
+																		<td>
+																			<span class="label label-danger" ng-if="datas_err[errores.indexOf(error)].marca.error">{{datas_err[errores.indexOf(error)].marca.valor}} {{datas_err[errores.indexOf(error)].marca.descripcion}}</span>
+																			<span ng-if="!datas_err[errores.indexOf(error)].marca.error">{{datas_err[errores.indexOf(error)].marca.valor}}</span>
+																		</td>
+																		
+																		<td>
+																			<span class="label label-danger" ng-if="datas_err[errores.indexOf(error)].submar.error">{{datas_err[errores.indexOf(error)].submar.valor}} {{datas_err[errores.indexOf(error)].submar.descripcion}}</span>
+																			<span ng-if="!datas_err[errores.indexOf(error)].submar.error">{{datas_err[errores.indexOf(error)].submar.valor}}</span>
+																		</td>
+																		
+																		<td>
+																			<span class="label label-danger" ng-if="datas_err[errores.indexOf(error)].modelo.error">{{datas_err[errores.indexOf(error)].modelo.valor}} {{datas_err[errores.indexOf(error)].modelo.descripcion}}</span>
+																			<span ng-if="!datas_err[errores.indexOf(error)].modelo.error">{{datas_err[errores.indexOf(error)].modelo.valor}}</span>
+																		</td>
+																		
+																		<td>
+																			<span class="label label-danger" ng-if="datas_err[errores.indexOf(error)].numserie.error">{{datas_err[errores.indexOf(error)].numserie.valor}} {{datas_err[errores.indexOf(error)].numserie.descripcion}}</span>
+																			<span ng-if="!datas_err[errores.indexOf(error)].numserie.error">{{datas_err[errores.indexOf(error)].numserie.valor}}</span>
+																		</td>
+																		
+																		<td>
+																			<span class="label label-danger" ng-if="datas_err[errores.indexOf(error)].oficialplaca.error">{{datas_err[errores.indexOf(error)].oficialplaca.valor}} {{datas_err[errores.indexOf(error)].oficialplaca.descripcion}}</span>
+																			<span ng-if="!datas_err[errores.indexOf(error)].oficialplaca.error">{{datas_err[errores.indexOf(error)].oficialplaca.valor}}</span>
+																		</td>
+																		
+																		<td>
+																			<span class="label label-danger" ng-if="datas_err[errores.indexOf(error)].nummotor.error">{{datas_err[errores.indexOf(error)].nummotor.valor}} {{datas_err[errores.indexOf(error)].nummotor.descripcion}}</span>
+																			<span ng-if="!datas_err[errores.indexOf(error)].nummotor.error">{{datas_err[errores.indexOf(error)].nummotor.valor}}</span>
+																		</td>
+																		
+																		<td>
+																			<span class="label label-danger" ng-if="datas_err[errores.indexOf(error)].artid.error">{{datas_err[errores.indexOf(error)].artid.valor}} {{datas_err[errores.indexOf(error)].artid.descripcion}}</span>
+																			<span ng-if="!datas_err[errores.indexOf(error)].artid.error">{{datas_err[errores.indexOf(error)].artid.valor}}</span>
+																		</td>
+																		
+																		
+																		
+<!-- 																		<td> -->
+<!-- 																		<span ng-if="error.ARTFRACCION != 'VACIO' && error.ARTFRACCION != 'LAYOUT INCORRECTO'">{{error.ARTFRACCION}}</span> -->
+<!-- 																		<span class="label label-danger" ng-if="error.ARTFRACCION == 'VACIO' || error.ARTFRACCION == 'LAYOUT INCORRECTO'">{{error.ARTFRACCION}}</span> -->
+																	
+<!-- 																		</td> -->
+<!-- 																		<td> -->
+<!-- 																		<span ng-if="error.ARTPARRAFO != 'VACIO' && error.ARTPARRAFO != 'LAYOUT INCORRECTO'">{{error.ARTPARRAFO}}</span> -->
+<!-- 																		<span class="label label-danger" ng-if="error.ARTPARRAFO == 'VACIO' || error.ARTPARRAFO == 'LAYOUT INCORRECTO'">{{error.ARTPARRAFO}}</span> -->
+																	
+<!-- 																		</td> -->
+<!-- 																		<td> -->
+<!-- 																		<span ng-if="error.ARTINCISO != 'VACIO' && error.ARTINCISO != 'LAYOUT INCORRECTO'">{{error.ARTINCISO}}</span> -->
+<!-- 																		<span class="label label-danger" ng-if="error.ARTINCISO == 'VACIO' || error.ARTINCISO == 'LAYOUT INCORRECTO'">{{error.ARTINCISO}}</span> -->
+																	
+<!-- 																		</td> -->
+<!-- 																		<td> -->
+<!-- 																		<span ng-if="error.ARTUNIDADCUENTA != 'VACIO' && error.ARTUNIDADCUENTA != 'LAYOUT INCORRECTO'">{{error.ARTUNIDADCUENTA}}</span> -->
+<!-- 																		<span class="label label-danger" ng-if="error.ARTUNIDADCUENTA == 'VACIO' || error.ARTUNIDADCUENTA == 'LAYOUT INCORRECTO'">{{error.ARTUNIDADCUENTA}}</span> -->
+																	
+<!-- 																		</td> -->
+																	</tr>
+																</tbody>
+															</table>
+															<dir-pagination-controls></dir-pagination-controls>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</section>
+	</body>
+</html>

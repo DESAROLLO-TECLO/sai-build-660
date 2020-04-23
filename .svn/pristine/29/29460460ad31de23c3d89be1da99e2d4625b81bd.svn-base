@@ -1,0 +1,1278 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>Modificación de Infracción</title>
+</head>
+<body>
+	<section class="content-header">
+		<h1>Modificación de Infracción</h1>
+		<ol class="breadcrumb">
+			<li><a><i class="fa fa-book"></i>Infracción</a></li>
+			<li class="active">Modificación</li>
+		</ol>
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<form id="form1" role="form" name="modificaInfraccion" novalidate>
+			<div class="row">
+				<section class="col-lg-6 connectedSortable">
+
+					<!-- Datos generales -->
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Datos Generales</h3>
+						</div>
+						<div class="box-body">
+							<div class="form-group">
+								<div class="row">
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label for="DGNCI">*NCI: </label>
+											<div class="input-group date ">
+												<div class="input-group-addon">
+													<i class="fa fa-building-o"></i>
+												</div>
+												<input type="text" class="form-control " capitalize id="DGNCI" ng-model="DG.nci" disabled
+													ng-required="true" name="DGNCI">
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label for="DGPagada">*Estatus Pago: </label>
+											<div class="input-group date ">
+												<div class="input-group-addon">
+													<i class="fa fa-building-o"></i>
+												</div>
+												<input type="text" class="form-control " capitalize id="DGPagada"  ng-model="DG.pagada" disabled
+													ng-required="true" name="DGPagada">
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label for="DGInfraccion">*Infracción: </label>
+											<div class="input-group date ">
+												<div class="input-group-addon">
+													<i class="fa fa-calendar"></i>
+												</div>
+												<input type="text" class="form-control " capitalize id="DGInfraccion" disabled
+													data-date-format="dd/mm/yyyy" ng-model="DG.infraccion"
+													ng-required="true" name="DGInfraccion">
+											</div>
+										</div>
+									</div>
+									
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label for="example2">Infracción Impresa:</label>
+
+											<div class="input-group">
+												<span class="input-group-addon"><i
+													class="fa fa-print"></i></span> <input
+													type="text" class="form-control" id="example2" 
+													ng-model="DG.infrac_impresa" name="DGInfracEmpresa" maxlength="17">
+											</div>
+										</div>
+
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-sm-6">
+										<div class="form-group"
+											ng-class="{'has-error': modificaInfraccion.DGFecha.$invalid && modificaInfraccion.DGFecha.$dirty}">
+											<label for="example1">*Fecha Infracción:</label>
+											
+											<div class="input-group date " datetimepicker options="dateTimePickerOptions"
+													ng-required="true"
+													ng-model="DG.fecha"
+													name="DGFecha"
+													on-hide="updateFIFecha()" show-button-bar="true">
+													
+												<div class="input-group-addon">
+													<i class="fa fa-calendar"></i>
+												</div>
+												<input type="text" class="form-control inputFecha input-append"
+													 readonly>
+											</div>
+									
+											<div
+												ng-show="modificaInfraccion.DGFecha.$error.required && modificaInfraccion.DGFecha.$dirty"
+												ng-style="{color:'red'}">La fecha infracción es requerida</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group" >
+											<label for="DGInfraccionFecha">*Fecha de Emisión: </label>
+											<div class="input-group date ">
+												<div class="input-group-addon">
+													<i class="fa fa-calendar"></i>
+												</div>
+												<input type="text" class="form-control" id="DGInfraccionFecha" disabled
+													data-date-format="dd/mm/yyyy" ng-model="DG.infraccionFecha"
+													name="DGInfraccionFecha"
+													readonly
+													date-picker	idioma-dp="{{currentLanguage}}" />
+
+											</div>
+											<div
+												ng-show="modificaInfraccion.DGFecha.$error.required && modificaInfraccion.DGFecha.$dirty"
+												ng-style="{color:'red'}">La fecha emisión es requerida</div>
+										</div>
+									</div>
+									
+								</div>
+
+								<div class="row">
+								
+									<div class="col-sm-6">
+									
+										<div class="form-group">
+										<!--  <span class="badge" style="background-color:transparent; width:50%; padding:0px;"><img src="static/dist/img/loading.gif"  class="ajax-loader img-responsive center-block" style="width:25%; border:0px; margin:0px;"/></span> -->
+										<label >*Estado:</label><br>
+											
+											
+											<div class="input-group">
+												
+												<span class="input-group-addon"><i
+													class="fa fa-map-marker"></i></span> <select class="form-control"
+													disabled="true" ng-model="DG.estado">
+													<option value="{{DF}}" selected="selected">{{DF.edoNombre}}</option>
+												</select>
+												<span class="input-group-addon">
+													<img src="static/dist/img/loading.gif"  class="ajax-loader img-responsive center-block" style="width:10%"/>
+												</span>
+
+											</div>
+										</div>
+										<!-- /.form-group -->
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group"
+											ng-class="{'has-error': modificaInfraccion.DGSector.$invalid && modificaInfraccion.DGSector.$dirty}">
+											<label>*Sector: </label>
+											<div class="input-group">
+												<span class="input-group-addon"><i
+													class="fa fa-pie-chart"></i></span> <select class="form-control"
+													name="DGSector"
+													ng-options="sector.secId as sector.secCod + '&nbsp;&nbsp;&nbsp;' + sector.secNombre for sector in DG.sectores"
+													ng-model="DG.Sector"
+													ng-change="actualizarUnidadTerritorialPorSector()"
+													ng-required="true">
+													<option value="" selected="selected">Seleccione</option>
+												</select>
+											</div>
+											<div
+												ng-show="modificaInfraccion.DGSector.$error.required && modificaInfraccion.DGSector.$dirty"
+												ng-style="{color:'red'}">El sector es requerido</div>
+										</div>
+										<!-- /.form-group -->
+									</div>
+
+								</div>
+
+								<div class="row">
+
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label>Unidad Territorial :</label>
+											<div class="input-group">
+												<span class="input-group-addon"><i
+													class="fa fa-random"></i></span> <select class="form-control"
+													ng-options="unidadT.utId.utId as unidadT.utNombre for unidadT in DG.unidadesTerritoriales"
+													ng-model="DG.UnidadT">
+													<option value="" selected="selected">Seleccione</option>
+												</select>
+											</div>
+											<!-- /.form-group -->
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group"
+											ng-class="{'has-error': (modificaInfraccion.DGResponsableVehiculo.$invalid && modificaInfraccion.DGResponsableVehiculo.$dirty) }">
+											<label> *Responsable del Vehículo:</label>
+											<div class="input-group">
+												<span class="input-group-addon"><i class="fa fa-user"></i></span>
+												<select class="form-control" id="DGResponsableVehiculo"
+													ng-options="catRespVeh.rVehId as catRespVeh.rVehNombre for catRespVeh in DG.CatalogoresponsableVehiculo"
+													ng-model="DG.ResponsableVehiculo" ng-required="true"
+													name="DGResponsableVehiculo">
+													<option value="" selected="selected">Seleccione</option>
+												</select>
+											</div>
+											<div
+												ng-show="modificaInfraccion.DGResponsableVehiculo.$error.required && modificaInfraccion.DGResponsableVehiculo.$dirty"
+												ng-style="{color:'red'}">El responsable del vehículo
+												es requerido</div>
+										</div>
+										<!-- /.form-group -->
+									</div>
+								</div>
+								<h4>Arrastre</h4>
+								<hr />
+								<div class="row">
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label>Con Arrastre:</label>
+											<div class="input-group">
+												<span class="input-group-addon"><i
+													class="fa fa-arrows"></i></span> <select class="form-control "
+													ng-options="catTipArr.codigoString as catTipArr.descripcion for catTipArr in DG.CatalogoTipoArrastre"
+													ng-model="DG.tipoArrastre"
+													disabled="true">
+<!-- 													<option value="" selected="selected">Seleccione</option> -->
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group"
+											ng-class="{'has-error': (modificaInfraccion.DGTipoUnidad.$invalid && modificaInfraccion.DGTipoUnidad.$dirty) }">
+											<label>Tipo de Unidad:</label>
+											<div class="input-group">
+												<span class="input-group-addon"><i class="fa fa-car"></i></span>
+												<select class="form-control" id="DGTipoUnidad"
+													ng-options="catTipUni.codigoString as catTipUni.descripcion for catTipUni in DG.CatalogoTipoUnidad"
+													ng-model="DG.tipoUnidad"
+													ng-change="actualizarBuscarCodigo()" ng-required="true"
+													name="DGTipoUnidad">
+													<option value="" selected="selected">Seleccione</option>
+												</select>
+											</div>
+											<div
+												ng-show="modificaInfraccion.DGTipoUnidad.$error.required && modificaInfraccion.DGTipoUnidad.$dirty"
+												ng-style="{color:'red'}">El tipo de unidad es
+												requerido</div>
+										</div>
+										<!-- /.form-group -->
+									</div>
+									<!-- /.col -->
+								</div>
+
+								<div class="row">
+									<div class="col-sm-6">
+										<div class="form-group"
+											ng-class="{'has-error': (modificaInfraccion.DGEmpleado.$invalid && modificaInfraccion.DGEmpleado.$dirty) || (DG.empleado.placaColor=='red') }">
+											<label> Placa Oficial:</label>
+											<div class="input-group">
+												<input type="text" class="form-control " capitalize
+													ng-model="DG.empleado.empPlaca"
+													ng-change="typePlacaDeEmpleado()"
+													ng-required="true"
+													name="DGEmpleado"> <span class="input-group-btn"><button
+														type="button" class="btn btn-danger btn-flat"
+														ng-click="buscarPlacaPorCodigo()">Buscar</button> </span>
+													<!--para input placa oficial style="color: {{DG.empleado.placaColor}} "-->
+											</div>
+											<div ng-show="modificaInfraccion.DGEmpleado.$error.required && modificaInfraccion.DGEmpleado.$dirty"
+												ng-style="{color:'red'}">La placa oficial es requerida</div>
+											<div ng-show="DG.empleado.placaColor=='red'"
+												ng-style="{color:'red'}">Se requiere de una placa valida</div>
+											<div ng-show="DG.empleado.placaColor=='green'">La placa oficial es valida</div>
+										</div>
+									</div>
+									<div class="col-sm-6" ng-show="showBuscaCodigo">
+										<div class="form-group"
+											ng-class="{'has-error': (modificaInfraccion.DGGrua.$invalid && modificaInfraccion.DGGrua.$dirty) || (DG.grua.codigoColor=='red') }">
+											<label>Código:</label>
+											<div class="input-group">
+												<input type="text" class="form-control " capitalize
+													ng-disabled="disabledBuscaCodigo"
+													ng-model="DG.grua.gruaCod" ng-change="typeCodigoDeGrua()"
+													ng-required="false"
+													name="DGGrua">
+													<!--para input codigo style="color: {{DG.grua.codigoColor}}" -->
+													 <span class="input-group-btn">
+													<button type="button" class="btn btn-danger btn-flat"
+														ng-disabled="disabledBuscaCodigo"
+														ng-click="buscarGruaPorCodigo()">Buscar</button> </a>
+												</span>
+											</div>
+											<div
+												ng-show="modificaInfraccion.DGGrua.$error.required && modificaInfraccion.DGGrua.$dirty"
+												ng-style="{color:'red'}">El código es requerido</div>
+											<div ng-show="DG.grua.codigoColor=='red'"
+												ng-style="{color:'red'}">Se requiere de un código
+												valido</div>
+											<div ng-show="DG.grua.codigoColor=='green'">El código es valido</div>
+										</div>
+									</div>
+								</div>
+								<!-- <div class="row" ng-show="DG.empleado.valido">
+									<div class="col-xs-8">
+										<div class="form-group">
+											<label>Nombre:</label>
+											<div class="input-group" style="width: 100%">
+												<input type="text" class="form-control" disabled="true"
+													value="{{DG.empleado.empApePaterno}} {{DG.empleado.empApeMaterno}} {{DG.empleado.empNombre}}"
+													style="color: green;">
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-4">
+										<label>Id:</label>
+										<div class="input-group">
+											<input type="text" class="form-control" disabled="true"
+												value="{{DG.empleado.empId}}"
+												style="color: green">
+										</div>
+									</div>
+								</div>
+								<div class="row" ng-show="DG.empleado.valido">
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label>Agrupamiento:</label>
+											<div class="input-group" style="width: 100%">
+												<input type="text" class="form-control" disabled="true"
+													value="{{DG.empleado.agrupamiento.agrupacionNombre}}"
+													style="color: green;">
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<label>Sector:</label>
+										<div class="input-group" style="width: 100%">
+											<input type="text" class="form-control" disabled="true"
+												value="{{DG.empleado.sector.secNombre}}"
+												style="color: green">
+										</div>
+									</div>
+								</div> -->
+								<fieldset class="scheduler-border" ng-show="DG.empleado.valido">
+									<legend class="scheduler-border">Datos del oficial</legend>
+										<div class="table-responsive">
+											<table class="table tblsnborder">
+												<tr>
+                                           		<td><dt>Nombre:</dt></td>
+                                           		<td>{{DG.empleado.empApePaterno}} {{DG.empleado.empApeMaterno}} {{DG.empleado.empNombre}}</td>
+                                           		<td><dt>Placa:</dt></td>
+                                          			<td>{{DG.empleado.empPlaca}}</td>
+                                          		</tr>
+                                          		<tr>
+                                          			<td><dt>Agrupamiento:</dt></td>
+                                          			<td>{{DG.empleado.agrupamiento.agrupacionNombre}}</td>
+                                          			<td><dt>Sector:</dt></td>
+                                          			<td>{{DG.empleado.sector.secNombre}}</td>
+                                          		</tr>
+										</table>
+									</div>
+								</fieldset>
+							</div>
+						</div>
+					</div>
+						<!-- /.box -->
+
+
+						<!-- Datos Vehiculo-->
+						<div class="box box-danger">
+							<div class="box-header with-border  text-center">
+								<h3 class="box-title">Datos del Vehículo</h3>
+							</div>
+							<!-- /.box-header -->
+							<div class="box-body">
+								<div class="row">
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label for="example4">*Cuenta con Placa:</label>
+											<div class="row">
+												<div class="col-lg-3">
+													<div class="radio">
+														<label> <input type="radio"
+															ng-model="DV.cuentaConPlaca" value="S"
+															ng-change="cambioCuenaConPlaca()"> Si
+														</label>
+													</div>
+												</div>
+												<!-- /.col-lg-6 -->
+												<div class="col-lg-3">
+													<div class="radio">
+														<label> <input type="radio"
+															ng-model="DV.cuentaConPlaca" value="N"
+															ng-change="cambioCuenaConPlaca()"> No
+														</label>
+													</div>
+												</div>
+												<!-- /.col-lg-6 -->
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group"
+											ng-class="{'has-error': (modificaInfraccion.DVPlaca.$invalid && modificaInfraccion.DVPlaca.$dirty) }">
+											<label for="DVPlaca">*Placa Vehículo:</label>
+											<div class="input-group">
+												<span class="input-group-addon"><i
+													class="fa fa-automobile"></i></span> <input type="text"
+													class="form-control " capitalize id="DVPlaca" ng-model="DV.placa"
+													ng-disabled="DV.placaDisabled" ng-required="DV.cuentaConPlaca == 'S'"
+													name="DVPlaca" maxlength="9"/>
+											</div>
+											<div
+												ng-show="modificaInfraccion.DVPlaca.$error.required && modificaInfraccion.DVPlaca.$dirty"
+												ng-style="{color:'red'}">La placa vehículo es requerida</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label>*Expedida en:</label>
+											<div class="input-group">
+												<span class="input-group-addon"><i class="fa fa-map"></i></span>
+												<select class="form-control"
+													ng-options="estado.edoId as estado.edoNombre for estado in DV.catalogoEstados"
+													ng-model="DV.estado" ng-change="verificaEstadoExpedicion()">
+												</select>
+											</div>
+											<!-- /.form-group -->
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group"
+											ng-class="{'has-error': (modificaInfraccion.DVTarjetaCirculacion.$invalid && modificaInfraccion.DVTarjetaCirculacion.$dirty) }">
+											<label for="tarjetaCirculacion">*Tarjeta de
+												Circulación: </label>
+											<div class="input-group">
+												<span class="input-group-addon"><i
+													class="fa  fa-credit-card"></i></span> <input type="text"
+													class="form-control " capitalize id="DVTarjetaCirculacion"
+													ng-model="DV.tarjetaCirculacion" ng-required="true"
+													name="DVTarjetaCirculacion" maxlength="25">
+											</div>
+											<div
+												ng-show="modificaInfraccion.DVTarjetaCirculacion.$error.required && modificaInfraccion.DVTarjetaCirculacion.$dirty"
+												ng-style="{color:'red'}">La tarjeta de circulación es
+												requerida</div>
+										</div>
+									</div>
+									</div>
+									<div class="row">
+									<div class="col-sm-6" ng-show="DV.showSelectGarantiaCatDoc">
+										<div class="form-group">
+											<label for="tarjetaCirculacion">*Garantía Documento:
+											</label>
+											<div class="input-group">
+												<span class="input-group-addon"><i
+													class="fa  fa-credit-card"></i></span> <select
+													class="form-control"
+													ng-options="gDoc.garantiaCatDocumentoId as gDoc.garantiaCatNombre for gDoc in DV.catalogoGarantiasDocumentos"
+													ng-model="DV.garantiaDocumento"
+													ng-required="DV.showSelectGarantiaCatDoc"
+													ng-disabled="DV.isGarantiaBlocked">
+													<option value="">Seleccione</option>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6" ng-show="DV.showSelectGarantiaCatDoc">
+										<div class="form-group"
+											ng-class="{'has-error': (DV.garantiaDocumento != null && modificaInfraccion.DVGarantiaFolio.$invalid && modificaInfraccion.DVGarantiaFolio.$dirty && !DV.isGarantiaBlocked) }">
+											<label for="DVGarantiaFolio">*Folio Garantía:</label>
+											<div class="input-group">
+												<span class="input-group-addon"><i
+													class="fa fa-automobile"></i></span>
+													<input type="text" class="form-control " capitalize 
+													id="DVGarantiaFolio" 
+													ng-model="DV.garantiaFolio"
+ 													ng-required="DV.showSelectGarantiaCatDoc && modificaInfraccion.DVGarantiaFolio.$invalid && modificaInfraccion.DVGarantiaFolio.$dirty && !DV.isGarantiaBlocked"
+													ng-disabled="DV.isGarantiaBlocked"
+													name="DVGarantiaFolio" />
+											</div>
+											<div
+												ng-show="DV.showSelectGarantiaCatDoc && modificaInfraccion.DVGarantiaFolio.$invalid && modificaInfraccion.DVGarantiaFolio.$dirty && !DV.isGarantiaBlocked"
+												ng-style="{color:'red'}">El folio de garantía es requerido</div>
+										</div>
+									</div>
+								</div>
+
+								<h4>Tipo de Vehículo</h4>
+								<hr />
+
+								<div class="row">
+
+									<div class="col-sm-6">
+										<div class="form-group"
+											ng-class="{'has-error': modificaInfraccion.DVTipoVehiculo.$invalid && modificaInfraccion.DVTipoVehiculo.$dirty }">
+											<label>Tipo:</label>
+											<div class="input-group">
+												<span class="input-group-addon"><i
+													class="fa fa-ellipsis-v "></i></span> <select class="form-control"
+													ng-options="tipoV.vTipoId as tipoV.vTipoNombre for tipoV in DV.catalogoTiposVehiculo"
+													ng-model="DV.tipoVehiculo" ng-required="true"
+													name="DVTipoVehiculo">
+													<option value="" selected="selected">Seleccione</option>
+												</select>
+											</div>
+
+											<div
+												ng-show="modificaInfraccion.DVTipoVehiculo.$error.required && modificaInfraccion.DVTipoVehiculo.$dirty"
+												ng-style="{color:'red'}">El tipo de vehiculo es
+												requerido</div>
+											<!-- /.form-group -->
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label for="example4">Origen: </label>
+											<div class="row">
+												<div class="col-lg-6">
+													<div class="radio">
+														<label> <input type="radio" ng-model="DV.origen"
+															value="N"> Nacional
+														</label>
+													</div>
+												</div>
+												<!-- /.col-lg-6 -->
+												<div class="col-lg-6">
+													<div class="radio">
+														<label> <input type="radio" ng-model="DV.origen"
+															value="E"> Extranjero
+														</label>
+													</div>
+												</div>
+												<!-- /.col-lg-6 -->
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-sm-6">
+										<label>Marca: </label>
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-registered"></i></span> <select class="form-control"
+												ng-options="marca.vMarId as marca.vMarNombre for marca in DV.catalogoVehiculosMarcas"
+												ng-model="DV.vehiculoMarca"
+												ng-change="actualizarVehiculosModeloPorMarca()">
+												<option value="" selected="selected">Seleccione</option>
+											</select>
+										</div>
+										<!-- /.form-group -->
+									</div>
+
+									<div class="col-sm-6">
+										<label>Modelo: </label>
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-barcode"></i></span> <select class="form-control"
+												ng-options="modelo.vModId.vModId as modelo.vModNombre for modelo in DV.catalogoVehiculosModelo"
+												ng-model="DV.vehiculoModelo">
+												<option value="">Seleccione</option>
+											</select>
+										</div>
+										<!-- /.form-group -->
+									</div>
+								</div>
+								</br>
+
+								<div class="row">
+									<div class="col-sm-6">
+										<label>Color: </label>
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-paint-brush"></i></span> <select class="form-control"
+												ng-options="color.vColorId as color.vColorNombre for color in DV.catalogoVehiculosColor"
+												ng-model="DV.vehiculoColor">
+												<option value="">Seleccione</option>
+											</select>
+										</div>
+										<!-- /.form-group -->
+									</div>
+
+									<div class="col-sm-6">
+										<label>Sector Público: </label>
+										<div class="row">
+											<div class="col-lg-7"></div>
+											<div class="col-lg-2">
+												<input type="checkbox" name="sectorPublico"
+													ng-true-value="'S'" ng-false-value="'N'"
+													ng-model="DV.sectorPublico">
+											</div>
+											<div class="col-lg-3"></div>
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</div>
+				</section>
+				<!-- /.Left col -->
+				<!-- right col (We are only adding the ID to make the widgets sortable)-->
+				<section class="col-lg-6 connectedSortable">
+
+
+					<!-- Ubicacion del automovil -->
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Ubicación de la Infracción</h3>
+						</div>
+						<!-- /.box-header -->
+						<div class="box-body">
+							<div class="row">
+								<div class="col-sm-6">
+									<div class="form-group"
+										ng-class="{'has-error': (modificaInfraccion.UBICalle.$invalid && modificaInfraccion.UBICalle.$dirty) }">
+										<label for="calle">*En la Calle: </label>
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-long-arrow-up"></i></span> <input type="text"
+												class="form-control " capitalize id="calle" ng-model="UBI.calle"
+												ng-required="true" name="UBICalle" maxlength="45">
+										</div>
+										<div
+											ng-show="modificaInfraccion.UBICalle.$error.required && modificaInfraccion.UBICalle.$dirty"
+											ng-style="{color:'red'}">La calle es requerida</div>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group"
+										ng-class="{'has-error': (modificaInfraccion.UBIEntreCalle1.$invalid && modificaInfraccion.UBIEntreCalle1.$dirty) }">
+										<label for="entreCalle1">*Entre la Calle: </label>
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa  fa-arrows-v"></i></span> <input type="text"
+												class="form-control  " capitalize id="entreCalle1"
+												ng-model="UBI.entreCalle1" ng-required="true"
+												name="UBIEntreCalle1" maxlength="45">
+										</div>
+										<div
+											ng-show="modificaInfraccion.UBIEntreCalle1.$error.required && modificaInfraccion.UBIEntreCalle1.$dirty"
+											ng-style="{color:'red'}">El valor es requerido</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-6">
+									<div class="form-group"
+										ng-class="{'has-error': (modificaInfraccion.UBIEntreCalle2.$invalid && modificaInfraccion.UBIEntreCalle2.$dirty) }">
+										<label for="entreCalle2">*Y en la calle: </label>
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-long-arrow-down"></i></span> <input type="text"
+												class="form-control " capitalize id="entreCalle2"
+												ng-model="UBI.entreCalle2" ng-required="true"
+												name="UBIEntreCalle2" maxlength="45">
+										</div>
+										<div
+											ng-show="modificaInfraccion.UBIEntreCalle2.$error.required && modificaInfraccion.UBIEntreCalle2.$dirty"
+											ng-style="{color:'red'}">El valor es requerido</div>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group"
+										ng-class="{'has-error': (modificaInfraccion.UBIDireccion.$invalid && modificaInfraccion.UBIDireccion.$dirty) }">
+										<label for="UBIDireccion">*Con Dirección: </label>
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa  fa-exchange"></i></span> <select class="form-control"
+												ng-required="true" name="UBIDireccion"
+												ng-options="conDir.catConDireccionDesc as conDir.catConDireccionDesc for conDir in UBI.catalogoconDirecciones"
+												ng-model="UBI.conDireccion">
+												<option value="" selected="selected">Seleccione</option>
+											</select>
+										</div>
+										<div
+											ng-show="modificaInfraccion.UBIDireccion.$error.required && modificaInfraccion.UBIDireccion.$dirty"
+											ng-style="{color:'red'}">La dirección es requerida</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-sm-6">
+									<div class="form-group"
+										ng-class="{'has-error': (modificaInfraccion.UBIFrenteAlNumero.$invalid && modificaInfraccion.UBIFrenteAlNumero.$dirty) }">
+										<label for="frenteAlNumero">*Frente al Número: </label>
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-sort-numeric-asc"></i></span> <input type="text"
+												class="form-control " capitalize required
+												name="UBIFrenteAlNumero" ng-model="UBI.numero" maxlength="8"></input>
+										</div>
+																		
+										<div
+										ng-show="modificaInfraccion.UBIFrenteAlNumero.$error.required && modificaInfraccion.UBIFrenteAlNumero.$dirty"
+											ng-style="{color:'red'}">Frente al número es requerido</div>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group"
+										ng-class="{'has-error': (modificaInfraccion.UBIColonia.$invalid && modificaInfraccion.UBIColonia.$dirty) }">
+										<label for="colonia">*Colonia: </label>
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-map-marker"></i></span> <input type="text"
+												class="form-control " capitalize id="colonia"
+												ng-required="true" name="UBIColonia" ng-model="UBI.colonia" maxlength="45"></input>
+										</div>
+										<div
+											ng-show="modificaInfraccion.UBIColonia.$error.required && modificaInfraccion.UBIColonia.$dirty"
+											ng-style="{color:'red'}">La colonia es requerida</div>
+									</div>
+								</div>
+
+							</div>
+							</br>
+
+							<div class="row">
+								<div class="col-sm-6">
+									<div class="form-group"
+										ng-class="{'has-error': (modificaInfraccion.UBIDelegacion.$invalid && modificaInfraccion.UBIDelegacion.$dirty) }">
+										<label for="exampl">*Delegación: </label>
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-map-marker"></i></span> <select class="form-control"
+												ng-options="del.delId.delId as del.delNombre for del in UBI.catalogoDelegaciones"
+												ng-model="UBI.delegacion" ng-required="true"
+												name="UBIDelegacion">
+												<option value="" selected="selected">Seleccione</option>
+											</select>
+										</div>
+										<div
+											ng-show="modificaInfraccion.UBIDelegacion.$error.required && modificaInfraccion.UBIDelegacion.$dirty"
+											ng-style="{color:'red'}">La delegación es requerida</div>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group"
+										ng-class="{'has-error': (modificaInfraccion.UBIObserveQue.$invalid && modificaInfraccion.UBIObserveQue.$dirty) }">
+										<label for="exampl">*Observé qué: </label>
+										<div class="input-group">
+											<span class="input-group-addon"><i class="fa fa-eye"></i></span>
+											<select class="form-control"
+												ng-options="obs.observeId as obs.observeDes for obs in UBI.catalogoObserveQue"
+												ng-model="UBI.observeQue" ng-required="true"
+												name="UBIObserveQue">
+												<option value="" selected="selected">Seleccione</option>
+											</select>
+										</div>
+										<div
+											ng-show="modificaInfraccion.UBIObserveQue.$error.required && modificaInfraccion.UBIObserveQue.$dirty"
+											ng-style="{color:'red'}">La observación requerida</div>
+									</div>
+								</div>
+							</div>
+
+						<!--<div class="row">
+								<div class="col-xs-12">
+									<div class="form-group">
+										<br />
+										<textarea class="form-control" rows="2"
+											placeholder="Descripción (Observé qué)" style="resize: none;"
+											ng-model="UBI.observacion"></textarea>
+									</div>
+								</div>
+							</div>-->
+
+						</div>
+					</div>
+
+
+					<!-- Datos Del Infractor -->
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Datos del Infractor</h3>
+						</div>
+						<!-- /.box-header -->
+						<div class="box-body">
+							<div class="row">
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label for="apellidoPaterno">*Apellido Paterno: </label>
+										<div class="input-group">
+											<span class="input-group-addon"><i class="fa fa-user"></i></span>
+											<input type="text" class="form-control " capitalize id="apellidoPaterno"
+												ng-model="DI.apellidoPaterno" maxlength="25">
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label for="apellidoMaterno">*Apellido Materno:</label>
+										<div class="input-group">
+											<span class="input-group-addon"><i class="fa fa-user"></i></span>
+											<input type="text" class="form-control " capitalize id="apellidoMaterno"
+												ng-model="DI.apellidoMaterno" maxlength="25">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label for="nombre">*Nombre: </label>
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-user-plus"></i></span> <input type="text"
+												class="form-control " capitalize id="nombre" ng-model="DI.nombre" maxlength="40">
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label for="rfc">RFC:</label>
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-building-o"></i></span> <input type="text"
+												class="form-control " capitalize id="rfc" ng-model="DI.rfc" maxlength="13">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-6">
+									<div class="form-group"
+										ng-class="{'has-error': (modificaInfraccion.DILicencia.$invalid && modificaInfraccion.DILicencia.$dirty) }">
+										<label for="DILicencia">*Licencia: </label>
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-credit-card"></i></span> <input type="text"
+												class="form-control " capitalize id="DILicencia" ng-model="DI.licencia"
+												ng-required="true" name="DILicencia" maxlength="11">
+										</div>
+										<div
+											ng-show="modificaInfraccion.DILicencia.$error.required && modificaInfraccion.DILicencia.$dirty"
+											ng-style="{color:'red'}">La licencia es requerida</div>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>Tipo: </label>
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-ellipsis-v"></i></span> <select class="form-control"
+												ng-options="tipoLicencia.tipoLId as tipoLicencia.tipoLNombre for tipoLicencia in DI.catalogoTipoLicencia"
+												ng-model="DI.tipoLicencia">
+												<option value="">Seleccione</option>
+											</select>
+										</div>
+										<!-- /.form-group -->
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>Expedida en: </label>
+										<div class="input-group">
+											<span class="input-group-addon"><i class="fa fa-map"></i></span>
+											<select class="form-control"
+												ng-options="estado.edoId as estado.edoNombre for estado in DV.catalogoEstados"
+												ng-model="DI.expedidaEnEstado">
+												<option value="">Seleccione</option>
+											</select>
+										</div>
+										<!-- /.form-group -->
+									</div>
+								</div>
+							</div>
+
+							<h4 class="box-title">Dirección</h4>
+							<hr />
+
+							<div class="row">
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label for="DIcalle">Calle: </label>
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-long-arrow-up"></i></span> <input type="text"
+												class="form-control " capitalize id="DIcalle" ng-model="DI.calle" maxlength="45">
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label for="DIcolonia">Colonia:</label>
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-map-marker"></i></span> <input type="text"
+												class="form-control " capitalize id="DIcolonia" ng-model="DI.colonia" maxlength="45">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label for="DInumExt">No. Ext: </label>
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-sort-numeric-asc"></i></span> <input type="text"
+												class="form-control " capitalize id="DInumExt"
+												ng-model="DI.numeroExterior" maxlength="25">
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label for="DInumInt">No. Int: </label>
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-sort-numeric-asc"></i></span> <input type="text"
+												class="form-control " capitalize id="DInumInt"
+												ng-model="DI.numeroInterior" maxlength="25">
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+							<div class="row">
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>Estado: </label>
+										<div class="input-group">
+											<span class="input-group-addon"><i class="fa fa-map"></i></span>
+											<select class="form-control"
+												ng-options="estado.edoId as estado.edoNombre for estado in DV.catalogoEstados"
+												ng-model="DI.direccionEstado"
+												ng-change="actualizarDelegacionPorEstado()">
+												<option value="">Seleccione</option>
+											</select>
+										</div>
+										<!-- /.form-group -->
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>Delegación / Municipio :</label>
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-map-marker"></i></span> <select class="form-control"
+												ng-options="del.delId.delId as del.delNombre for del in DI.catalogoDelegaciones"
+												ng-model="DI.delegacion">
+												<option value="">Seleccione</option>
+											</select>
+										</div>
+										<!-- /.form-group -->
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+
+
+
+
+				</section>
+			</div>
+
+			<div class="row">
+
+				<section class="col-lg-12 connectedSortable">
+
+					<!-- Fundamentación Infracción -->
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Fundamentación de la Infracción</h3>
+						</div>
+						<!-- /.box-header -->
+						<div class="box-body">
+<!-- 							<div class="row"> -->
+<!-- 								<div class="col-sm-offset-4 col-sm-4"> -->
+<!-- 									<div class="form-group"> -->
+<!-- 										<label for="example1">*Fecha Infracción: </label> -->
+<!-- 										<div class="input-group date "> -->
+<!-- 											<div class="input-group-addon"> -->
+<!-- 												<i class="fa fa-calendar"></i> -->
+<!-- 											</div> -->
+<!-- 											<input type="text" class="form-control" id="datepicker1" -->
+<!-- 												data-date-format="dd/mm/yyyy" ng-model="FI.fechaInfraccion" -->
+<!-- 												ng-change="updateDGFecha()" readonly style="background-color:white;"> -->
+										
+<!-- 										</div> -->
+<!-- 									</div> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+							<div class="row">
+								<div class="col-sm-4">
+									<div class="form-group"
+										ng-class="{'has-error': (modificaInfraccion.FIArticulo.$invalid && modificaInfraccion.FIArticulo.$dirty) }">
+										<label>*Artículo: </label>
+										<div class="input-group">
+											<span class="input-group-addon"><i class="fa fa-gavel"></i></span>
+											<select id="FIArticulo" class="form-control"
+												ng-disabled="!FI.fechaInfraccion" ng-options="articulo as articulo.artInfrFinArticulo for articulo in FI.catalogoArticulos"
+												ng-model="FI.articulo"
+												ng-change="actualizarFraccionesPorArticulos(false)"
+												ng-required="true" name="FIArticulo">
+												<option value="">Seleccione</option>
+											</select>
+										</div>
+										<div
+											ng-show="modificaInfraccion.FIArticulo.$error.required && modificaInfraccion.FIArticulo.$dirty"
+											ng-style="{color:'red'}">El artículo es requerido</div>
+									</div>
+									<!-- /.form-group -->
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group"
+										ng-class="{'has-error': (modificaInfraccion.FIFraccion.$invalid && modificaInfraccion.FIFraccion.$dirty) }">
+										<label>*Fracción: </label>
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-hand-o-right"></i></span> <select id="FIFraccion"
+												class="form-control"
+												ng-disabled="!FI.articulo" ng-options="articulo as romanize(articulo.artInfrFinFraccion) for articulo in FI.catalogoFracciones"
+												ng-model="FI.fraccion"
+												ng-change="actualizarIncisoParrafoPorFraccion(false)"
+												ng-required="true" name="FIFraccion">
+												<option value="">Seleccione</option>
+											</select>
+										</div>
+										<div
+											ng-show="modificaInfraccion.FIFraccion.$error.required && modificaInfraccion.FIFraccion.$dirty"
+											ng-style="{color:'red'}">La fracción es requerida</div>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group"
+										ng-class="{'has-error': (modificaInfraccion.FIArticuloFinal.$invalid && modificaInfraccion.FIArticuloFinal.$dirty) }">
+										<label>*Inciso - Párrafo : </label>
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-hand-o-right"></i></span> <select id="select_fraccion"
+												class="form-control"
+												ng-disabled="!FI.fraccion" ng-options="articulo as 'Inciso ' + articulo.artInfrFinInciso + ' - Parrafo ' + articulo.artInfrFinParrafo for articulo in FI.catalogoIncisoParrafo"
+												ng-model="FI.articuloFinal" ng-required="true"
+												name="FIArticuloFinal"
+												ng-change="actualizarSancionesPorFraccion()">
+												<option value="">Seleccione</option>
+											</select>
+										</div>
+										<div
+											ng-show="modificaInfraccion.FIArticuloFinal.$error.required && modificaInfraccion.FIArticuloFinal.$dirty"
+											ng-style="{color:'red'}">El inciso - párrafo es
+											requerido</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label for="example4">*Es una violación a la Ley del
+											Transporte:</label>
+										<div class="row">
+											<div class="col-lg-1">
+												<div class="radio">
+													<label> <input type="radio"
+														ng-model="FI.violacionLeyTransporte" value="S">
+														Si
+													</label>
+												</div>
+											</div>
+											<!-- /.col-lg-6 -->
+											<div class="col-lg-1">
+												<div class="radio">
+													<label> <input type="radio"
+														ng-model="FI.violacionLeyTransporte" value="N"> No
+													</label>
+												</div>
+											</div>
+											<!-- /.col-lg-6 -->
+										</div>
+									</div>
+								</div>
+
+<!-- 								<div class="col-sm-4"> -->
+<!-- 									<div class="form-group" -->
+<!-- 										ng-class="{'has-error': (modificaInfraccion.FIArticuloSancion.$invalid && modificaInfraccion.FIArticuloSancion.$dirty) }"> -->
+<!-- 										<label>Sanción:</label>									 -->
+<!-- 										<div ng-model="FI.articuloSancion"	> -->
+<!-- 												{{FI.catalogoSancion.length>0 ? 'Artículo ' + FI.catalogoSancion[0].articuloSancion.artNumero + -->
+<!-- 												' Fracción ' + FI.catalogoSancion[0].articuloSancion.artFraccion + -->
+<!-- 												' Párrafo ' + FI.catalogoSancion[0].articuloSancion.artParrafo : -->
+<!-- 												'El articulo que sanciona no está activo'}} -->
+<!-- 										</div > -->
+<!-- 										<div -->
+<!-- 											ng-show="modificaInfraccion.FIArticuloSancion.$error.required && modificaInfraccion.FIArticuloSancion.$dirty" -->
+<!-- 											ng-style="{color:'red'}">El artículo que sanciona es -->
+<!-- 											requerido</div> -->
+<!-- 									</div> -->
+<!-- 								</div> -->
+									<div class="col-sm-4">
+									<div class="form-group"
+										ng-class="{'has-error': (modificaInfraccion.FIArticuloSancion.$invalid && modificaInfraccion.FIArticuloSancion.$dirty) }">
+										<label>*Sanción:</label>
+										<div class="input-group">
+											<span class="input-group-addon"><i class="fa fa-map"></i></span>
+											<select class="form-control" ng-disabled="!FI.articuloFinal"
+												ng-options="sancion as 
+												'Artículo ' + sancion.articuloSancion.artNumero +
+												' Fracción ' + sancion.articuloSancion.artFraccion +
+												' Párrafo ' + sancion.articuloSancion.artParrafo 
+												for sancion in FI.catalogoSancion"
+												ng-model="FI.articuloSancion" name="FIArticuloSancion"
+												ng-required="true">
+												<option value="" selected="selected">Seleccione</option>
+											</select>
+										</div>
+										<div
+											ng-show="modificaInfraccion.FIArticuloSancion.$error.required && modificaInfraccion.FIArticuloSancion.$dirty"
+											ng-style="{color:'red'}">El artículo que sanciona es
+											requerido</div>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label>UMA:</label>
+										<div class="input-group">
+											<span class="input-group-addon"><i class="fa fa-info-circle"></i></span> 
+											<input type="text"	class="form-control " ng-disabled="true" ng-model = "FI.articuloSancion.articuloSancion.artDias" />
+										</div>
+												<div ng-style="{color:'black'}">Multa en cantidad de UMA vigente en la Ciudad de México.</div>
+<!-- 												Multa en días de salario mínimo vigente en la Ciudad de México. -->
+									</div>
+								</div>
+<!-- 								<div class="col-md-4"> -->
+<!-- 									<div class="form-group"  ng-show="FI.catalogoSancion.length>0 "> -->
+<!-- 											<label>UMA: </label> -->
+<!-- 											<div> -->
+<!-- 									  		{{FI.catalogoSancion[0].articuloSancion.artDias}} -->
+<!-- 	 										</div> -->
+<!-- 	 										<div ng-style="{color:'black'}">Multa en días de salario mínimo vigente en la Ciudad de México.</div> -->
+<!-- 	 								</div> -->
+<!-- 								</div> -->
+							</div>
+
+							<div class="row">
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>Motivación de la Infracción: </label>
+										<textarea id="infra_motivo" class="form-control" rows="3"
+											style="resize: none;"
+											ng-model="FI.articuloFinal.artInfrFinDescripcion"
+											disabled="true"></textarea>
+									</div>
+									<!-- /.form-group -->
+								</div>
+
+								<div class="col-sm-6">
+									<div class="form-group"
+										ng-class="{'has-error': (modificaInfraccion.FIMotivacionCompleta.$invalid && modificaInfraccion.FIMotivacionCompleta.$dirty) }">
+										<label>Motivación Completa: </label>
+										<textarea class="form-control " capitalize rows="3" style="resize: none;"
+											ng-model="FI.motivacionCompleta" ng-required="true"
+											name="FIMotivacionCompleta" maxlength="250"></textarea>
+										<div
+											ng-show="modificaInfraccion.FIMotivacionCompleta.$error.required && modificaInfraccion.FIMotivacionCompleta.$dirty"
+											ng-style="{color:'red'}">La motivación es requerida</div>
+									</div>
+									<!-- /.form-group -->
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="form-group"
+										ng-class="{'has-error': (modificaInfraccion.FIMotivo.$invalid && modificaInfraccion.FIMotivo.$dirty) }">
+										<label>*Motivo del Cambio: </label>
+										<textarea class="form-control " capitalize rows="3" style="resize: none;"
+											ng-model="FI.motivo" ng-required="true"
+											name="FIMotivo" maxlength="250"></textarea>
+										<div
+											ng-show="modificaInfraccion.FIMotivo.$error.required && modificaInfraccion.FIMotivo.$dirty"
+											ng-style="{color:'red'}">El motivo de cambio es requerida</div>
+									</div>
+									<!-- /.form-group -->
+								</div>
+							</div>
+
+							<div class="row itemsBox">
+                                <button ng-click="regresarMod()" class="btn btn-danger">
+									<i class="fa fa-arrow-circle-left"></i>
+									<span>Regresar</span>
+								</button>
+								<button class="btn btn-danger" id="btnGuardarDatos" ng-click="ModificaInfraccionVO()">
+									<span>Guardar</span>
+								</button>
+							</div>
+							<!-- {{infraccion}} -->
+						</div>
+					</div>
+				</section>
+			</div>
+		</form>
+	</section>
+	<div class="control-sidebar-bg"></div>
+	<!-- Page script -->
+	<script>
+		$(function() {
+
+			//Datemask dd/mm/yyyy
+			$("#datemask").inputmask("dd/mm/yyyy", {
+				"placeholder" : "dd/mm/yyyy"
+			});
+			//Datemask2 mm/dd/yyyy
+			$("#datemask2").inputmask("mm/dd/yyyy", {
+				"placeholder" : "mm/dd/yyyy"
+			});
+			//Money Euro
+			$("[data-mask]").inputmask();
+
+			//Date picker
+			$('#datepicker').datepicker({
+				autoclose : true,
+				endDate: '+0d',
+				todayHighlight: true
+			});
+			
+// 			$('#datetimepicker').datetimepicker({
+// 				autoclose : true,
+// 				endDate : '+0d',
+// // 				pickSeconds: false,
+// 				todayHighlight : true,
+// // 				maskInput:true,
+// 				language:'es',
+// 				pick12HourFormat: false,
+// 				minuteStep : 1
+// // 				secondsFormat: 'ss',
+// //             	secondsStep:   1
+// 			});
+
+			$('#datepicker1').datepicker({
+				autoclose : true,
+				endDate: '+0d',
+				todayHighlight: true
+			});
+			
+			$('#DGInfraccionFecha').datepicker({
+				autoclose : true,
+				endDate: '+0d'
+			});
+			
+			/*Timepicker
+			$(".timepicker").timepicker({
+				showInputs : false
+			});*/
+
+		});
+
+		function cambiarFraccion() {
+			$("#select_fraccion").val("1");
+			$("#infra_motivo").val("");
+			$("#infra_sancion").html("");
+		}
+
+		function cambiarMotivacion() {
+			var motivo = "TRATANDOSE DE VEHÍCULOS CON PLACAS DE MATRÍCULA EXTRANJERA, POR NO PORTAR LOS DOCUMENTOS OFICIALES EN LOS QUE SE DESCRIBAN LAS CARACTERÍSTICAS DEL VEHÍCULO Y SE ACREDITE LA LEGAL ESTANCIA EN EL  PAÍS."
+			var sancion = "Multa de 5 unidades de cuenta en la Ciudad de México";
+			$("#infra_motivo").val(motivo);
+			$("#infra_sancion").html(sancion);
+
+		}
+	</script>
+
+</body>
+</html>

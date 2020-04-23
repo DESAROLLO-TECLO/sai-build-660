@@ -1,0 +1,290 @@
+<html>
+<head>
+		<meta charset="utf-8">
+		<title>Cancelacion Detecciones</title>
+	</head>
+	<body>
+		<section class="content-header">
+			<h1>Cancelacion Detecciones</h1>
+			<ol class="breadcrumb">
+				<li><a><i class="fa fa-book"></i> Dispositivos-Fijos</a></li>
+				<li class="active">Cancelacion Detecciones</li>
+			</ol>
+		</section>
+
+	<!-- Main content -- parametros de busqueda -->
+		<section class="content">
+			<form role="form" name="form" novalidate>
+				
+				<div class="row">
+					<div class="col-md-2"></div>
+					<div class="col-md-8">
+						<div class="box box-danger">
+							<div class="box-header with-border text-center">
+								<h3 class="box-title">Cancelar Detecciones</h3>
+								
+								<div class="box-tools pull-right">
+   									<button type="button" class="btn btn-box-tool" data-widget="collapse">
+	  										<i class="fa fa-minus"></i>
+   									</button>
+								</div>
+							
+							</div>
+							<div class="box-body">
+							
+																			<!-- PARAMETROS DE BÚSQUEDA -->
+								<div class="row">
+									<div class="col-md-4">
+										<div class="form-group" >
+											<label for="fEmision">Fechas:</label>
+											<div class="input-group">
+												<div class="input-group-addon">
+													<i class="fa fa-calendar"></i>
+											</div>
+											<select class="form-control select2" name="TipoFechas"
+											    id="TipoFechas"  ng-model="parametroBusqueda.TipoFecha"
+											    ng-options='fecha.fechaValue as fecha.fechaFormat for fecha in TiposFecha' >
+										</select>
+										</div>
+									  </div>
+									</div>
+									
+									<div class="col-md-4">
+										<div class="form-group">
+											<label for="fInicio">Tipo Detección:</label>
+											<div class="input-group">
+												<div class="input-group-addon">
+													<i class="fa fa-tachometer"></i>
+											   </div>
+											<select class="form-control select2" name="TipoDeteccion" id="TipoDeteccion" ng-model="parametroBusqueda.TipoDeteccion" 
+							     		       ng-options='option.idArchivoTipoFora as option.nbDispositivoDeteccion  for option in ListaTipoDetecciones' 
+											   ng-change="filtroTipoRadar()">
+										  </select>
+											</div>
+										</div>
+									</div>
+									
+									<div class="col-md-4">
+										<div class="form-group">
+											<label for="fFin">Tipo Radar:</label>
+											<div class="input-group">
+												<div class="input-group-addon">
+													<i class="fa fa-tachometer"></i>
+										</div>
+											<select class="form-control select2" name="TipoRadar" id="TipoRadar"
+											ng-model="parametroBusqueda.TipoRadar" ng-disabled="parametroBusqueda.TipoDeteccion===0"
+											ng-options='option.idMarcaDispositivoDet as option.nbMarcaDispositivo for option in ListaTipoRadar' >
+										</select>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-md-4">
+										<div class="form-group">
+											<label for="lote">Origen Placa:</label>
+											<div class="input-group date">
+												<div class="input-group-addon">
+												   <i class="fa fa-car"></i>
+										        </div>
+											<select class="form-control select2" name="filtroOrigenPlaca"
+											id="filtroOrigenPlaca" ng-model="parametroBusqueda.OrigenPlaca"
+											ng-options='option.codigo as option.descripcion for option in filterValues'>
+										</select>
+											</div>
+										</div>
+									</div>
+									
+							   <div class="col-md-12 text-center">
+									<button class="btn btn-danger"	ng-click="consultaDeteccionesParaCancelar()">Buscar</button>
+						      </div>	
+				   </div>
+				</div>
+			</div>
+		 </div>
+	 </div>
+	 </form>
+	 
+					<div class="col-md-2"></div>
+				</div>
+				
+   <!--  parametros de busqueda final ,cambiare la vista para que sean tres por renglon -->
+				<div class="col-md-3"></div>
+			</div>
+
+												<!--Tabla de resultados ,conteo de detecciones posibles para cancelar   -->
+			<div class="col-md-12 connectedSortable">
+				<div class="row" >
+				  <div class="col-md-3"></div>
+				     <div class="col-md-6"  ng-show='results.length>0'>
+						<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title" align="center">Detecciones a Cancelar</h3>
+							
+							<div class="box-tools pull-right">
+   									<button type="button" class="btn btn-box-tool" data-widget="collapse">
+	  										<i class="fa fa-minus"></i>
+   									</button>
+								</div>
+							
+							
+						</div>
+						<div class="box-body">
+								<div class="box-body table-responsive">	
+							<div class="col-md-12">
+								<table class="table ">
+									<thead >
+										<tr >
+											<th class="text-left" >TIPO DETECCIÓN</th>
+											<th class="text-left" >RADAR</th>
+											<th class="text-center" >TOTAL</th>
+											
+										</tr>
+										
+									</thead>
+									<tbody>
+										<tr ng-repeat="result in results">
+ 										 <td class="text-center" >{{result.tipo}}</td>
+ 										 <td class="text-center" >{{result.radar}}</td>
+									     <td class="text-center" >{{result.total}}</td>
+								      </tr>
+						       
+									<tr>
+										<td class="text-center"></td>
+ 										<td class="text-center"><strong>TOTAL: </strong></td> 
+ 										<td class="text-center"><strong>{{TotalActuales}}</strong></td>
+ 									</tr> 
+										
+									</tbody>
+								</table>
+								
+<!-- 								<div class="col-mod-12"> -->
+<!-- 								  <div class="form-group"> -->
+<!-- 								    <div aling="center"> -->
+<!-- 								       <button class="btn btn-danger" value="Ver Detalle"  ng-click="consultaDetalles()" >Ver detalle</button> -->
+<!-- 								    </div> -->
+<!-- 								   </div>	   -->
+<!-- 								</div> -->
+
+                           <div class="row" >
+								<div class="col-md-12">
+									<div class="form-group">
+										<label for="motivo">Motivo Cancelación:</label>
+										<textarea ng-model="motivo" rows="" cols="" maxlength="200" class="form-control" style="overflow:auto;resize:none">
+										   </textarea>
+									</div>
+							</div>
+					   </div>
+							<div class="row" >
+									<div align="center">
+									    <button class="btn btn-danger" value="Ver Detalle"  ng-click="consultaDetalles()" >Ver detalle</button>
+										<button class="btn btn-danger" value="Aceptar"  ng-click="confirmCancelacion(motivo)">Aceptar</button>
+									</div>
+							</div>
+													    
+								</div>
+							</div>
+						</div>
+					</div>
+				
+				<div class="col-md-2">
+				</div>	
+				
+			</div>
+  </div></div>
+									
+			<div class="col-md-5"></div>
+				<div class="row">
+					<div class="col-xs-12" ng-if="listaDetecciones.length>0">
+						
+						<div class="box box-danger">
+							<div class="box-header row">
+								<div class="col-md-6 col-xs-12">
+								<h3 class="box-title">Registros Encontrados: {{(listaDetecciones| filter:view.searchSomething).length }}</h3>
+
+								</div>
+								<div class="col-md-6 form-group">
+									<div class="row">
+										<div class="col-md-offset-4 col-md-7 col-xs-8">
+											<div class="input-group">
+												<input id="searchsomething" type="text" class="form-control"
+													placeholder="Buscar por filtro"
+													ng-model="view.searchSomething"> <span
+													class="input-group-addon"><i class="fa fa-search"></i></span>
+											</div>
+										</div>
+										<div class="col-md-1 col-xs-1">
+											<a ng-click="descargaExcel()" title="Descargar Reporte">
+												<span class="pull-right "><img
+													src="static/dist/img/excel.png" class="img-rounded"
+													width="30px"></span>
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="box-body table-responsive">
+								<table class="table table-striped table-hover header-fixed">
+									<thead>
+										<tr>
+											<th sort order="'placa'" by="order" reverse="reverse">PLACA</th>
+											<th align="center" class="center wrap-text" sort order="'tdskuid'" by="order" reverse="reverse">TDSKUID</th>
+											<th align="center" sort order="'fecha'" by="order" reverse="reverse">FECHA</th>
+											<th align="center" sort order="'hora'" by="order" reverse="reverse">HORA</th>
+											<th sort order="'nombre'" by="order" reverse="reverse" class="center wrap-text">NOMBRE</th>
+											<th sort order="'usuario'" by="order" reverse="reverse">NOMBRE OFICIAL</th>
+											<th sort order="'fechavalidacion'" by="order" reverse="reverse">FECHA VALIDACIÓN</th>
+											<th sort order="'fechacreacion'" by="order" reverse="reverse">FECHA CREACIÓN</th>
+											<th class="center wrap-text" sort order="'tipoDeteccion'" by="order" reverse="reverse" >TIPO DETECCIÓN</th>
+											<th class="center wrap-text" sort order="'radar'" by="order" reverse="reverse">TIPO RADAR</th>
+											<th sort order="'origenPlaca'" by="order" reverse="reverse" class="center wrap-text">ORIGEN PLACA</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr
+											ng-if="(listaDetecciones | filter:view.searchSomething).length < 1">
+											<td colspan="9" class="text-center"><label>No se
+													encontraron coincidencias</label></td>
+										</tr>
+										<tr dir-paginate="datos in listaDetecciones | orderBy:order:reverse | filter:view.searchSomething | itemsPerPage: view.rowsPerPage">
+											<td align="center" class="center wrap-text">{{datos.placa}}</td>
+											<td align="center">{{datos.tdskuid}}</td>
+											<td align="center">{{datos.fecha}}</td>
+											<td align="center">{{datos.hora}}</td>
+											<td align="center" class="center wrap-text">{{datos.nombre}}</td>
+											<td align="center" class="center wrap-text">{{datos.usuario}}</td>
+											<td align="center" class="center wrap-text">{{datos.fechavalidacion}}</td>
+											<td align="center" class="center wrap-text">{{datos.fechacreacion}}</td>
+											<td align="center" class="center wrap-text">{{datos.tipoDeteccion}}</td>
+											<td align="center" class="center wrap-text">{{datos.radar}}</td>
+											<td align="center" class="center wrap-text">{{datos.origenPlaca}}</td>
+										</tr>
+									</tbody>
+								</table>
+
+
+
+							</div>
+
+							<div class="container-fluid">
+								<div class="fixed-table-pagination" style="display: block;">
+									<rows-per-page rows="view.rowsPerPage"
+										filtro="view.searchSomething" array="listaDetecciones"></rows-per-page>
+
+									<div class="pull-right pagination">
+										<dir-pagination-controls class="pagination"></dir-pagination-controls>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- /.box -->
+					</div>
+				</div>
+				</div>
+			</div>
+	</section>
+
+ 
+<body>
+</html>

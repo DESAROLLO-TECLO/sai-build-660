@@ -1,0 +1,289 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>Consulta Líneas de Captura</title>
+</head>
+<body>
+	<section class="content-header">
+		<h1>Consulta Líneas de Captura</h1>
+		<ol class="breadcrumb">
+			<li><a><i class="fa fa-barcode tool"></i> Línea de Captura</a></li>
+			<li class="active">Consulta LC</li>
+		</ol>
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<form role="form" name="form" novalidate>
+			<div class="row">
+				<div class="col-md-6 col-md-offset-3">
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Búsqueda</h3>
+						</div>
+						<div class="box-body">
+							<!-- TIPO DE BÚSQUEDA -->
+							<div class="row">
+								<div class="col-xs-5">
+									<label>
+						      			Tipo de Búsqueda:
+								    </label>
+								</div>
+								<div class="col-xs-7">
+									<label class="radio-inline">
+						      			<input type="radio" name="optradio" value="0" ng-change="changeFilter()"
+						      				ng-model="parametroBusqueda.tipoBusqueda">Histórico
+								    </label>
+								    <label class="radio-inline">
+						      			
+								    </label>
+								    <label class="radio-inline">
+							      		<input type="radio" name="optradio" value="1" ng-change="changeFilter()" 
+							      			ng-model="parametroBusqueda.tipoBusqueda">Estadística
+								    </label>
+								</div>
+								<br><br>
+							</div>
+							<!-- PARAMETROS DE BÚSQUEDA -->
+							<div class="row" ng-if="viewParameters">
+								<div class="col-md-6">
+									<div class="form-group" ng-class="{'has-error': form.fInicio.$invalid && form.fInicio.$dirty}">
+										<label for="fInicio">Fecha Inicio:</label>
+										<div class="input-group date">
+											<div class="input-group-addon">
+												<i class="fa fa-calendar"></i>
+											</div>
+											<input type="text" id="fInicio" readonly class="form-control pull-right inputFecha" name="fInicio" ng-model="parametroBusqueda.startDate"  autocomplete="off" ng-required="parametroBusqueda.endDate != ''">
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group" ng-class="{'has-error': form.fFin.$invalid && form.fFin.$dirty}">
+										<label for="fFin">Fecha Fin:</label>
+										<div class="input-group date">
+											<div class="input-group-addon">
+												<i class="fa fa-calendar"></i>
+											</div>
+											<input type="text" id="fFin" readonly class="form-control pull-right inputFecha" name="fFin" ng-model="parametroBusqueda.endDate"  autocomplete="off" ng-required="parametroBusqueda.startDate != ''">
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6" ng-if="viewHistorico">
+									<div class="form-group">
+										<label for="nInfraccion">No. Infracción:</label>
+										<div class="input-group date">
+											<div class="input-group-addon">
+												<i class="fa fa-hashtag"></i>
+											</div>
+											<input type="text" id="nInfraccion" class="form-control" name="nInfraccion" maxlength="11" ng-model="parametroBusqueda.noInfraccion" autocomplete="off">
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="pOficial">Usuario:</label>
+										<div class="input-group date">
+											<div class="input-group-addon">
+												<i class="fa fa-star"></i>
+											</div>
+											<input type="text" id="pOficial" class="form-control" name="pOficial" ng-model="parametroBusqueda.pOficial" autocomplete="off">
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6" ng-if="viewHistorico">
+									<div class="form-group">
+										<label for="pVehicular">Placa Vehicular:</label>
+										<div class="input-group date">
+											<div class="input-group-addon">
+												<i class="fa fa-car"></i>
+											</div>
+											<input type="text" id="pVehicular" class="form-control" name="pVehicular" maxlength="11" ng-model="parametroBusqueda.pVehicular" autocomplete="off">
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6" ng-if="viewEstadistica">
+									<div class="form-group">
+										<label for="nOficial">Nombre Usuario:</label>
+										<div class="input-group date">
+											<div class="input-group-addon">
+												<i class="fa fa-font"></i>
+											</div>
+											<input type="text" id="nOficial" class="form-control" name="nOficial" ng-model="parametroBusqueda.nOficial" autocomplete="off">
+										</div>
+									</div>
+								</div>
+								
+								<div class="col-md-12 text-center" style="height: 25px;">
+									<div ng-if="((form.fInicio.$error.required || form.fFin.$error.required) && (form.fInicio.$dirty || form.fFin.$dirty)) && viewHelpers.search" ng-style="{color:'red'}">Es necesario colocar ambas fechas</div>
+								</div>
+								<div class="col-md-12 text-center">
+									<button class="btn btn-danger" ng-click="buscarInformacion()">Buscar</button>	
+								</div>
+							</div>
+						
+						</div>
+					</div>
+				</div>
+
+			</div>
+			
+			
+			<div class="row" ng-if="listHistorico.length > 0 && viewHistorico">
+				<div class="col-xs-12">
+					<div class="box box-danger">
+						
+						<div class="box-header row">
+							<div class="col-md-6">
+								<h3 class="box-title">Registros Encontrados: {{ (listHistorico | filter:view.searchSomething).length }}</h3>
+							</div>
+							<div class="col-md-offset-2 col-md-3 col-xs-10">
+								<div class="input-group">
+									 <input id="searchsomething" type="text" class="form-control" placeholder="Buscar por filtro" ng-model="view.searchSomething">
+									 <div class="input-group-addon"><i class="fa fa-search"></i></div>
+								</div>
+							</div>
+							<div class="col-md-1 col-xs-1">
+								<a ng-click="generarExcelHistorico()" width="30px" class="img-rounded" title="Descargar Reporte">
+									<span class="pull-right ">
+										<img src="static/dist/img/excel.png">
+									</span>
+								</a>
+							</div>
+						</div>
+						<!-- /.box-header -->
+						<div class="box-body table-responsive">
+							<table id="tabla_historico" class="table table-striped table-hover header-fixed">
+								<thead>
+									<tr>
+										<th sort order="'numeroInfraccion'" by="order" reverse="reverse" class="text-center">FOLIO</th>
+										<th sort order="'nombreOficial'" by="order" reverse="reverse" class="text-center">NOMBRE USUARIO</th>
+										<th sort order="'placaOficial'" by="order" reverse="reverse" class="text-center">USUARIO</th>
+										<th sort order="'fechaReasignacionOrder'" by="order" reverse="reverse" class="text-center">FECHA REASIGNACIÓN</th>
+										<th sort order="'fechaCreacionOrder'" by="order" reverse="reverse" class="text-center">FECHA CREACIÓN</th>
+										<th sort order="'vigenciaOrder'" by="order" reverse="reverse" class="text-center">VIGENCIA</th>
+										<th class="text-center">FUT</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-if="(listHistorico | filter:view.searchSomething).length < 1"><td colspan="6" class="text-center"><h4>No se encontraron coincidencias</h4></td></tr>
+									<tr dir-paginate="historico in listHistorico | orderBy:order:reverse | filter:view.searchSomething | itemsPerPage: view.rowsPerPage">
+										<td align="center">{{historico.numeroInfraccion}}</td>
+										<td align="center">{{historico.nombreOficial}}</td>
+										<td align="center">{{historico.placaOficial}}</td>
+										<td align="center">{{historico.fechaReasignacion}}</td>
+										<td align="center">{{historico.fechaCreacion}}</td>
+										<td align="center">{{historico.vigencia}}</td>
+										<td align="center">
+											<a>
+												<img src="static/dist/img/pdf_logo.png" ng-click="generarFUT(historico)" class="img-rounded img-responsive" width="30px" height="30px" title="Descargar FUT"/>
+											</a>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						
+						<div class="container-fluid">
+							<div class="fixed-table-pagination" style="display:block;">
+								<rows-per-page rows="view.rowsPerPage" filtro="view.searchSomething" array="listHistorico"></rows-per-page>
+								
+								<div class="pull-right pagination">
+									<dir-pagination-controls class="pagination"></dir-pagination-controls>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		
+			<div class="row" ng-if="listEstadistica.length > 0 && viewEstadistica">
+				<div class="col-xs-12">
+					<div class="box box-danger">
+						<div class="box-header row">
+							<div class="col-md-6">
+								<h3 class="box-title">Registros Encontrados: {{ (listEstadistica | filter:view.searchSomething).length }}</h3>	
+							</div>
+							<div class="col-md-offset-2 col-md-3 col-xs-10">
+								<div class="input-group">
+									<input id="searchsomething" type="text" class="form-control" placeholder="Buscar por filtro" ng-model="view.searchSomething">
+									<span class="input-group-addon"><i class="fa fa-search"></i></span>
+								</div>
+							</div>
+							<div class="col-md-1 col-xs-1">
+								<a ng-click="generarExcelEstadistica()" width="30px" class="img-rounded" title="Descargar Reporte">
+									<span class="pull-right ">
+										<img src="static/dist/img/excel.png">
+									</span>
+								</a>
+							</div>
+						</div>
+
+						<div class="box-body table-responsive">
+							<table id="tabla_historico" class="table table-striped table-hover header-fixed">
+								<thead>
+									<tr>
+										<th sort order="'nombreOficial'" by="order" reverse="reverse" class="text-center">NOMBRE USUARIO</th>
+										<th sort order="'placaOficial'" by="order" reverse="reverse" class="text-center">USUARIO</th>
+										<th sort order="'numeroReasignaciones'" by="order" reverse="reverse" class="text-center">NUM. REASIGNACIONES</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-if="(listEstadistica | filter:view.searchSomething).length < 1"><td colspan="3" class="text-center"><h4>No se encontraron coincidencias</h4></td></tr>
+									<tr dir-paginate="estadistica in listEstadistica | orderBy:order:reverse | filter:view.searchSomething | itemsPerPage: view.rowsPerPage">
+										<td>{{estadistica.nombreOficial}}</td>
+										<td align="center">{{estadistica.placaOficial}}</td>
+										<td align="center">
+											<span ng-if="estadistica.numeroReasignaciones < 1">
+												{{estadistica.numeroReasignaciones}}
+											</span>
+											<a ng-click="buscaReasignacionesByOficial(estadistica.nombreOficial, estadistica.placaOficial)" ng-if="estadistica.numeroReasignaciones > 0">
+												{{estadistica.numeroReasignaciones}}
+											</a>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						
+						<div class="container-fluid">
+							<div class="fixed-table-pagination" style="display:block;">
+								<rows-per-page rows="view.rowsPerPage" filtro="view.searchSomething" array="listEstadistica"></rows-per-page>
+								
+								<div class="pull-right pagination">
+									<dir-pagination-controls class="pagination"></dir-pagination-controls>
+								</div>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</form>
+	</section>
+	
+	<script type="text/javascript" ng-if="viewParameters">
+		$(function () {
+		
+		    $("#fInicio").datepicker({             
+				format: 'dd/mm/yyyy',
+				//language: 'es',
+				todayHighlight : true,
+				autoclose : true
+			}).on('changeDate', function (selected) {
+	        	var minDate = new Date(selected.date.valueOf());
+	        	$('#fFin').datepicker('setStartDate', minDate);
+	    	});
+			
+			$("#fFin").datepicker({             
+				format: 'dd/mm/yyyy',
+				//language: 'es',
+				todayHighlight : true,
+				autoclose : true
+			}).on('changeDate', function (selected) {
+	        	var maxDate = new Date(selected.date.valueOf());
+	        	$('#fInicio').datepicker('setEndDate', maxDate);
+	    	});
+		});
+    </script>  
+</body>
+</html>

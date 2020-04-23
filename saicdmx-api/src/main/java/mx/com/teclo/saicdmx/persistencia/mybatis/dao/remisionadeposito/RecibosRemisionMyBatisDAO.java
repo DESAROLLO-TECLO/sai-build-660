@@ -1,0 +1,88 @@
+package mx.com.teclo.saicdmx.persistencia.mybatis.dao.remisionadeposito;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+
+import mx.com.teclo.saicdmx.persistencia.vo.remisionadeposito.ReciboArrastreVO;
+import mx.com.teclo.saicdmx.persistencia.vo.remisionadeposito.ReciboIngresoVO;
+
+@Mapper
+public interface RecibosRemisionMyBatisDAO {
+
+	String CONSULTA_INFRACCION = " select infrac_num_ctrl,infrac_num , infrac_m_colonia, infrac_m_del_id, vmod_id, vmar_id, vcolor_id,  infrac_placa, dep_id, emp_id, art_id "
+			+ " from infracciones "
+			+ " where infrac_num = #{infrac_num} ";
+	
+	String CONSULTA_DATOS_RECIBO_RESGUARDO = "SELECT INFRAC_NUM_CTRL, INFRAC_M_EN_LA_CALLE, "
+						       + "TO_CHAR(INFRACCIONES.INFRAC_M_FECHA_HORA, 'dd/mm/yyyy hh24:mm') AS FECHA, "
+						 	   + "INFRAC_M_COLONIA, "
+						       + "PKG_ENCRIPCION.DESENCRIPTA(INFRACCIONES. infrac_i_paterno) || ' ' || PKG_ENCRIPCION.DESENCRIPTA(INFRACCIONES.infrac_i_materno) "
+						       + "|| ', ' ||  PKG_ENCRIPCION.DESENCRIPTA(INFRACCIONES.infrac_i_nombre) AS INFRACTOR, "
+						       + "DELEGACIONES.DEL_NOMBRE, INFRAC_PLACA, "
+						       + "VEHICULO_MARCA.VMAR_NOMBRE, VEHICULO_MODELO.VMOD_NOMBRE, "
+						       + "VEHICULO_COLOR.VCOLOR_NOMBRE, INFRAC_OBSERVACION, "
+						       + "INGRESOS.INGR_ASN, NVL(INGRESOS.INGR_OBSERVA, ' ') AS INGR_OBSERVA, INGRESOS.SELLADO, "
+						       + "INGRESOS.CAJUELA, INGRESOS.DEP_ID, INGRESOS.INGR_RESGUARDO, "
+						       + "TIPO_INGRESO.T_INGR_NOMBRE, EMPLEADOS.EMP_PLACA, "
+						       + "EMPLEADOS.emp_ape_paterno || ' ' || EMPLEADOS.emp_ape_materno || ', ' || EMPLEADOS.emp_nombre AS EMP_NOMBRE, " 
+						       + "GRUAS.GRUA_COD, VEHICULO_TIPO.VTIPO_NOMBRE, DEPOSITOS.DEP_NOMBRE, "
+						       + "ARTICULOS.ART_NUMERO, ARTICULOS.ART_FRACCION, ARTICULOS.ART_PARRAFO, "
+						       + "ARTICULOS.ART_INCISO, ARTICULOS.ART_MOTIVACION, ARTICULOS.ART_DIAS, "
+						       + "SANCION.ART_NUMERO AS SANCIONNUMERO, SANCION.ART_FRACCION AS SANCIONFRACCION, SANCION.ART_PARRAFO AS SANCIONPARRAFO, "
+						       + "SANCION.ART_INCISO AS SANCIONINCISO, NVL(TIPO_LICENCIA.TIPO_L_COD, ' ') AS TIPO_L_COD "
+						       + "FROM INFRACCIONES JOIN DELEGACIONES ON INFRACCIONES.INFRAC_M_DEL_ID = DELEGACIONES.DEL_ID "
+						       + "AND DELEGACIONES.EDO_ID = INFRACCIONES.INFRAC_M_EDO_ID "
+						       + "LEFT JOIN VEHICULO_MARCA ON INFRACCIONES.VMAR_ID = VEHICULO_MARCA.VMAR_ID "
+						       + "LEFT JOIN VEHICULO_MODELO ON INFRACCIONES.VMOD_ID = VEHICULO_MODELO.VMOD_ID "
+						       + "AND VEHICULO_MODELO.VMAR_ID = INFRACCIONES.VMAR_ID "
+						       + "LEFT JOIN VEHICULO_COLOR ON INFRACCIONES.VCOLOR_ID = VEHICULO_COLOR.VCOLOR_ID "
+						       + "JOIN INGRESOS ON INFRACCIONES.INFRAC_NUM = INGRESOS.INFRAC_NUM "
+						       + "JOIN EMPLEADOS ON INFRACCIONES.EMP_ID = EMPLEADOS.EMP_ID "
+						       + "LEFT JOIN GRUAS ON INFRACCIONES.GRUA_ID = GRUAS.GRUA_ID "
+						       + "LEFT JOIN VEHICULO_TIPO ON INFRACCIONES.VTIPO_ID = VEHICULO_TIPO.VTIPO_ID "
+						       + "JOIN DEPOSITOS ON INFRACCIONES.DEP_ID = DEPOSITOS.DEP_ID "
+						       + "JOIN TIPO_INGRESO ON INGRESOS.T_INGR_ID = TIPO_INGRESO.T_INGR_ID "
+						       + "JOIN ARTICULOS ON INFRACCIONES.ART_ID = ARTICULOS.ART_ID "
+						       + "JOIN ARTICULOS SANCION ON INFRACCIONES.SANCION_ART_ID = SANCION.ART_ID "
+						       + "LEFT JOIN TIPO_LICENCIA ON INFRACCIONES.TIPO_L_ID = TIPO_LICENCIA.TIPO_L_ID " 
+						       + "WHERE INFRACCIONES.INFRAC_NUM = #{infrac_num}";
+	
+	String CONSULTA_DATOS_RECIBO_ARRASTRE = "SELECT INFRAC_NUM_ARRASTRE, TO_CHAR(INFRAC_M_FECHA_HORA, 'dd/mm/yyyy hh24:mm') AS FECHA, INFRAC_PLACA, INFRAC_M_COLONIA, INFRACCIONES.INFRAC_NUM, INFRAC_M_EN_LA_CALLE, "
+			 								+ "SECTORES.SEC_NOMBRE, CONCESIONARIA.CONSE_NOMBRE, INFRACCIONES.INFRAC_TIPO_ARRASTRE, NVL(DELEGACIONES.DEL_NOMBRE, ' ') AS DEL_NOMBRE, "
+			 								+ "NVL(INFRACCIONES.INFRAC_M_ENTRE_CALLE, ' ') AS INFRAC_M_ENTRE_CALLE, NVL(INFRACCIONES.INFRAC_M_Y_LA_CALLE, ' ') AS INFRAC_M_Y_LA_CALLE, INFRACCIONES.GRUA_ID, "
+			 								+ "EMPLEADOS.emp_ape_paterno || ' ' || EMPLEADOS.emp_ape_materno || ', ' || EMPLEADOS.emp_nombre AS EMP_NOMBRE, " 
+			 								+ "INGRESOS.INFRAC_DOCTO, GRUAS.GRUA_COD, VEHICULO_MARCA.VMAR_NOMBRE, VEHICULO_MODELO.VMOD_NOMBRE, "
+		 									+ "VEHICULO_COLOR.VCOLOR_NOMBRE, INGRESOS.INGR_ASN, NVL(INGRESOS.INGR_OBSERVA, ' ') AS INFRAC_OBSERVACION, NVL(INFRAC_OBSERVACION, ' ') AS INGR_OBSERVA, EMPLEADOS.EMP_PLACA "	///Se cambio el alias a la consulta INFRAC_OBSERVACION por INGR_OBSERVA para que se mosrara en el reporte  
+			 								+ "FROM INFRACCIONES LEFT JOIN SECTORES ON INFRACCIONES.SEC_ID = SECTORES.SEC_ID "
+			 								+ "LEFT JOIN GRUAS ON INFRACCIONES.GRUA_ID = GRUAS.GRUA_ID "
+			 								+ "LEFT JOIN CONCESIONARIA ON GRUAS.CONSE_ID = CONCESIONARIA.CONSE_ID "
+			 								+ "JOIN EMPLEADOS ON INFRACCIONES.EMP_ID = EMPLEADOS.EMP_ID "
+			 								+ "JOIN INGRESOS ON INFRACCIONES.INFRAC_NUM = INGRESOS.INFRAC_NUM "
+			 								+ "LEFT JOIN VEHICULO_MARCA ON INFRACCIONES.VMAR_ID = VEHICULO_MARCA.VMAR_ID "
+			 						        + "LEFT JOIN VEHICULO_MODELO ON INFRACCIONES.VMOD_ID = VEHICULO_MODELO.VMOD_ID "
+			 						        + "AND VEHICULO_MODELO.VMAR_ID = INFRACCIONES.VMAR_ID "
+			 						        + "LEFT JOIN VEHICULO_COLOR ON INFRACCIONES.VCOLOR_ID = VEHICULO_COLOR.VCOLOR_ID "
+			 						        + "JOIN DELEGACIONES ON INFRACCIONES.INFRAC_M_DEL_ID = DELEGACIONES.DEL_ID "
+			 								+ "AND DELEGACIONES.EDO_ID = INFRACCIONES.INFRAC_M_EDO_ID "
+			 								+ "WHERE INFRACCIONES.INFRAC_NUM = #{infrac_num}";
+	
+	String CONSULTA_OPERADOR_GRUA = "SELECT DISTINCT A.EMP_NOMBRE || ' ' || A.EMP_APE_PATERNO || ' ' || A.EMP_APE_MATERNO AS OPE_GRUA FROM EMPLEADOS A, " 
+									+ "ROLL_SERVICIO B WHERE A.EMP_ID = B.OPERADOR_ID AND B.GRUA_ID = #{gruaId} "
+									+ "AND TO_CHAR(B.GRUA_FECHA,'DD')= #{dia}";
+			 
+	@Select(value = CONSULTA_DATOS_RECIBO_RESGUARDO)
+	ReciboIngresoVO buscarInfraccionResguardo(@Param("infrac_num") String infrac_num);
+		
+	@Select("select COMP_NOMBRE from inventario i inner join componentes_inventario ci on ci.comp_id = i.comp_id "
+			+"where i.infrac_num = #{infrac_num}")
+	List<String> buscarInventarios(@Param("infrac_num") String infrac_num);
+	
+	@Select(value = CONSULTA_DATOS_RECIBO_ARRASTRE)
+	ReciboArrastreVO buscarInfraccionArrastre(@Param("infrac_num") String infrac_num);
+	
+	@Select(value = CONSULTA_OPERADOR_GRUA)
+	String buscaOperadorGrua (@Param("gruaId") String gruaId, @Param("dia") String dia);
+}

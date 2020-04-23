@@ -1,0 +1,140 @@
+
+/* Contenedor datos de la infracción */
+.contExpediente{
+	max-height: calc(100vh - 30.71rem);
+	overflow-y: scroll;
+	overflow-x: hidden;
+	padding: 0.7143rem 0 !important;
+}
+
+.conteoArchivos{
+	display: flex;
+	justify-content: flex-end;
+	flex-wrap: wrap;
+}
+.conteoArchivos h5{
+	margin-bottom: 0.3571rem;
+}
+.badgeExp,
+.badgeInf,
+.badgeAsoc{
+	display: inline-block;
+	min-width: 0.7143rem;
+	padding: 0.2143rem 0.5rem;
+	font-size: .8rem;
+	font-weight: bold;
+	line-height: 1;
+	vertical-align: baseline;
+	white-space: nowrap;
+	text-align: center;
+	border-radius: 0.7143rem;
+}
+.badgeExp{
+	background-color: #fff;
+	color: #34495e;
+}
+.badgeInf{
+	background-color: #E92D3D;
+	color: #fff;
+}
+.badgeAsoc{
+	background-color: #d2d6de;
+	color: #444;
+}
+
+
+/* Contenedor expediente de la infracción */
+
+.status-ready-group,
+.status-standBy-group{
+	display:flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: center;
+	box-shadow: 0 -1px #f4f4f4 inset;
+	transition: all .2s ease-out;
+}
+.status-ready-group{
+	padding: 0.7143rem 1.071rem;
+}
+.status-standBy-group{
+	padding: 0.3571rem 1.071rem;
+}
+.status-standBy-group:hover{
+	background-color: #f4f4f4;
+}
+.status-ready-group:hover{
+	background-color: #f5fcf9;
+}
+
+.expedienteLabel i{
+	font-size: 1.429rem
+}
+.expedienteLabel label{
+	vertical-align: middle;
+	font-weight: normal;
+}
+
+.option > input{ /*Ocultar el input de carga*/
+	display: none;
+}
+.option{
+	display: inline-block;
+}
+.option a{
+	margin-left: 0.3571rem;
+}
+.option i{
+	vertical-align: middle;
+}
+.option i.fa-remove{
+	font-size:  1.571rem;
+}
+.option i.fa-binoculars{
+	font-size: 1.143rem;
+}
+.option i.fa-download{
+	font-size: 1.357rem;
+}
+
+.status-ready-group label,
+.status-ready-group .fa-check{
+	color: #00a65a;
+}
+.delete-Link,
+.delete-Link:visited,
+.view-Link,
+.view-Link:visited,
+.download-Link,
+.download-Link:visited{
+	color: #828282;
+}
+.delete-Link:hover,
+.delete-Link:focus{
+	color: #dd4b39;
+}
+.view-Link:hover,
+.view-Link:focus{
+	color: #f39c12;
+}
+.download-Link:hover,
+.download-Link:focus{
+	color: #3c8dbc;
+}
+
+.download-Link {
+	margin-right: 0.3571rem
+}
+
+/* MEDIAS */
+@media only screen and (max-width: 432px){	
+	.contExpediente{
+		max-height: calc(100vh - 21.43rem);
+		overflow-y: auto;
+	}
+	.status-ready-group,
+	.status-standBy-group{
+		flex-direction: column;
+		justify-content: space-around;
+	}
+} 

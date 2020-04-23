@@ -1,0 +1,130 @@
+<html >
+<head>
+<meta charset="utf-8">
+<title>Salida de Depósito</title>
+</head>
+<body>
+	
+	<section class="content-header" >
+		<h1>Salida de Depósito</h1>
+		<ol class="breadcrumb">
+			<li><a><i class="fa fa-book"></i> Liberación Vehículo</a></li>
+			<li class="active">Liberación</li>
+		</ol>
+	</section>
+	
+	<section class="content"  ng-if="data.message">
+		<div class="row col-md-8 col-md-offset-2">
+		<div class="alert alert-teclo  alert-dismissable center">
+<!-- 			<button type="button" class="close" data-dismiss="alert">×</button> -->
+			<strong class="mensajeAutorizacion">{{data.message}}</strong>
+		</div>
+	</div>
+	
+	</section>
+
+	<!-- Main content -->
+	<section class="content" ng-if="viewHelpers.viewForm">
+		<form role="form" name="forms.myform" novalidate>
+			<div class="row">
+				<div class="col-md-6 col-md-offset-3">
+
+					<!-- Datos Del Infractor -->
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Búsqueda</h3>
+						</div>
+
+						<div class="box-body">
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<div class="input-group date">
+											<div class="input-group-addon">
+												<i class="fa fa-list"></i>
+											</div>
+											<select ng-model="parametrosBusqueda.tipoBusqueda" class="form-control select2" style="width: 100%;" 
+												name="tipoBusqueda" id="tipoBusqueda"
+												ng-options='option.codigoString as option.descripcion for option in filterValues'>
+											</select>		
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<div class="input-group date">
+											<div class="input-group-addon">
+												<i class="fa fa-pencil"></i>
+											</div>
+											<input type="text" ng-model="parametrosBusqueda.valor" class="form-control" capitalize ng-required="true" name="txtvalor"></input> <span class="input-group-btn">
+											<button type="button" ng-click="buscaVehiculos()" class="btn btn-danger btn-flat">Buscar</button>
+											</span>	
+										</div>
+										<div ng-if="forms.myform.txtvalor.$invalid && forms.myform.txtvalor.$dirty" ng-style="{color:'red'}">El valor es requerido.</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- /.row -->
+				</div>
+
+			</div>
+			
+			<div class="row" ng-if="listadoVehiculos.length > 0">
+				<div class="col-xs-12">
+					<div class="box box-danger">
+						<div class="box-header">
+							<h3 class="box-title">Registros Encontrados: {{listadoVehiculos.length}}</h3>
+						</div>
+						<!-- /.box-header -->
+						<div class="box-body table-responsive no-padding">
+							<table id="tabla_documentos" class="table table-striped table-hover">
+								<thead>
+									<tr>
+										<th class="text-center">NCI</th>
+										<th class="text-center">No. INFRACCIÓN / No. DOCUMENTO</th>
+										<th class="text-center">FECHA</th>
+										<th class="text-center">No. PLACA</th>
+										<th class="text-center">MARCA</th>
+										<th class="text-center">MODELO</th>
+										<th class="text-center">COLOR</th>
+										<th class="text-center">INFRACTOR</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr dir-paginate="vehiculo in listadoVehiculos | itemsPerPage: 5">
+										<td class="center"  >
+											<a href="#/liberacionVehiculoModificacion/{{vehiculo.t_Infraccion}}/salidaVehiculoModificacion">
+												{{vehiculo.t_NCI}}
+											</a>
+										</td>
+										<td class="center"  >
+											<a href="#/liberacionVehiculoModificacion/{{vehiculo.t_Infraccion}}/salidaVehiculoModificacion">
+												{{vehiculo.t_Infrac_Mostrar}}
+											</a>
+										</td>
+										<td class="center"  >{{vehiculo.t_Fecha}}</td>
+										<td class="center"  >
+											<a href="#/liberacionVehiculoModificacion/{{vehiculo.t_Infraccion}}/salidaVehiculoModificacion">
+												{{vehiculo.t_Placa}}
+											</a>
+										</td>
+										<td class="center"  >{{vehiculo.t_Marca}}</td>
+										<td class="center"  >{{vehiculo.t_Modelo}}</td>
+										<td class="center"  >{{vehiculo.t_Color}}</td>
+										<td class="center"  >{{vehiculo.t_Infractor}}</td>
+									</tr>
+								</tbody>
+							</table>
+							<dir-pagination-controls></dir-pagination-controls>
+						</div>
+						<!-- /.box-body -->
+					</div>
+					<!-- /.box -->
+				</div>
+			</div>
+		</form>
+	</section>
+<body>
+</html>

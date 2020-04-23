@@ -1,0 +1,107 @@
+<html>
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+<section class="content-header">
+		<h1>Artículos Infracciones Finanzas</h1>
+		<ol class="breadcrumb">
+			<li>
+				<a><i class="{{breadCrumbs.icono}}"></i>{{breadCrumbs.modulo}}</a>
+			</li>
+			<li>
+				<a href="">{{breadCrumbs.servicio}}</a>
+			</li>
+			<li class="active">
+				Búsqueda
+			</li>
+		</ol>
+	</section>
+	<section class="content">
+	<form role="form" name="formCrud">
+<!-- 	<a type="button" class="btn btn-primary" href="#/altaHistoricoArticulo/{{artCons}}">Nueva2</a> -->
+<!-- 		<div class="row" ng-if="historicos.length > 0"> -->
+		<div class="row ngIfAnimate" ng-if="historicos.length > 0">			
+			<div class="col-xs-12">					
+				<div class="box box-danger">
+					<div class="box-header col-md-12">
+						<div class="col-md-6">
+							<h3 class="box-title">Registros Encontrados: {{ (historicos | filter:view.searchSomething).length }}</h3>
+						</div>
+						<div class="col-md-6 form-group">
+							<div class="row">
+								<div class="col-md-offset-4 col-md-7 col-xs-8">
+					      			<div class="input-group pull-right">
+					        			<input id="searchsomething" type="text" class="form-control" placeholder="Buscar por filtro" ng-model="view.searchSomething">
+										<div class="input-group-addon"><i class="fa fa-search"></i></div>
+					     			</div>
+					     		</div>
+				     			<div class="col-md-1 col-xs-1">
+				     				<a type="button" class="btn btn-primary btn-sm pull-right" href="#/catalogos/altaHistoricoArticulo/{{artCons}}">
+									  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+									</a>
+								</div>
+<!-- 								<div ng-show="datos.length>0" class="col-md-1 col-xs-1"> -->
+<!-- 				     				<a ng-click="generarExcel('/catalogos/componente/reporte')"> -->
+<!-- 										<span class="pull-right "><img src="static/dist/img/excel.png"></span> -->
+<!-- 									</a> -->
+<!-- 				     			</div>  -->
+				     		</div>  
+						</div>
+					</div>
+					<!-- /.box-header -->
+					<div class="box-body table-responsive no-padding">
+						<table id="tabla" class="table table-hover table-striped header-fixed text-center">
+							<thead>
+								<tr>
+									<th sort order="'artNumero'" by="order" reverse="reverse">ARTíCULO</th>
+									<th sort order="'artInfrFinFraccion'" by="order" reverse="reverse">FRACCIÓN</th>
+									<th sort order="'artInfrFinParrafo'" by="order" reverse="reverse">PARRAFO</th>
+									<th sort order="'artInfrFinInciso'" by="order" reverse="reverse">INCISO</th>
+									<th sort order="'artInfrFinFechaInicio'" by="order" reverse="reverse">FECHA INICIO</th>
+									<th sort order="'artInfrFinFechaTermino'" by="order" reverse="reverse">FECHA TERMINO</th>
+									<th>MODIFICAR</th>
+								</tr>
+								
+							</thead>
+							<tbody>
+								<tr dir-paginate="historico in historicos | orderBy:order:reverse | filter:view.searchSomething | itemsPerPage: view.rowsPerPage">									
+<!-- 								<td><a href="#/historicoDetalle/{{historico.artInfrFinCons}} ">Consultar</a></td> -->
+									<td>{{::historico.articulo.artNumero}}</td>
+									<td>{{::historico.artInfrFinFraccion}}</td>
+									<td>{{::historico.artInfrFinParrafo}}</td>
+									<td>{{::historico.artInfrFinInciso}}</td>
+									<td>{{::historico.artInfrFinFechaInicio | date:'dd/MM/yyyy HH:mm'}}</td>
+									<td>{{::historico.artInfrFinFechaTermino | date:'dd/MM/yyyy HH:mm'}}</td>									
+									<td><a class="btn btn-danger btn-sm" href="#/catalogos/modificaHistorico/{{historico.artInfrFinCons}}"><i class="fa fa-edit"></i></a></td>
+								</tr>
+								<tr ng-if="historicos == null"><td colspan="5" class="text-center"><h4>No se encontraron coincidencias</h4></td></tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="container-fluid">
+							<div class="fixed-table-pagination" style="display:block;">
+								<rows-per-page rows="view.rowsPerPage" filtro="view.searchSomething" array="historicos"></rows-per-page>
+								
+								<div class="pull-right pagination">
+									<dir-pagination-controls class="pagination"></dir-pagination-controls>
+								</div>
+							</div>
+						</div>
+				</div>
+				<!-- /.box -->
+			</div>
+			
+			<div class="col-xs-12">	
+				<div class="col-xs-12 text-center">
+					<a  href="#/catalogos"  class="btn">
+						<i class="fa fa-arrow-circle-left"></i>
+						<span>Regresar</span>
+					</a>
+				</div>
+			</div>
+		</div>
+	</form>
+	</section>
+<body>
+</html>

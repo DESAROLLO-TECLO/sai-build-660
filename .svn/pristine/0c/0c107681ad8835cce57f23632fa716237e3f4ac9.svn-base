@@ -1,0 +1,328 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>Consulta Infracción</title>
+</head>
+<body>
+	<section class="content-header">
+		<h1>Modificación de Infracción en Depósito</h1>
+		<ol class="breadcrumb">
+			<li><a><i class="fa fa-book"></i>Infracción</a></li>
+			<li class="active">Modificación en Depósito</li>
+		</ol>
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<form id="form1" role="form" name="modificaInfraccion" >
+			<div class="row">
+				<section class="col-lg-offset-2 col-lg-8 connectedSortable">
+					<div class="box box-danger">
+						<div class="box-header with-border">
+							<h3 class="box-title">Información a Modificar</h3>
+							<div class="box-tools pull-right">
+								<button type="button" class="btn btn-box-tool"
+									data-widget="collapse">
+									<i class="fa fa-minus"></i>
+								</button>
+							</div>
+						</div>
+						<div class="box-body" style="padding-left: 20px;padding-right: 20px;">
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="form-group">
+										<div class="table-responsive">
+											<table class="table tblsnborder">
+												<tr>
+													<td style="padding-left:0px;"><dt>NCI:</dt></td>
+													<td>{{infraccion.nci}}</td>
+													<td style="padding-left:0px;"><dt>Infracción:</dt></td>
+													<td>{{infraccion.infraccionNumero}}</td>
+												</tr>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<div class="row">
+								<div class="col-md-3 col-xs-6">
+									<label>
+						      			*Cuenta con Placa:
+								    </label>
+								</div>
+							
+								<div class="col-md-3 col-xs-6">
+									
+									<label class="radio-inline">
+						      			<input type="radio"
+											ng-model="edicion.cuentaConPlaca" value="S"
+											ng-change="cambioCuentaConPlaca()"> Si
+								    </label>
+					  
+								    <label class="radio-inline">
+							      		<input type="radio"
+											ng-model="edicion.cuentaConPlaca" value="N"
+											ng-change="cambioCuentaConPlaca()"> No
+								    </label>
+									
+								</div>
+
+								<div class="col-md-6 col-xs-12">
+									<div class="form-group"
+										ng-class="{'has-error': (modificaInfraccion.placa.$invalid && modificaInfraccion.placa.$dirty) && (edicion.cuentaConPlaca == 'S')}">
+										<label for="DVPlaca">*Placa:</label>
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-automobile"></i></span> <input type="text"
+												class="form-control text-uppercase" id="placa" ng-model="edicion.placa"
+												ng-disabled="isPlacaBlocked" ng-required="true"
+												name="placa"/>
+										</div>
+										<div
+											ng-show="modificaInfraccion.placa.$error.required && modificaInfraccion.placa.$dirty && (edicion.cuentaConPlaca == 'S')"
+											ng-style="{color:'red'}">La placa es requerida.</div>
+									</div>
+								</div>	
+							</div>
+							
+							<div class="row">
+								<div class="col-md-6 col-xs-12">
+									<div class="form-group">
+										<label>Con Arrastre:</label>
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-arrows"></i></span> <select class="form-control "
+												ng-options="catTipArr.codigoString as catTipArr.descripcion for catTipArr in CatalogoTipoArrastre"
+												ng-model="edicion.tipoArrastre"
+												ng-disabled="isTipoArrastreBlocked">
+												<option value="" selected="selected">Seleccione</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6 col-xs-12">
+									<div class="form-group"
+										ng-class="{'has-error': modificaInfraccion.TipoVehiculo.$invalid && modificaInfraccion.TipoVehiculo.$dirty }">
+										<label>Tipo:</label>
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-ellipsis-v "></i></span><select class="form-control" id="TipoVehiculo"
+												ng-options="tipoV.vTipoId as tipoV.vTipoNombre for tipoV in catalogoTiposVehiculo"
+												ng-model="tipoVehiculo" ng-required="true"
+												name="TipoVehiculo">
+												<option value="" selected="selected">Seleccione</option>
+											</select>
+										</div>
+
+										<div
+											ng-show="modificaInfraccion.TipoVehiculo.$error.required && modificaInfraccion.TipoVehiculo.$dirty"
+											ng-style="{color:'red'}">El tipo de vehiculo es
+											requerido</div>
+										<!-- /.form-group -->
+									</div>
+								</div>
+							</div>
+
+
+
+
+							<div class="row">
+								<div class="col-md-12 col-xs-12">
+									<div class="form-group"
+										ng-class="{'has-error': modificaInfraccion.articuloSelect.$invalid && modificaInfraccion.articuloSelect.$dirty }">
+										<label>Articulo:</label>
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-arrows"></i></span> <select class="form-control "
+												ng-options="articulo as 'Articulo : ' + articulo.artNumero  + ' Fracción : ' + articulo.artFraccion + ' Inciso : ' + articulo.artInciso + ' Parrafo : ' + articulo.artParrafo for articulo in articulos"
+												ng-model="articulo"
+												name="articuloSelect"
+												ng-required="true"
+												ng-change="cambiaArticulo(articulo)"
+												>
+												<option value="" selected="selected">Seleccione</option>
+											</select>
+										</div>
+										<div
+											ng-show="modificaInfraccion.articuloSelect.$error.required && modificaInfraccion.articuloSelect.$dirty"
+											ng-style="{color:'red'}">El articulo es
+											requerido</div>
+										<!-- /.form-group -->
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12 col-xs-12">
+									<div class="form-group"
+										ng-class="{'has-error': (modificaInfraccion.TAFundamentacion.$invalid && modificaInfraccion.TAFundamentacion.$dirty) }">
+										<label>*Fundamentación: </label>
+										<textarea class="form-control text-uppercase" rows="2" style="resize: none;"
+											ng-model="articulo.artMotivacion" ng-required="true" readonly
+											name="TAFundamentacion"></textarea>
+										<div
+											ng-show="modificaInfraccion.TAFundamentacion.$error.required && modificaInfraccion.TAFundamentacion.$dirty"
+											ng-style="{color:'red'}">...</div>
+									</div>
+								</div>
+							</div>
+							
+							
+							
+							
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group"
+										ng-class="
+										{'has-error': (modificaInfraccion.placaOficial.$invalid && modificaInfraccion.placaOficial.$dirty) 
+										|| edicion.oficial.placaColor=='red' 
+										}
+										">
+										<label>*Placa de Oficial que Autoriza:</label>
+										<div class="input-group" style="width:100%;">
+											<span class="input-group-addon"><i
+											class="fa fa-star"></i></span>
+											<input type="text"
+													class="form-control" id="placaOficial"
+													ng-model="edicion.placaOficial"  ng-required="true"
+													name="placaOficial" ng-change="typePlacaDeEmpleado()"/>
+										</div>
+										<div
+											ng-show="modificaInfraccion.placaOficial.$error.required && modificaInfraccion.placaOficial.$dirty"
+											ng-style="{color:'red'}">La placa del oficial es requerida
+										</div>
+										<div ng-show="edicion.oficial.placaColor=='red'" ng-style="{color:'red'}">Se requiere de una placa valida</div>
+										<div ng-show="edicion.oficial.placaColor=='green'" >La placa del oficial es valida</div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label>Contraseña:</label>
+										<div class="input-group">
+											<span class="input-group-addon"><i class="fa fa-asterisk"></i></span>
+											<input type="password" ng-model="edicion.psw"
+												class="form-control"></input> <span class="input-group-btn">
+												<button type="button"
+													ng-click="buscarOficial()"
+													class="btn btn-danger btn-flat">Buscar</button>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row"  ng-show="edicion.oficial.placaValida">
+								<div class="col-xs-offset-1 col-xs-10">
+									<fieldset class="scheduler-border">
+										<legend class="scheduler-border">Datos del Oficial que Autoriza</legend>
+										<div class="table-responsive">
+											<table class="table tblsnborder">
+												<tr>
+	                                           		<td align="right"><dt>Nombre:</dt></td>
+	                                           		<td align="center">{{edicion.oficial.empNombre}}</td>
+                                          		</tr>
+											</table>
+										</div>
+									</fieldset>
+								</div>
+							</div>
+							<br>
+							<div class="row">	
+								<div class="col-xs-12">
+									<div class="form-group"
+										ng-class="{'has-error': (modificaInfraccion.FIMotivo.$invalid && modificaInfraccion.FIMotivo.$dirty) }">
+										<label>*Motivo del Cambio: </label>
+										<textarea class="form-control text-uppercase" rows="3" style="resize: none;"
+											ng-model="edicion.motivo" ng-required="true"
+											name="FIMotivo"></textarea>
+										<div
+											ng-show="modificaInfraccion.FIMotivo.$error.required && modificaInfraccion.FIMotivo.$dirty"
+											ng-style="{color:'red'}">El motivo de cambio es requerida</div>
+									</div>
+									<!-- /.form-group -->
+								</div>
+							</div>
+							<div class="row itemsBox">
+								<button ng-click="regresarBusqMod()" class="btn btn-danger">
+									<i class="fa fa-arrow-circle-left"></i>
+									<span>Regresar</span>
+								</button>
+								<button type="button" class="btn btn-danger" id="btnGuardarDatos" ng-click="modificaEnDeposito()">
+									<span>Guardar</span>
+								</button>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+		</form>
+	</section>
+
+	<div class="control-sidebar-bg"></div>
+
+
+
+
+	<!-- Page script -->
+	<script>
+		$(function() {
+
+			//Datemask dd/mm/yyyy
+			$("#datemask").inputmask("dd/mm/yyyy", {
+				"placeholder" : "dd/mm/yyyy"
+			});
+			//Datemask2 mm/dd/yyyy
+			$("#datemask2").inputmask("mm/dd/yyyy", {
+				"placeholder" : "mm/dd/yyyy"
+			});
+			//Money Euro
+			$("[data-mask]").inputmask();
+
+			//Date picker
+			$('#datepicker').datepicker({
+				autoclose : true
+			});
+
+			$('#datepicker1').datepicker({
+				autoclose : true
+			});
+			/*Timepicker
+			$(".timepicker").timepicker({
+				showInputs : false
+			});*/
+
+		});
+
+		function cambiarFraccion() {
+			$("#select_fraccion").val("1");
+			$("#infra_motivo").val("");
+			$("#infra_sancion").html("");
+		}
+
+		function cambiarMotivacion() {
+			var motivo = "TRATANDOSE DE VEHÍCULOS CON PLACAS DE MATRÍCULA EXTRANJERA, POR NO PORTAR LOS DOCUMENTOS OFICIALES EN LOS QUE SE DESCRIBAN LAS CARACTERÍSTICAS DEL VEHÍCULO Y SE ACREDITE LA LEGAL ESTANCIA EN EL  PAÍS."
+			var sancion = "Multa de 5 unidades de cuenta en la Ciudad de México";
+			$("#infra_motivo").val(motivo);
+			$("#infra_sancion").html(sancion);
+
+		}
+	</script>
+	<style type="text/css">
+legend.scheduler-border {
+	font-size: 1em !important;
+	font-weight: bold !important;
+	text-align: left !important;
+	width: auto;
+	padding: 0 10px;
+	border-bottom: none;
+}
+
+fieldset.scheduler-border {
+	border-radius: 0.5em; /* applied border radius */
+	border: 1px solid #ccc !important;
+	padding: 0 1.4em 1.4em 1.4em !important;
+	margin: 0 0 1.5em 0 !important;
+}
+</style>
+
+</body>
+</html>

@@ -1,0 +1,564 @@
+<html>
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+	<section class="content-header">
+		<h1>Pago de Garantías</h1>
+		<ol class="breadcrumb">
+			<li><a><i class="fa fa-book"></i>Garantías</a></li>
+			<li class="active">Pagar</li>
+		</ol>
+	</section>
+
+
+
+	<!-- Contenido -->
+	<section class="content" ng-init="init()"
+		ng-controller="garantiaPagoController">
+		<applet archive="{{applet_route}}/applets/appcp_v100.jar"
+			code="{{codebase}}" id="App" width="1" height="1"></applet>
+
+		<section>
+			<div class="row col-md-8 col-md-offset-2" ng-if="isCajero == false">
+				<div class="alert alert-teclo alert-dismissable text-center">
+					<strong class="mensajeAutorizacion">¡Cuidado! No puedes
+						realizar esta operación, verifica tu perfil </strong>
+				</div>
+			</div>
+		</section>
+		<section>
+			<div class="row col-md-8 col-md-offset-2"
+				ng-if="navegador =='chrome' || navegador =='ms-edge'">
+				<div class="alert alert-teclo alert-dismissable text-center">
+					<strong class="mensajeAutorizacion">¡Cuidado! El módulo
+						pago require de navegador Firefox </strong>
+				</div>
+			</div>
+		</section>
+		<div class="row"
+			ng-if="isCajero == true && (navegador !='chrome' && navegador !='ms-edge')">
+			<div class="col-md-6 col-md-offset-3">
+				<div class="box box-danger" style="overflow: hidden;">
+					<div class="box-header with-border">
+						<div class="row">
+							<div class="col-xs-12 text-center">
+								<h3 class="box-title">Criterios de Búsqueda</h3>
+							</div>
+						</div>
+					</div>
+					<div class="box-body">
+						<form role="form" name="forms.formPago" novalidate>
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<div class="input-group">
+											<span class="input-group-addon"> <i class="fa fa-map"></i>
+											</span> <select class="form-control select2"
+												ng-model="busquedaVO.tipo"
+												ng-options="opcion as opcion.codigoString for opcion in busquedaVO.opcion"
+												ng-required="true">
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group"
+										ng-class="{'has-error': forms.formPago.findPago.$invalid && forms.formPago.findPago.$dirty}">
+										<div class="input-group">
+											<span class="input-group-addon"> <i
+												class="fa fa-credit-card"></i>
+											</span> <input type="text" class="form-control"
+												ng-model="busquedaVO.valor" name="findPago" ng-required=true />
+											<span class="input-group-btn">
+												<button type="button" class="btn btn-danger"
+													ng-click="buscarGarantiasPorPagar()">Buscar</button>
+											</span>
+										</div>
+										<div
+											ng-show="forms.formPago.findPago.$error.required && forms.formPago.findPago.$dirty"
+											ng-style="{color:'red'}">El valor es requerido</div>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row" ng-if="garantiasVO.length>0">
+			<div class="col-xs-12">
+				<div class="box box-danger">
+					<div class="box-header row">
+						<div class="col-md-9 col-xs-12">
+							<h3 class="box-title ng-binding">Registros Encontrados: {{
+								(garantiasVO | filter:view.filterSearch).length }}</h3>
+						</div>
+						<div class="col-md-3 form-group">
+							<div class="input-group ">
+								<input id="searchsomething" type="text" class="form-control"
+									placeholder="Buscar por filtro" ng-model="view.filterSearch">
+								<span class="input-group-addon"><i class="fa fa-search"></i></span>
+							</div>
+						</div>
+					</div>
+					<!-- /.box-header -->
+					<div class="box-body table-responsive no-padding">
+						<table id="tabla_garantias" class="table table-hover">
+							<thead>
+								<tr>
+									<th sort order="'infracNum'" by="order" reverse="reverse"
+										class="text-center">INFRACCIÓN</th>
+									<th sort order="'garantiaId'" by="order" reverse="reverse"
+										class="text-center">N° GARANTÍA</th>
+									<th sort order="'documentoFolio'" by="order" reverse="reverse"
+										class="text-center">FOLIO DOCUMENTO</th>
+									<th sort order="'fechaCreacionInfraccionOrder'" by="order"
+										reverse="reverse" class="text-center">FECHA INFRACCIÓN</th>
+									<th sort order="'fechaCreacionGarantia'" by="order"
+										reverse="reverse" class="text-center">FECHA RECEPCIÓN</th>
+									<th sort order="'recibida'" by="order" reverse="reverse"
+										class="text-center">RECIBIDA</th>
+									<th sort order="'garantiaDocumentoId'" by="order"
+										reverse="reverse" class="text-center">TIPO DOCUMENTO</th>
+									<th class="text-center">REALIZAR PAGO</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr class="text-center"
+									dir-paginate="garantia in garantiasVO | orderBy:order:reverse |  filter: view.filterSearch | itemsPerPage: view.rowsPerPage">
+									<td style="line-height: 2;">{{ garantia.infracNum }}</td>
+									<td style="line-height: 2;">{{ garantia.garantiaId }}</td>
+									<td style="line-height: 2;">{{ garantia.documentoFolio }}</td>
+									<td style="line-height: 2;">{{
+										garantia.fechaCreacionInfraccion }}</td>
+									<td style="line-height: 2;">{{
+										garantia.fechaCreacionGarantia }}</td>
+									<td style="line-height: 2;">{{ garantia.recibida }}</td>
+									<td style="line-height: 2;">{{
+										garantia.garantiaDocumentoId }}</td>
+									<td style="line-height: 2;"
+										ng-if="(garantia.estatusCancelacion== 'E') || (garantia.estatusCancelacion== 'C') ">
+										<span data-toggle="tooltip" data-placement="left"
+										title="Impugnacion"> <a class="btn btn-danger btn-sm"
+											data-toggle="modal"
+											data-target="#modalInformacionCancelacion"
+											ng-click="cargarCancelacionGarantia(garantiasVO.indexOf(garantia))">
+												<!-- <img src="./dist/img/payment-icon.png" />  --> <i
+												class="fa fa-money"></i>
+										</a>
+									</span>
+
+									</td>
+
+									<td style="line-height: 2;"
+										ng-if="(garantia.estatusCancelacion== null)"><span
+										data-toggle="tooltip" data-placement="left"
+										title="Pagar garantía"> <a
+											class="btn btn-danger btn-sm" data-toggle="modal"
+											data-target="#modalPagoDetalles"
+											ng-click="cargarPagoDetalles(garantiasVO.indexOf(garantia))">
+												<!-- <img src="./dist/img/payment-icon.png" /> --> <i
+												class="fa fa-money"></i>
+										</a>
+									</span></td>
+							</tbody>
+						</table>
+						<dir-pagination-controls class="ng-isolate-scope"><!-- ngIf: 1 < pages.length || !autoHide --></dir-pagination-controls>
+					</div>
+					<!-- /.box-body -->
+				</div>
+				<!-- /.box -->
+
+			</div>
+		</div>
+		<div class="modal fade" id="modalPagoDetalles"
+			style="overflow-y: auto;" role="dialog" data-keyboard="false"
+			data-backdrop="static">
+			<div class="modal-dialog" role="document">
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header bg-red-active">
+						<button type="button" class="close" data-dismiss="modal"
+							ng-click="reset()">&times;</button>
+						<h3 class="modal-title">Pago Garantía Detalle</h3>
+					</div>
+					<!-- 						<div class="modal-header text-center bg-red-active"> -->
+					<!-- 							<div class="box-header" style="color: white;"> -->
+					<!-- 								<button type="button" class="close" data-dismiss="modal" -->
+					<!-- 									style="color: blue;" ng-click="">&times;</button> -->
+					<!-- 								<i class="fa fa-"></i> -->
+					<!-- 								<h3 class="modal-title"></h3> -->
+					<!-- 							</div> -->
+					<!-- 						</div> -->
+					<div class="box">
+						<div class="box-header">
+							<h3 class="box-title">Garantía</h3>
+							<div class="box-tools pull-right">
+								<button type="button" class="btn btn-box-tool"
+									data-widget="collapse">
+									<i class="fa fa-minus"></i>
+								</button>
+							</div>
+						</div>
+						<div class="modal-body box-body col-md-offset-1 col-xs-offset-1">
+							<div class="row">
+								<div class="col-md-3 col-xs-3">
+									<label>TIPO DOCUMENTO:</label>
+								</div>
+								<div class="col-md-3 col-xs-3">{{
+									garantiaDetalle.garantiaDocumentoId }}</div>
+								<div class="col-md-3 col-xs-3">
+									<label>FOLIO DOCUMENTO:</label>
+								</div>
+								<div class="col-md-3 col-xs-3">{{
+									garantiaDetalle.documentoFolio }}</div>
+							</div>
+							<div class="row">
+								<div class="col-md-3 col-xs-3">
+									<label>RECIBIDA:</label>
+								</div>
+								<div class="col-md-3 col-xs-3">{{ garantiaDetalle.recibida
+									}}</div>
+								<div class="col-md-3 col-xs-3">
+									<label>FECHA:</label>
+								</div>
+								<div class="col-md-3 col-xs-3">{{
+									garantiaDetalle.fechaCreacionGarantia }}</div>
+							</div>
+						</div>
+
+						<div class="box-header">
+							<h3 class="box-title">Pago</h3>
+						</div>
+						<div class="modal-body col-md-offset-1 col-xs-offset-1">
+							<div class="row">
+								<div class="col-md-offset-12"></div>
+								<div class="col-md-12">
+									<div class="row">
+										<div class="col-md-3 col-xs-3">
+											<label>FOLIO INFRACCIÓN:</label>
+										</div>
+										<div class="col-md-3 col-xs-3">
+											{{pagoDetalle.t_infraccion}}</div>
+										<div class="col-md-3 col-xs-3">
+											<label>FECHA INFRACCIÓN:</label>
+										</div>
+										<div class="col-md-3 col-xs-3">
+											{{garantiaDetalle.fechaCreacionInfraccion}}</div>
+									</div>
+								</div>
+								<div class="col-md-12">
+									<div class="row">
+										<div class="col-md-3 col-xs-3">
+											<label>FUNDAMENTACIÓN:</label>
+										</div>
+										<div class="col-md-3 col-xs-3">{{pagoDetalle.t_motivo}}
+										</div>
+										<div class="col-md-3 col-xs-3">&nbsp;</div>
+										<div class="col-md-3 col-xs-3">&nbsp;</div>
+									</div>
+								</div>
+								<div class="col-md-12">
+									<div class="row">
+										<div class="col-md-3 col-xs-3">
+											<label>MONTO INFRACCIÓN:</label>
+										</div>
+										<div class="col-md-3 col-xs-3">{{pagoDetalle.t_monto}}</div>
+										<div class="col-md-3 col-xs-3">
+											<label>DESCUENTO:</label>
+										</div>
+										<div class="col-md-3 col-xs-3">
+											{{pagoDetalle.t_reduccion}}</div>
+									</div>
+								</div>
+								<div class="col-md-12">
+									<div class="row">
+										<div class="col-md-3 col-xs-3">
+											<label>ACTUALIZACIÓN:</label>
+										</div>
+										<div class="col-md-3 col-xs-3">
+											{{pagoDetalle.t_actualizacion}}</div>
+										<div class="col-md-3 col-xs-3">&nbsp;</div>
+										<div class="col-md-3 col-xs-3">&nbsp;</div>
+									</div>
+								</div>
+								<div class="col-md-12">
+									<div class="row">
+										<div class="col-md-6 col-xs-6 text-right">
+											<label>TOTAL A PAGAR:</label>
+										</div>
+										<div class="col-md-3 col-xs-3">{{pagoDetalle.t_total}}</div>
+										<div class="col-md-3  col-xs-3">&nbsp;</div>
+									</div>
+								</div>
+								<div class="col-xs-12">&nbsp;</div>
+								<div class="col-md-11 col-xs-11 text-center">
+									<button style="display: inline-bock;" ng-hide="showMetodoPago"
+										type="button" class="btn bg-red-active" id="btnAceptar"
+										ng-click="pagarPagoGarantia()">Pagar</button>
+								</div>
+							</div>
+						</div>
+						<div ng-show="showMetodoPago">
+							<div class="box-header">
+								<h3 class="box-title">Tipo de Pago</h3>
+							</div>
+
+							<div class="modal-body col-md-offset-1 col-xs-offset-1">
+								<div class="row">
+									<div class="col-md-12">
+										<div class="row">
+											<div class="col-md-6 col-xs-6">
+												<label>SELECCIONE METODO DE PAGO:</label>
+											</div>
+											<div class="col-md-6 col-xs-6">
+												<div class="form-group">
+													<div class="input-group">
+														<span class="input-group-addon"> <i
+															class="fa fa-map"></i>
+														</span> <select class="form-control select2"
+															ng-change="changeMetodoPago()"
+															ng-model="metodoPagoVO.tipo"
+															ng-options="opcion as opcion.codigoString for opcion in metodoPagoVO.opcion"
+															ng-required="true">
+															<option label="Selecciona una Opción">Selecciona
+																una Opción</option>
+														</select>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+						<div ng-show="showMetodoTarjeta">
+							<div class="box-header">
+								<h3 class="box-title">Pago con Tarjeta</h3>
+							</div>
+							<div class="modal-body">
+								<div class="row centerCol">
+									<!-- 													<div class="col-md-offset-12"></div> -->
+									<div class="col-xs-12 btnCenter">
+										<button style="display: inline-bock;"
+											ng-hide="tarjetaValidada" class="btn btn-danger"
+											ng-click="validarPagaGarantia()">Leer Tarjeta</button>
+										<button style="display: inline-bock;"
+											ng-show="tarjetaValidada" class="btn btn-danger"
+											ng-click="pagarGarantia()">Pagar</button>
+									</div>
+									<div class="col-md-12 text-center">
+										<label ng-if="msgLecturaTarjet"><font color="red">{{labelTarjeta}}</font></label>
+									</div>
+									<div class="col-xs-12 btnCenter"
+										ng-if="msgLecturaTarjet.length > 0 ">
+										<div class="alert alert-teclo  alert-dismissable text-center">
+											<strong class="mensajeAutorizacion">{{msgLecturaTarjet}}</strong>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div ng-show="showMetodoDocumento">
+							<div class="box-header">
+								<h3 class="box-title">Pago con Documento</h3>
+							</div>
+							<div class="modal-body">
+								<div class="row col-md-offset-1 col-xs-offset-1">
+									<div class="col-md-offset-12"></div>
+									<div class="col-md-12">
+										<div class="row">
+											<div class="col-md-6 col-xs-6">
+												<label>ENTIDAD:</label>
+											</div>
+											<div class="col-md-6 col-xs-6">
+												<div class="form-group">
+													<div class="input-group">
+														<span class="input-group-addon"> <i
+															class="fa fa-tasks"></i>
+														</span> <select class="form-control select2"
+															ng-change="changeEntidadDocumento()"
+															ng-model="tipoEntidadVO.tipo"
+															ng-options="opcion as opcion.codigoString for opcion in tipoEntidadVO.opcion"
+															ng-required="true">
+														</select>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-12">
+										<div class="row">&nbsp;</div>
+									</div>
+									<div class="col-md-12">
+										<div class="row">
+											<div class="col-md-6 col-xs-6">
+												<label>DOCUMENTO:</label>
+											</div>
+											<div class="col-md-6 col-xs-6">
+												<form name="formEntidad" role="form">
+													<div class="form-group"
+														ng-class="{'has-error': formEntidad.datoDocumento.$invalid && formEntidad.datoDocumento.$dirty}">
+														<div class="input-group">
+															<span class="input-group-addon"> <i
+																class="fa fa-credit-card"></i>
+															</span> <input type="text" class="form-control"
+																ng-model="documentoVO.infraccionReferencia"
+																name="datoDocumento" ng-required=true maxlength="24" />
+														</div>
+														<div
+															ng-show="formEntidad.datoDocumento.$error.required && formEntidad.datoDocumento.$dirty"
+															ng-style="{color:'red'}">El valor es requerido</div>
+													</div>
+												</form>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- 												<div class="col-md-12"> -->
+								<div class="row centerCol">
+									<div class="col-xs-12 btnCenter">
+										<!-- button style="display:inline-block;" ng-hide="documentoValidado" class="btn btn-success" ng-click="validarPagaGarantia()">Confirmar</button -->
+										<button style="display: inline-block;" class="btn btn-danger"
+											ng-click="pagarGarantia()">Pagar</button>
+									</div>
+								</div>
+								<!-- 												</div> -->
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+
+		<!-- Modal cancelacion de impugnacion -->
+		<!-- Modal cancelacion de impugnacion -->
+		<div class="modal fade" id="modalInformacionCancelacion" tabindex="-1"
+			data-keyboard="false" data-backdrop="static" role="dialog"
+			aria-labelledby="myLargeModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-md">
+				<div class="modal-content">
+
+					<div class="modal-header"></div>
+					<div class="modal-body" id="modal-body">
+						<div class="container">
+							<div style="position: absolute;width: 30px;">
+								<span class="glyphicon glyphicon-info-sign"></span>
+							</div>
+							<div
+								style="padding: 0.7143rem 1.071rem 0.7143rem 1.071rem; margin: 1%; min-height: 3.571rem; width: 40%; display: block; float: left; position: initial;">
+								<label style="font-size: 12px;" class="text-right">La
+									infracción con numero: <strong>{{garantiaDetalle.infracNum}}</strong>
+								    de esta garantía está en proceso de impugnación, por favor
+									contacte a su administrador
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer center ">
+						<button class="btn btn-danger " type="button" data-dismiss="modal">Aceptar</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+
+		<!-- 				<div class="modal-body"><br> -->
+		<!-- 				</div> -->
+		<div class="modal fade" id="modalPagoDetallesResults"
+			style="overflow-y: auto;" role="dialog" data-keyboard="false"
+			data-backdrop="static">
+			<div class="modal-dialog" role="document">
+				<!-- Modal content-->
+				<div class="modal-content">
+					<!-- 						<div class="modal-header text-center bg-red-active"> -->
+					<!-- 							<div class="box-header" style="color: white;"> -->
+					<!-- 								<button type="button" class="close" data-dismiss="modal" ng-click="" -->
+					<!-- 									style="color: blue;">&times;</button> -->
+					<!-- 								<i class="fa fa-"></i> -->
+					<!-- 								<h3 class="box-title">Reportes</h3> -->
+					<!-- 							</div> -->
+					<!-- 						</div> -->
+					<div class="modal-header bg-red-active">
+						<button type="button" class="close" data-dismiss="modal"
+							ng-click="cleanInputAndSearchData()">&times;</button>
+						<h3 class="modal-title">Reportes</h3>
+					</div>
+					<div class="box">
+						<div ng-if="metodoPagoVO.tipo.codigo == 2" class="box-header">
+							<h3 class="box-title">Reporte de Pago</h3>
+						</div>
+						<div ng-if="metodoPagoVO.tipo.codigo == 2"
+							class="modal-body box-body">
+							<div class="row">
+								<div class="col-md-offset-12"></div>
+								<div class="col-md-10 col-md-offset-1">
+									<div class="row">
+										<div class="col-md-6">
+											<label>RECIBO:</label>
+										</div>
+										<div class="col-md-6">
+											<a id="pEnlaceEntrega" ng-click="descargaAcuse()"><img
+												src="imagenes/pdf_logo.png" alt="Entrega" height="36"
+												width="36"></a>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-10 col-md-offset-1">
+									<div class="row">
+										<div class="col-md-6">
+											<label>VOUCHER:</label>
+										</div>
+										<div class="col-md-6">
+											<a id="pEnlaceEntrega" ng-click="descargaVaucher()"><img
+												src="imagenes/pdf_logo.png" alt="Entrega" height="36"
+												width="36"></a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="box-header">
+							<h3 class="box-title">Entrega de Garantía</h3>
+						</div>
+						<div class="modal-body box-body">
+							<div class="row">
+								<div class="col-md-offset-12"></div>
+								<div class="col-md-10 col-md-offset-1">
+									<div class="row">
+										<!-- 												<div class="col-md-6"> -->
+										<!-- 													<label>ENTREGA:</label> -->
+										<!-- 												</div> -->
+										<div class="col-md-12 center">
+											<a ng-click="redirEntrega()" class="btn btn-danger">Proceder
+												a Entrega</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<script type="text/javascript">
+		var app = angular.module("siidfApp");
+		app.controller("garantiaPagoController", function() {
+			return new cancelaPorTimeOut();
+		});
+		function cancelaPorTimeOut() {
+			this.timeOutParaPagar();
+		}
+	</script>
+</body>
+</html>

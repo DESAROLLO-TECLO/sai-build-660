@@ -1,0 +1,152 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>Consulta Infracción</title>
+</head>
+<body>
+    <!-- <div ng-show="error" class="alert alert-warning">
+    	{{error.message}}
+	</div> -->
+	<section class="content-header">
+		<h1  ng-show="!validaExpediente" >Consulta de Infracción</h1>
+		<h1  ng-show="validaExpediente" >Valida Expediente</h1>
+		<ol class="breadcrumb">
+			<li><a><i class="fa fa-book"></i>Infracción</a></li>
+			<li ng-show="!validaExpediente" class="active">Consulta</li>
+			<li ng-show="validaExpediente" class="active">Valida Expediente</li>
+		</ol>
+	</section>
+
+	<!-- Main content -->
+
+	<section class="content">
+		<form role="form" name="busq">
+			<div class="row">
+				<div class="col-md-3"></div>
+				<div class="col-md-6 ">
+
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Búsqueda</h3>
+						</div>
+
+						<div class="box-body">
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<div class="input-group">
+											<span class="input-group-addon"><i
+													class="fa fa-list"></i></span>
+											<select class="form-control"
+												name="tipoBusqueda"
+												id="tipoBusqueda"
+												ng-options="filtro as filtro.descripcion for filtro in catalogoFiltros"
+												ng-model="parametroBusqueda.tipoFiltro">
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group" 
+										ng-class="{'has-error': busq.param.$invalid && busq.param.$dirty}">
+										<div class="input-group">
+											<span class="input-group-addon">
+												<i class="fa fa-pencil"></i>
+											</span>
+											<input type="text" ng-model="parametroBusqueda.valor" name="param" ng-required="true"
+												class="form-control" capitalize />
+											<span class="input-group-btn">
+												<button type="button"
+													ng-click="buscarInfracciones(false)"
+													class="btn btn-danger btn-flat">Buscar
+												</button>
+											</span>
+										</div>
+										<div
+											ng-show="busq.param.$invalid && busq.param.$dirty"
+											ng-style="{color:'red'}">El valor es requerido</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4"></div>
+			</div>
+
+			<div class="row" ng-if="infracciones.length > 0">
+				<div class="col-xs-12">
+					<div class="box box-danger">
+						<div class="box-header row">
+							<div class="col-md-4 col-xs-12">
+								<h3 class="box-title">Registros Encontrados: {{ (infracciones | filter : view.searchSomething).length }}</h3>
+							</div>
+							
+<!-- 							Acontinuacion anexo de msg de vehiculo robado 
+								Antes: col-md-6, col-md-offset3
+					-->
+							<div class="col-md-4 col-xs-12 center">
+								<h6 ng-style="{color:'red'}" class="box-title">{{bannerMsgRobo}}</h6>
+							</div>
+						
+							
+							<div class="col-md-offset-1 col-md-3 col-xs-10">
+				      			<div class="input-group pull-right">
+				        			<input type="text" id="searchsomething" class="form-control" placeholder="Buscar por filtro" ng-model="view.searchSomething">
+									<div class="input-group-addon"><i class="fa fa-search"></i></div>
+				     			</div>
+				     		</div> 
+						
+						</div>
+						<div class="box-body table-responsive">
+							<table id="tabla_infracciones" class="table table-striped table-hover header-fixed">
+								<thead>
+									<tr>
+										<th sort order="'infraccionNumero'" by="order" reverse="reverse">FOLIO</th>
+										<th sort order="'placa'" by="order" reverse="reverse">PLACA</th>
+										<th sort order="'fechaOrder'" by="order" reverse="reverse" >FECHA</th>
+										<th class="wrap-text" sort order="'fechaEmisionOrder'" by="order" reverse="reverse">FECHA EMISIÓN</th>
+										<th sort order="'ubicacion'" by="order" reverse="reverse">UBICACIÓN</th>
+										<th sort order="'articulo'" by="order" reverse="reverse">MOTIVO</th>
+										<th class="wrap-text" sort order="'sancion'" by="order" reverse="reverse">SANCIÓN (UMA)</th>
+										<th sort order="'pagada'" by="order" reverse="reverse">¿PAGADA?</th>
+										<th class="wrap-text" sort order="'deposito'" by="order" reverse="reverse" >¿REMITIDA A DEPÓSITO?</th>
+										<th>EXPEDIENTE</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr dir-paginate="infraccion in infracciones | orderBy:order:reverse | filter:view.searchSomething | itemsPerPage: view.rowsPerPage">
+										<td><a href="#/consultaInfraccionDetalle/{{infraccion.infraccionNumero}}">{{infraccion.infraccionNumero}}</a></td>
+										<td class="center">{{infraccion.placa}}</td>
+										<td class="center wrap-text">{{infraccion.fecha}}</td>
+										<td class="center wrap-text">{{infraccion.fechaEmision}}</td>
+										<td class="wrap-text">{{infraccion.ubicacion}}</td>
+										<td class="center" >{{infraccion.articulo}}</td>
+										<td class="center">{{infraccion.sancion}}</td>
+										<td class="center">{{infraccion.pagada}}</td>
+										<td>{{infraccion.deposito}}</td>
+										<td class="center" ng-if="!validaExpediente"><a href="#/consultaExpediente/{{infraccion.infraccionNumero}}/false" class="fa fa-folder-o fa-2x" data-toggle="tooltip" data-placement="left" title="Ver Expediente"></a></td>
+										<td class="center" ng-if="validaExpediente"><a  href="#/consultaExpediente/{{infraccion.infraccionNumero}}/true"  class="fa fa-folder-o fa-2x" data-toggle="tooltip" data-placement="left" title="Ver Expediente"></a></td>
+									                                  
+									</tr>
+									<tr ng-if="(infracciones | filter:view.searchSomething).length < 1"><td colspan="10" class="text-center"><h4>No se encontraron coincidencias</h4></td></tr>
+								</tbody>
+							</table>
+						</div>
+						
+						<div class="container-fluid">
+							<div class="fixed-table-pagination" style="display:block;">
+								<rows-per-page rows="view.rowsPerPage" filtro="view.searchSomething" array="infracciones"></rows-per-page>
+								
+								<div class="pull-right pagination">
+									<dir-pagination-controls class="pagination"></dir-pagination-controls>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</section>
+<body>
+</html>

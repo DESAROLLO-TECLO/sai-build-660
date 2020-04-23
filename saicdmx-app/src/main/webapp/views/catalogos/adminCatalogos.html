@@ -1,0 +1,361 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>Administración de Catálogos</title>
+</head>
+<body >
+	<section class="content-header">
+		<h1>Administración de Catálogos</h1>	
+		<ol class="breadcrumb">
+			<li><a href=""><i class="fa fa-hand-o-right"></i>Catálogos</a></li>
+			<li class="active">Admin</li>
+		</ol>
+	</section>
+
+	<!-- Main content -->
+
+	<section class="content">
+		<form role="form" name="formsgeneral.formCrud">
+			<div class="row">
+				<div class="col-md-3"></div>
+				<div class="col-md-6">
+					<!-- Datos Del Infractor -->
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Catálogos</h3>													
+						</div>
+
+						<!-- /.box-header -->
+						<div class="box-body">
+							<div class="row">
+
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="catalogo">Catálogos: </label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-book"></i>
+											</div>
+											<select class="form-control" name="catalogo"
+												id="catalogo"
+												ng-options="catalogo.catalogoDesc for catalogo in catalogos"
+												ng-model="catalogoWeb"
+												ng-change="actualizarOpciones(catalogoWeb.catalogoId)">
+												<option value="">Seleccionar</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="opciones">Opciones: </label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-hand-o-right"></i>
+											</div>
+											<select class="form-control" name="opciones"
+												id="opciones"
+												ng-change="limpiarSelectedOption()"
+												ng-options="opcion.opcionDesc for opcion in opciones"
+												ng-model="opcion">
+												<option value="">Seleccionar</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div ng-if="opcion.opcionUrl === 'admon_cat_grua_grua.jsp'" class="col-md-6" ng-init="buscarConcesionarias()">
+									<div class="form-group">
+										<label for="conc">Concesionaria: </label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-hand-o-right"></i>
+											</div>
+											<select class="form-control" name="conc"
+												id="conc"
+												ng-options="concesionaria.concesionariaNombre for concesionaria in concesionarias"
+												ng-change="configCrud('/gruas/' + selectedOption.concesionaria.concesionariaId, '/gruas')"
+												ng-model="selectedOption.concesionaria">
+												<option value="">Seleccionar</option>
+											</select>
+										</div>										
+									</div>
+								</div>
+								<div ng-if="opcion.opcionUrl === 'admon_cat_agrupamiento_region.jsp'" class="col-md-6" ng-init="buscarEstados()">
+									<div class="form-group">
+										<label for="conc">Estados: </label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-hand-o-right"></i>
+											</div>
+											<select class="form-control" name="estado"
+												id="estado"
+												ng-options="estado.edoNombre for estado in estados"
+												ng-change="configCrud('/regiones/' + selectedOption.estado.edoId, '/regiones')"
+												ng-model="selectedOption.estado">
+												<option value="">Seleccionar</option>
+											</select>
+										</div>										
+									</div>
+								</div>
+								<div ng-if="opcion.opcionUrl === 'admon_cat_agrupamiento_delegacion.jsp'" class="col-md-6" ng-init="buscarEstados()">
+									<div class="form-group">
+										<label for="conc">Estados: </label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-hand-o-right"></i>
+											</div>
+											<select class="form-control" name="estado"
+												id="estado"
+												ng-options="estado.edoNombre for estado in estados"
+												ng-change="configCrud('/delegacionesTodos/' + selectedOption.estado.edoId, '/delegaciones'); buscarRegionesPorEstado(selectedOption.estado.edoId)"
+												ng-model="selectedOption.estado">
+												<option value="">Seleccionar</option>
+											</select>
+										</div>									
+									</div>
+								</div>
+								<div ng-if="opcion.opcionUrl === 'admon_cat_agrupamiento_unidades.jsp'" class="col-md-6" ng-init="buscarSectores()">
+									<div class="form-group">
+										<label for="conc">Sector: </label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-hand-o-right"></i>
+											</div>
+											<select class="form-control" name="sector"
+												id="sector"
+												ng-options="sector.secNombre for sector in sectores | orderBy:['secNombre'] track by sector.secNombre"
+												ng-change="configCrud('/unidadTerritorialPorSectorTodos/' + selectedOption.sector.secId, '/unidadTerritoriales')"
+												ng-model="selectedOption.sector">
+												<option value="">Seleccionar</option>
+											</select>
+										</div>										
+									</div>
+								</div>
+								<div ng-if="opcion.opcionUrl === 'admon_cat_agrupamiento_sector.jsp'" class="col-md-6" ng-init="buscarEstados()">
+									<div class="form-group">
+										<label for="conc">Estados: </label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-hand-o-right"></i>
+											</div>
+											<select class="form-control" name="estado"
+												id="estado"
+												ng-options="estado.edoNombre for estado in estados"
+												ng-change="buscarDelegacionPorEstado(selectedOption.estado.edoId)"
+												ng-model="selectedOption.estado">
+												<option value="">Seleccionar</option>
+											</select>
+										</div>										
+									</div>
+								</div>
+								<div ng-if="opcion.opcionUrl === 'admon_cat_agrupamiento_sector.jsp'" class="col-md-6">
+									<div class="form-group">
+										<label for="conc">Delegación: </label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-hand-o-right"></i>
+											</div>
+											<select class="form-control" name="delegacion"
+												id="delegacion"
+												ng-options="delegacion.delNombre for delegacion in delegaciones"
+												ng-change="configCrud('/sectorTodosPorDelegacion/' + selectedOption.delegacion.delId + '/' + selectedOption.estado.edoId, '/sectores')"
+												ng-model="selectedOption.delegacion">
+												<option value="">Seleccionar</option>
+											</select>		
+										</div>								
+									</div>
+								</div>
+								<div ng-if="opcion.opcionUrl === 'admon_cat_deposito_region.jsp'" class="col-md-6" ng-init="buscarEstados()">
+									<div class="form-group">
+										<label for="conc">Estados: </label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-hand-o-right"></i>
+											</div>
+											<select class="form-control" name="estado"
+												id="estado"
+												ng-options="estado.edoNombre for estado in estados"
+												ng-change="configCrud('/regionesDeposito/' + selectedOption.estado.edoId, '/regionesDeposito')"
+												ng-model="selectedOption.estado">
+												<option value="">Seleccionar</option>
+											</select>
+										</div>									
+									</div>
+								</div>
+								<div ng-if="opcion.opcionUrl === 'admon_cat_deposito_deposito.jsp'" class="col-md-6" ng-init="regionesDF()">
+									<div class="form-group">
+										<label for="region">Región: </label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-hand-o-right"></i>
+											</div>
+											<select class="form-control" name="region"
+												id="region"
+												ng-options="region.regionNombre for region in regiones"
+												ng-change="configCrud('/depositos/' + selectedOption.region.regionId, '/depositos')"
+												ng-model="selectedOption.region">
+												<option value="">Seleccionar</option>
+											</select>
+										</div>										
+									</div>
+								</div>
+								<div ng-if="opcion.opcionUrl === 'admon_cat_vehiculos_modelo.jsp'" class="col-md-6" ng-init="buscarMarcas()">
+									<div class="form-group">
+										<label for="region">Marcas: </label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-hand-o-right"></i>
+											</div>
+											<select class="form-control" name="marca"
+												id="marca"
+												ng-change="configCrud('/modelosVehiculos/' + selectedOption.marca.vMarId, '/modelosVehiculos')"
+												ng-options="marca.vMarNombre for marca in marcas | orderBy:['vMarNombre'] track by marca.vMarNombre" 											
+												ng-model="selectedOption.marca">
+												<option value="">Seleccionar</option>
+											</select>
+										</div>										
+									</div>
+								</div>
+								<div ng-if="opcion.opcionUrl === 'admon_cat_vehiculos_tipo.jsp'" class="col-md-6" ng-init="buscarSubTipos()">
+									<div class="form-group">
+										<label for="subtipo">Subtipo: </label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-hand-o-right"></i>
+											</div>
+											<select class="form-control" name="subtipo"
+												id="subtipo"
+												ng-change="configCrud('/tiposVehiculoTodosPorSupTipo/' + selectedOption.subTipo.vSubTipoId, '/tiposVehiculo')"
+												ng-options="subTipo.vSubTipoNombre for subTipo in subTipos | orderBy:['vSubTipoNombre'] track by subTipo.vSubTipoNombre"												
+												ng-model="selectedOption.subTipo">
+												<option value="">Seleccionar</option>
+											</select>	
+										</div>								
+									</div>
+								</div>
+							</div>
+						</div>						
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4"></div>
+			<div class="row">
+				<div class="col-xs-12">
+					<!-- Cambiar esta parte, segunda fase crear codigo opcion en la tabla CATALOGOS_WEB_OPCIONES  -->
+					<div ng-if="opcion.opcionUrl === 'admon_cat_grua_concesionaria.jsp'"
+					ng-init="configCrud('/concesionarias', '/concesionarias')" crud-concesionaria></div>
+					
+					<div ng-if="opcion.opcionUrl === 'admon_cat_grua_status.jsp'"
+					ng-init="configCrud('/gruaStatus', '/gruaStatus')" crud-status></div>
+					
+					<div ng-if="opcion.opcionUrl === 'admon_cat_grua_grua.jsp' && selectedOption.concesionaria != null"
+					crud-gruas></div>
+					
+					<div ng-if="opcion.opcionUrl === 'admon_cat_grua_turno.jsp'"
+					ng-init="configCrud('/turnos', '/turnos')" crud-turnos></div>
+					
+					<div ng-if="opcion.opcionUrl === 'admon_cat_grua_zona.jsp'"
+					ng-init="configCrud('/zonasServicio', '/zonasServicio')" crud-zona-servicio></div>
+					
+					<div ng-if="opcion.opcionUrl === 'admon_cat_agente_empleado.jsp'"
+					ng-init="configCrud('/tiposEmpleado', '/tiposEmpleado')" crud-tipo-empleado></div>
+					
+					<div ng-if="opcion.opcionUrl === 'admon_cat_agente_alarma.jsp'" 
+					ng-init="configCrud('/tiposAlarma', '/tiposAlarma')" crud-tipo-alarma></div>
+					
+					<div ng-if="opcion.opcionUrl === 'admon_cat_agrupamiento_estado.jsp'"
+					ng-init="configCrud('/estadosTodos', '/estados')" crud-estado></div>
+					
+					<div ng-if="opcion.opcionUrl === 'admon_cat_agrupamiento_region.jsp' && selectedOption.estado != null"
+					crud-region></div>
+					
+					<div ng-if="opcion.opcionUrl === 'admon_cat_agrupamiento_delegacion.jsp' && selectedOption.estado != null"
+					crud-delegacion></div>
+					
+					<div ng-if="opcion.opcionUrl === 'admon_cat_agrupamiento_unidades.jsp' && selectedOption.sector != null"
+					crud-unidad-territorial></div>
+					
+					<div ng-if="opcion.opcionUrl === 'admon_cat_agrupamiento_sector.jsp' && selectedOption.delegacion != null"
+					crud-sector></div>
+					
+					<div ng-if="opcion.opcionUrl === 'admon_cat_agrupamiento_agrupamiento.jsp'"
+					ng-init="configCrud('/agrupamientos', '/agrupamientos')" crud-agrupamiento></div>
+					
+					<div ng-if="opcion.opcionUrl === 'admon_cat_deposito_zona.jsp'"
+					ng-init="configCrud('/zonas', '/zonas')" crud-zona></div>
+					
+					<div ng-if="opcion.opcionUrl === 'admon_cat_deposito_region.jsp' && selectedOption.estado != null"
+					crud-region-deposito></div>
+					
+					<div ng-if="opcion.opcionUrl === 'admon_cat_deposito_deposito.jsp' && selectedOption.region"
+					crud-deposito></div>
+					
+					<div ng-if="opcion.opcionUrl === 'admon_cat_vehiculos_marca.jsp'"
+					ng-init="configCrud('/marcasVehiculosTodos', '/marcasVehiculos')" crud-marca-vehiculo></div>
+					
+					<div ng-if="opcion.opcionUrl === 'admon_cat_vehiculos_modelo.jsp' && selectedOption.marca"
+					crud-modelo-vehiculo></div>
+					
+					<div ng-if="opcion.opcionUrl === 'admon_cat_vehiculos_subtipo.jsp'"
+					ng-init="configCrud('/subTiposVehiculo', '/subTiposVehiculo')" crud-sub-tipo-vehiculo></div>
+					
+					<div ng-if="opcion.opcionUrl === 'admon_cat_vehiculos_tipo.jsp' && selectedOption.subTipo"
+					crud-tipo-vehiculo></div>
+					
+					<div ng-if="opcion.opcionUrl === 'admon_cat_vehiculos_color.jsp'"
+					ng-init="configCrud('/colorVehiculoTodos', '/colorVehiculoCrud')" crud-color-vehiculo></div>
+					
+					<div ng-if="opcion.opcionUrl === 'admon_cat_vehiculos_responsable.jsp'"
+					ng-init="configCrud('/catalogoResponsableVehiculoTodos', '/catalogoResponsableVehiculo')" crud-responsable-vehiculo></div>
+					
+					<div ng-if="opcion.opcionUrl === 'admon_cat_vehiculos_licencia.jsp'"
+					ng-init="configCrud('/tipoLicenciaTodos', '/tipoLicencia')" crud-tipo-licencia></div>
+					
+					<div ng-if="opcion.opcionUrl === 'admon_cat_infrac_evento.jsp'"
+					ng-init="configCrud('/eventos', '/eventos')" crud-evento></div>
+					
+					<div ng-if="opcion.opcionUrl === 'admon_cat_infrac_status.jsp'"
+					ng-init="configCrud('/estatusInfraccion', '/estatusInfraccion')" crud-status-infracion></div>
+					
+					<div ng-if="opcion.opcionUrl === 'admon_cat_pagos_den.jsp'"
+					ng-init="configCrud('/denominaciones', '/denominaciones')" crud-denominacion></div>
+					
+					<div ng-if="opcion.opcionUrl === 'admon_cat_pagos_concepto.jsp'"
+					ng-init="configCrud('/conceptos', '/conceptos')" crud-concepto></div>
+					
+					<div ng-if="opcion.opcionUrl === 'admon_cat_pagos_entidad.jsp'"
+					ng-init="configCrud('/entidades', '/entidades')" crud-entidad></div>
+					
+					<div ng-if="opcion.opcionUrl === 'admon_cat_pagos_banco.jsp'"
+					ng-init="configCrud('/bancos', '/bancos')" crud-banco></div>
+					
+					<div ng-if="opcion.opcionUrl === 'admon_cat_ingresos_tipo.jsp'"
+					ng-init="configCrud('/ingresos/tipos', '/ingresos/tipos')" crud-tipo_ingreso></div>
+					
+					<div ng-if="opcion.opcionUrl === 'admon_cat_ingresos_causa.jsp'"
+					ng-init="configCrud('/causasIngreso', '/causasIngreso')" crud-causa-ingreso></div>
+					
+					<div ng-if="opcion.opcionUrl === 'admon_cat_ingresos_area.jsp'"
+					ng-init="configCrud('/areas', '/areas')" crud-area></div>
+					
+					<div ng-if="opcion.opcionUrl === 'admon_cat_ingresos_componente.jsp'"
+					ng-init="configCrud('/componentes', '/componentes')" crud-componente></div>
+					
+					<div ng-if="opcion.opcionUrl === 'admon_cat_articulos_historico.jsp'"
+					crud-articulo></div>
+					
+					<div ng-if="opcion.opcionUrl === 'admon_cat_articulos_program.jsp'"
+					ng-init="configCrud('/programas', '/programas')" crud-programa></div>
+					
+					<div ng-if="opcion.opcionUrl === 'admon_cat_articulos_categoria.jsp'"
+					ng-init="configCrud('/categorias', '/categorias')" crud-categoria></div>
+					
+					<div ng-if="opcion.opcionUrl === 'admon_cat_articulos_causal.jsp'"
+					ng-init="configCrud('/causales', '/causales')" crud-causales></div>
+				</div>
+			</div>
+			
+		</form>
+	</section>
+<body>
+</html>

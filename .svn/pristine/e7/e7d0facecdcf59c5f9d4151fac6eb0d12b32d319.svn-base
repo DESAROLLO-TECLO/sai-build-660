@@ -1,0 +1,79 @@
+<html>
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+	<section class="content-header">
+		<h1>Carga Imágenes Expediente</h1>
+		<ol class="breadcrumb">
+			<li><a><i class="fa fa-book"></i>Pago</a></li>
+			<li><a>Infracción</a></li>
+			<li class="active">Captura</li>
+		</ol>
+	</section>
+
+	<!-- Contenido -->
+	<section  class="content" ng-init="obtenerExpediente()" ng-controller="cargaExpedienteController">
+		<!--div class="row">
+			<div class="col-md-4 col-md-offset-4 text-center">
+				<div class="box box-danger">
+					<div class="box-header">
+						
+					</div>
+				</div>
+			</div>
+		</div-->
+		<div class="row">
+			<div class="col-md-8 col-md-offset-2">
+				<div class="box box-danger" style="overflow: hidden;">
+					<form>
+						<div class="box-header">
+							<div class="row">
+								<div class="col-xs-6 col-md-6">
+									<h3 class="box-title">Digitalizar infracción : {{infracNumM}}</h3>
+								</div>
+								<div class="col-xs-6 col-md-6">
+									<h5 class="col-xs-6 col-md-6"><p class="col-xs-3 col-md-3">{{(catalogoExp|filter:registro = false).length}}</p><p> Faltante(s)</p></h5>
+									<h5 class="col-xs-6 col-md-6"><p class="col-xs-3 col-md-3">{{(catalogoExp|filter:registro = true).length}}</p><p>Capturado(s)</p></h5>
+								</div>
+							</div>	
+						</div>
+						<div class="row" ng-repeat="cat in catalogoExp">
+							<div class="col-md-12 status-ready-group text-right" ng-if="cat.registrado == true">
+								<div class="expedienteLabel">
+									<i class="fa fa-check"></i>
+									<label>{{ cat.descripcion }}</label>
+								</div>
+								<div class="option">
+									<input id="{{ cat.tipo }}" type="file" accept='image/*' /><label style="visibility: hidden;" for="{{ cat.tipo }}" class="btn btn-danger btn-flat text-right">Cargar</label>
+									<a class="delete-Link" data-toggle="tooltip" data-placement="top" title="Eliminar"
+									href="#" ng-click="eliminarExpediente($event, cat.tipo)" ><i class="fa fa-remove"></i></a>
+									<a class="view-Link" data-toggle="tooltip" data-placement="top" title="visualizar" href="#" ng-click="verExpediente($event, cat.tipo)"><i class="fa fa-binoculars"></i></a>
+									<a class="download-Link" data-toggle="tooltip" data-placement="left" title="Descargar" href="#" ng-click="descargarExpediente($event, cat.tipo)"><i class="fa fa-download"></i></a>
+								</div>
+							</div>
+							<div class="col-md-12 status-standBy-group text-right" ng-if="cat.registrado == false">
+								<div class="expedienteLabel">
+									<label>{{ cat.descripcion }}</label>
+								</div>
+								<div class="option">
+									<input id="{{ cat.tipo }}" type="file" ng-model="file" accept='image/*' on-change="onChange" base-sixty-four-input ><label for="{{ cat.tipo }}" class="btn btn-danger btn-flat text-right">Cargar</label>
+									<!-- input style="display:none;" type="text" ng-model="routeURL" value="{{ file.base64 }}" on-change="cargarExpediente({files:file})" /-->
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="row text-center">
+			<div class="col-md-4 col-md-offset-4">
+				<div style="margin-top:20px;">
+				<button type="button" ng-click="regresar()" class="btn btn-danger"><span>Regresar</span></button>
+<!-- 					<label class="btn btn-danger" ng-click="regresar(this)">Regresar</label> -->
+				</div>
+			</div>
+		</div>
+	</section>
+</body>
+</html>

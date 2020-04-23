@@ -1,0 +1,452 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>Consulta Infracción</title>
+</head>
+<body>
+<!-- 	<div ng-show="error" class="alert alert-warning"> -->
+<!-- 		{{error.message}}</div> -->
+	<section class="content-header">
+		<h1>Consulta de Infracción</h1>
+		<ol class="breadcrumb">
+			<li><a><i class="fa fa-book"></i>Infracción</a></li>
+			<li class="active">Consulta</li>
+		</ol>
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<div class="row">
+			<section class="col-lg-6 connectedSortable">
+				<div class="box box-danger">
+					<div class="box-header with-border text-center">
+						<h3 class="box-title">Datos Generales</h3>
+						<div class="box-tools pull-right">
+							<button type="button" class="btn btn-box-tool" data-widget="collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+						</div>
+					</div>
+					<div class="box-body">
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="form-group">
+									<div class="table-responsive">
+										<table class="table">
+											<tr>
+												<td><dt>NCI:</dt></td>
+												<td>{{infraccion.nci}}</td>
+												<td><dt>Pagada:</dt></td>
+												<td>{{infraccion.pagada}}</td>
+											</tr>
+											<tr>
+												<td><dt>Infracción:</dt></td>
+												<td>{{infraccion.infraccionNumero}}</td>
+												<td><dt>Infracción Impresa:</dt></td>
+												<td>{{infraccion.impresa}}</td>
+											</tr>
+											<tr>
+												<td><dt>Fecha infracción:</dt></td>
+												<td>{{infraccion.fecha}}</td>
+												<td><dt>Fecha Emisión:</dt></td>
+												<td>{{infraccion.fechaEmision}}</td>
+											</tr>
+											<tr>
+												<td><dt>Estado:</dt></td>
+												<td colspan=3>{{infraccion.infractorEdo}}</td>
+											</tr>
+											<tr>
+												<td><dt>Sector:</dt></td>
+												<td>{{infraccion.infracSector}}</td>
+												<td><dt>Unidad Territorial:</dt></td>
+												<td>{{infraccion.infracUniterr}}</td>
+											</tr>
+											<tr>
+												<td><dt>No. de Grúa:</dt></td>
+												<td>{{infraccion.grua}}</td>
+											</tr>
+										</table>
+									</div>
+									<div class="table-responsive">
+										<fieldset class="scheduler-border">
+											<legend class="scheduler-border">Datos del oficial</legend>
+											<table class="table tblsnborder">
+												<tr>
+                                            		<td><dt>Nombre:</dt></td>
+                                            		<td>{{infraccion.oficialNombre}}</td>
+                                            		<td><dt>Placa:</dt></td>
+                                           			<td>{{infraccion.oficialPlaca}}</td>
+                                           		</tr>
+                                           		<tr>
+                                           			<td><dt>Agrupamiento:</dt></td>
+                                           			<td>{{infraccion.oficialAgrupamiento}}</td>
+                                           			<td><dt>Sector:</dt></td>
+                                           			<td>{{infraccion.oficialSector}}</td>
+                                           		</tr>
+											</table>
+										</fieldset>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="box box-danger">
+					<div class="box-header with-border text-center">
+						<h3 class="box-title">Datos del Vehículo</h3>
+						<div class="box-tools pull-right">
+							<button type="button" class="btn btn-box-tool" data-widget="collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+						</div>
+					</div>
+					<div class="box-body">
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="form-group">
+									<div class="table-responsive">
+										<table class="table">
+											<tr>
+                                       			<td><dt>Cuenta con Placa:</dt></td>
+                                       			<td>{{infraccion.tienePlaca}}</td>
+                                       			<td><dt>Placa:</dt></td>
+                                       			<td>{{infraccion.vehiculoPlaca}}</td>
+                                       		</tr>
+                                       		<tr>
+                                       			<td><dt>Expedida en:</dt></td>
+                                       			<td>{{infraccion.placaExpedida}}</td>
+                                       			<td><dt>Tarjeta de Circulación:</dt></td>
+                                       			<td>{{infraccion.tarjetaCirculacion}}</td>
+                                       		</tr>
+                                       		<tr ng-if="infraccion.garantiaTipoId!=0">
+                                       			<td><dt>Garantia Retenida:</dt></td>
+                                       			<td colspan="3">{{infraccion.garantiaTipoNombre}}</td>
+                                       		</tr>
+											<tr>
+                                       			<td><dt>Tipo de Vehículo:</dt></td>
+                                       			<td>{{infraccion.vehiculoTipo}}</td>
+                                       			<td><dt>Origen:</dt></td>
+                                       			<td>{{infraccion.vehiculoOrigen}}</td>
+                                       		</tr>
+                                       		<tr>
+                                       			<td><dt>Marca:</dt></td>
+                                       			<td>{{infraccion.vehiculoMarca}}</td>
+                                       			<td><dt>Modelo:</dt></td>
+                                       			<td>{{infraccion.vehiculoModelo}}</td>
+                                       		</tr>
+                                       		<tr>
+                                       			<td><dt>Color:</dt></td>
+                                       			<td>{{infraccion.vehiculoColor}}</td>
+                                       			<td><dt>Servicio Público:</dt></td>
+                                       			<td>{{infraccion.infracLServPublico}}</td>
+                                       		</tr>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="box box-danger"> <!-- style="min-height: 462px;" -->
+					<div class="box-header with-border text-center">
+						<h3 class="box-title">Datos de la Infracción</h3>
+<!-- 						<div class="box-tools pull-right"> -->
+<!-- 							<button type="button" class="btn btn-box-tool" data-widget="collapse"> -->
+<!-- 								<i class="fa fa-minus"></i> -->
+<!-- 							</button> -->
+<!-- 						</div> -->
+					</div>
+					<div class="box-body">
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="form-group">
+									<div class="table-responsive">
+										<table class="table">
+											<tr style="height: 40px;">
+                                       			<td width="10%"><dt>Artículo:</dt></td>
+                                       			<td width="40%"><span align=justify>{{infraccion.infracArticulo}}</span></td>
+                                       			<td width="10%"><dt>Fracción:</dt></td>
+                                       			<td width="40%">{{infraccion.infracFraccion}}</td>
+                                       		</tr>
+                                       		<tr style="height: 40px;">
+                                       			<td width="10%"><dt>Párrafo:</dt></td>
+                                       			<td width="40%">{{infraccion.infracParrafo}}</td>
+                                       			<td width="10%"><dt>Inciso:</dt></td>
+                                       			<td width="40%">{{infraccion.infracInciso}}</td>
+                                       		</tr>
+                                       		<tr style="height: 40px;">
+<!--                                        			<td><dt>Violación a la Ley del Transporte:</dt></td> -->
+<!--                                        			<td>{{transLeyDelTransp(infraccion.infracLeyTransp)}}</td> -->
+                                       			<td width="10%"><dt>Depósito:</dt></td>
+                                       			<td width="40%">{{infraccion.deposito}}</td>
+                                       			<td width="10%"><dt>Sanción:</dt></td>
+                                       			<td width="40%">{{infraccion.sancion}}</td>
+                                       		</tr>
+                                       		<tr style="height: 40px;">
+                                       			<td colspan="4"> Multa en cantidad de UMA vigente en la Ciudad de México.</td>
+                                       		</tr>
+										</table>
+									</div>
+									<fieldset class="scheduler-border" style="min-height: 95px;">
+										<legend class="scheduler-border">Motivación de la Infracción:</legend>
+										{{infraccion.motivacion}}
+									</fieldset>
+									<fieldset class="scheduler-border" style="min-height: 95px;">
+									<legend class="scheduler-border">Motivación Completo:</legend>
+										{{infraccion.infracObservacion}}
+									</fieldset>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section class="col-lg-6 connectedSortable">
+				<div class="box box-danger">
+					<div class="box-header with-border text-center">
+						<h3 class="box-title">Ubicación del Automóvil</h3>
+						<div class="box-tools pull-right">
+							<button type="button" class="btn btn-box-tool" data-widget="collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+						</div>
+					</div>
+					<div class="box-body">
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="form-group">
+									<div class="table-responsive">
+										<table class="table">
+											<tr>
+                                       			<td><dt>En la calle:</dt></td>
+                                       			<td>{{infraccion.infracCalle}}</td>
+                                       			<td><dt>Entre la calle:</dt></td>
+                                       			<td>{{infraccion.infracEntreCalle}}</td>
+                                       		</tr>
+                                       		<tr>
+                                       			<td><dt>Y en la	calle:</dt></td>
+                                       			<td>{{infraccion.infracYCalle}}</td>
+                                       			<td><dt>Con Dirección:</dt></td>
+                                       			<td>{{infraccion.infracConDireccion}}</td>
+                                       		</tr>
+                                       		<tr>
+                                       			<td><dt>Frente al Número:</dt></td>
+                                       			<td>{{infraccion.infracFrenteAlNum}}</td>
+                                       			<td><dt>Observe Que:</dt></td>
+                                       			<td>{{infraccion.infracObserveQueDesc}}</td>
+                                       		</tr>
+                                       		<tr>
+                                       			<td><dt>Colonia:</dt></td>
+                                       			<td>{{infraccion.infracColonia}}</td>
+                                       			<td><dt>Delegación:</dt></td>
+                                       			<td>{{infraccion.infracDelegacion}}</td>
+                                       		</tr>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="box box-danger" style="min-height: 440px;">
+					<div ng-if="listaImagenes.length == 0">
+						<div class="box-header with-border text-center">
+							<h4 class="box-title">Sin imágenes</h4>
+						</div>
+						<div class="box-body" style="min-height: 420px; display: flex;align-content: center;justify-content: center;">
+							<img ng-src="static/dist/img/image-not-found.svg" style="width: 38rem;"
+	 						 class="img-responsive center-block figure-img img-fluid img-rounded">
+						</div>
+					</div>
+					
+					
+					<div uib-carousel active="0" ng-if="listaImagenes">
+						<div uib-slide ng-repeat="img in listaImagenes" index="$index">
+							<div class="box-title">
+								<h4 class="box-title">{{img[0].nombreArchivo}}</h4>
+							</div>
+							<div class="box-body">
+								<figure class="figure">
+									<img ng-src="http://imagenes.infracciones.df.gob.mx/{{img[0].path}}/{{img[0].nombreArchivo}}" 
+										 class="img-responsive center-block figure-img img-fluid img-rounded" 
+										 ng-if="img[1] == 'HandHeld'">
+									<img ng-src="{{img[0].image}}" class="img-responsive center-block figure-img img-fluid img-rounded"
+										 ng-if="img[1] == 'Infraccion'">
+								</figure>
+							</div>
+						</div>
+<!-- 						<table> -->
+<!-- 							<tr ng-repeat="consulta in consultaExpediente"> -->
+<!-- 								<td> -->
+<!-- 									<div ng-init="buscarImagen(consulta.nombreArchivo,consulta.tipo)"></div> -->
+<!-- 									{{consulta.nombreArchivo}} -->
+<!-- 								</td> -->
+<!-- 							</tr> -->
+<!-- 						</table> -->
+					</div>
+				</div>
+				<div class="box box-danger">
+					<div class="box-header with-border text-center">
+						<h3 class="box-title">Datos del Infractor</h3>
+<!-- 						<div class="box-tools pull-right"> -->
+<!-- 							<button type="button" class="btn btn-box-tool" data-widget="collapse"> -->
+<!-- 								<i class="fa fa-minus"></i> -->
+<!-- 							</button> -->
+<!-- 						</div> -->
+					</div>
+					<div class="box-body">
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="form-group">
+									<div class="table-responsive">
+										<table class="table">
+											<tr>
+                                       			<td><dt>Apellido Paterno:</dt></td>
+                                       			<td>{{infraccion.infractorApePaterno}}</td>
+                                       			<td><dt>Apellido Materno:</dt></td>
+                                       			<td>{{infraccion.infractorApeMaterno}}</td>
+                                       		</tr>
+                                       		<tr>
+                                       			<td><dt>Nombre:</dt></td>
+                                       			<td colspan="3">{{infraccion.infractorNombre}}</td>
+                                       			
+                                       		</tr>
+                                       	    <tr>
+                                       	    <td><dt>Tipo Persona:</dt></td>
+                                       		<td>{{infraccion.nbTipoPersona}}</td>
+                                       		</tr>
+                                       		<tr>
+                                       			<td><dt>Licencia:</dt></td>
+                                       			<td>{{infraccion.infractorLicencia}}</td>
+                                       			<td><dt>Tipo:</dt></td>
+                                       			<td>{{infraccion.licenciaTipo}}</td>
+                                       		</tr>
+                                       		<tr>
+                                       			<td><dt>Expedida en:</dt></td>
+                                       			<td>{{infraccion.licenciaExpedida}}</td>
+                                       			<td><dt>RFC:</dt></td>
+                                       			<td>{{infraccion.infractorRfc}}</td>
+                                       		</tr>
+										</table>
+										<fieldset class="scheduler-border">
+											<legend class="scheduler-border">Dirección</legend>
+											<div class="table-responsive">
+												<table class="table tblsnborder">
+													<tr>
+		                                       			<td><dt>Calle:</dt></td>
+		                                       			<td colspan="3">{{infraccion.infractorCalle}}</td>
+		                                       		</tr>
+		                                       		<tr>
+		                                       			<td><dt>No.Ext.:</dt></td>
+		                                       			<td>{{infraccion.infractorNumExt}}</td>
+		                                       			<td><dt>No.Int.:</dt></td>
+		                                       			<td>{{infraccion.infractorNumInt}}</td>
+		                                       		</tr>
+		                                       		<tr>
+		                                       			<td><dt>Colonia:</dt></td>
+		                                       			<td>{{infraccion.infractorColonia}}</td>
+		                                       			<td><dt>Delegación/<br>Municipio:</dt></td>
+		                                       			<td>{{infraccion.infractorDelegacion}}</td>
+		                                       		</tr>
+												</table>
+											</div>
+										</fieldset>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section class="col-lg-12 connectedSortable">
+				<div class="box-body">
+					<div class="row itemsBox">
+						<button ng-click="regresarBusq()" class="btn btn-danger">
+							<i class="fa fa-arrow-circle-left"></i>
+							<span>Regresar</span>
+						</button>
+						<button ng-click="verExpediente()" class="btn btn-danger">
+							<i class="fa fa-picture-o"></i>
+							<span>Ver Expediente</span>
+						</button>
+						<button class="btn btn-danger" type="button" ng-click="imprimir()">
+							<span>Imprimir</span>
+						</button>
+					</div>
+				</div>
+			</section>
+		</div>
+		<!-- {{infraccion}}  --> 
+	</section>
+
+
+
+	<div class="control-sidebar-bg"></div>
+
+
+
+
+	<!-- Page script -->
+	<script>
+		$(function() {
+
+			//Datemask dd/mm/yyyy
+			$("#datemask").inputmask("dd/mm/yyyy", {
+				"placeholder" : "dd/mm/yyyy"
+			});
+			//Datemask2 mm/dd/yyyy
+			$("#datemask2").inputmask("mm/dd/yyyy", {
+				"placeholder" : "mm/dd/yyyy"
+			});
+			//Money Euro
+			$("[data-mask]").inputmask();
+
+			//Date picker
+			$('#datepicker').datepicker({
+				autoclose : true
+			});
+
+			$('#datepicker1').datepicker({
+				autoclose : true
+			});
+			/*Timepicker
+			$(".timepicker").timepicker({
+				showInputs : false
+			});*/
+
+		});
+
+		function cambiarFraccion() {
+			$("#select_fraccion").val("1");
+			$("#infra_motivo").val("");
+			$("#infra_sancion").html("");
+		}
+
+		function cambiarMotivacion() {
+			var motivo = "TRATANDOSE DE VEHÍCULOS CON PLACAS DE MATRÍCULA EXTRANJERA, POR NO PORTAR LOS DOCUMENTOS OFICIALES EN LOS QUE SE DESCRIBAN LAS CARACTERÍSTICAS DEL VEHÍCULO Y SE ACREDITE LA LEGAL ESTANCIA EN EL  PAÍS."
+			var sancion = "Multa de 5 unidades de cuenta en la Ciudad de México";
+			$("#infra_motivo").val(motivo);
+			$("#infra_sancion").html(sancion);
+
+		}
+	</script>
+	<style type="text/css">
+		legend.scheduler-border {
+			font-size: 1em !important;
+			font-weight: bold !important;
+			text-align: left !important;
+			width: auto;
+			padding: 0 10px;
+			border-bottom: none;
+		}
+		
+		fieldset.scheduler-border {
+			border-radius: 0.5em; /* applied border radius */
+			border: 1px solid #ccc !important;
+			padding: 0 1.4em 1.4em 1.4em !important;
+			margin: 0 0 1.5em 0 !important;
+		}
+	</style>
+
+</body>
+</html>

@@ -1,0 +1,389 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>Modificación de Documento (Parte Informativo)</title>
+</head>
+<body>
+	<section class="content-header">
+		<h1>Modificación de Documento (Parte Informativo)</h1>
+		<ol class="breadcrumb">
+			<li>
+				<a><i class="{{breadCrumbs.icono}}"></i>{{breadCrumbs.modulo}}</a>
+			</li>
+			<li>
+				<a href="#/busquedaDocumentos">{{breadCrumbs.servicio}}</a>
+			</li>
+			<li class="active">
+				Modificación de Documento
+			</li>
+		</ol>
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<form name="form" novalidate>
+			<div class="row">
+				<section class="col-lg-6 connectedSortable">
+					<!-- Datos generales -->
+					<div class="box box-danger">
+						<div class="box-header with-border">
+							<h3 class="box-title">Datos Generales</h3>
+							<div class="box-tools pull-right">
+								<button type="button" class="btn btn-box-tool"
+									data-widget="collapse">
+									<i class="fa fa-minus"></i>
+								</button>
+							</div>
+						</div>
+						<div class="box-body">
+							<div class="form-group">
+								<div class="row">
+									<div class="col-sm-6">
+										<div class="form-group" ng-class="{'has-error': form.numConse.$invalid && form.numConse.$dirty}">
+											<label>*No. Consecutivo:</label>
+											<div class="input-group">
+												<div class="input-group-addon">
+													<i class="fa fa-sort-numeric-asc" aria-hidden="true"></i>
+												</div>
+												<input type="text" ng-required="true" class="form-control" capitalize name="numConse" ng-model="eDocumento.noConsecutivo" size="20" maxlength="20">
+											</div>
+											<div ng-show="form.numConse.$error.required && form.numConse.$dirty" ng-style="{color:'red'}">El No. Consecutivo es requerido</div>
+										</div>
+									</div>
+									
+									<div class="col-sm-6">
+										<div class="form-group" ng-class="{'has-error': form.aOperativa.$invalid && form.aOperativa.$dirty}">
+											<label>*Área Operativa:</label>
+											<div class="input-group">
+												<div class="input-group-addon">
+													<i class="fa fa-map-marker"></i>
+												</div>
+												<input type="text" class="form-control" capitalize ng-required="true" name="aOperativa" ng-model="eDocumento.oficialAoper" size="20" maxlength="30">
+											</div>
+											<div ng-show="form.aOperativa.$error.required && form.aOperativa.$dirty" ng-style="{color:'red'}">El Área Operativa es requerido</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-6">
+										<div class="form-group" ng-class="{'has-error': form.fRecepcion.$invalid && form.fRecepcion.$dirty}">
+											<label for="fRecepcion">*Fecha Recepción:</label>
+										 <div class="input-group date "  datetimepicker options="dateTimePickerOptionsFR"
+													 ng-model="eDocumento.fecha" name="fRecepcion" ng-required="true"
+													show-button-bar="true">
+												<div class="input-group-addon">
+													<i class="fa fa-calendar"></i>
+												</div>
+											  <input type="text"  class="form-control pull-right inputFecha"  readonly />
+										</div>
+										<div ng-show="form.fRecepcion.$error.required && form.fRecepcion.$dirty" ng-style="{color:'red'}">La Fecha de Recepción es requerida</div>
+									  </div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group"
+											ng-class="{'has-error': form.fEntrega.$invalid && form.fEntrega.$dirty}">
+											<label for="fentrega">Fecha Entrega:</label>
+												 <div class="input-group date" name="fEntrega" datetimepicker options="dateTimePickerOptionsFE"
+													ng-required="false" ng-model="eDocumento.fechaEntrega"
+													show-button-bar="true">
+												<div class="input-group-addon">
+													<i class="fa fa-calendar"></i>
+												</div>
+											  <input type="text" class="form-control pull-right inputFecha" readonly />	
+											</div>
+											<div ng-show="form.fEntrega.$error.required && form.fEntrega.$dirty" ng-style="{color:'red'}">La Fecha de Recepción es requerida</div>
+										</div>
+										<!-- /.form-group -->
+									</div>
+
+								</div>
+								
+								<div class="row">
+									<div class="col-xs-12">
+										<div class="form-group" ng-style="{color:validColor}">
+											<label>*Placa Oficial:</label>
+											<div class="input-group">
+												<div class="input-group-addon">
+													<i class="fa fa-star"></i>
+												</div>
+												<input type="text" class="form-control" name="placaOficial" ng-model="eDocumento.oficialPlaca" ng-change="changePlaca()" size="20" maxlength="12">
+												<span class="input-group-btn">
+											        <button class="btn btn-danger" type="button" ng-click="buscarEmpleadoPorPlaca(eDocumento.oficialPlaca)">Buscar</button>
+										      	</span>
+											</div>
+											<div ng-show="viewMessagePlaca" ng-style="{color:validColor}">{{validMensaje}}</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="row" ng-show="viewOficialData">
+									<div class="col-xs-12">	
+										<div class="form-group table-responsive">						
+											<fieldset>
+												<legend>Datos del Oficial</legend>
+                                                   		<table class="table tblsnborder">
+                                                           <tr>
+                                                               <td><label>Nombre:</label></td>
+                                                               <td colspan="3">{{oficialNombre}}</td>
+                                                           </tr>
+                                                        	<tr>
+                                                               <td><label>Sector:</label></td>
+                                                               <td>{{oficialSector}}</td>
+                                                               
+                                                                <td><label>Agrupamiento:</label></td>
+                                                               <td>{{oficialAgrupamiento}}</td>
+                                                           	</tr>
+                                                   		</table>
+									  		</fieldset>
+								  		</div>
+							  		</div>
+								</div>
+			
+							</div>
+						</div>
+
+					</div>
+				</section>
+				<!-- Lista de Boletas/Placas -->
+				<section class="col-lg-6 connectedSortable">
+					<!-- Lista de Boletas/Placas -->
+					<div class="box box-danger">
+						<div class="box-header with-border">
+							<h3 class="box-title">Lista de Boletas/Placas</h3>
+							<div class="box-tools pull-right">
+								<button type="button" class="btn btn-box-tool"
+									data-widget="collapse">
+									<i class="fa fa-minus"></i>
+								</button>
+							</div>
+						</div>
+						<div class="box-body">
+							<div class="row">
+								<div class="col-xs-6 text-center">
+									<button type="button" class="btn btn-danger" id="btnadd" ng-click="agregarInfracciones()">
+										<i class="fa fa-plus-circle"></i> Agregar
+									</button>
+								</div>
+								<div class="col-xs-6 text-center">
+									<button type="button" class="btn btn-danger" id="btndelete" ng-click="eliminarInfracciones()">
+										<i class="fa fa-minus-circle"></i> Elimnar
+									</button>
+								</div>
+							</div>	
+							
+							<br>
+													
+							<div class="row">
+								<div class="col-sm-6">
+									<div class="form-group" ng-class="{'has-error': validinfra}">
+										<label for="addinfraccion">Agrega Infracción: </label>
+										<div class="input-group">
+											<span class="input-group-addon">
+												<i class="fa fa-long-arrow-up"></i>
+											</span>
+											<input type="text" class="form-control"  capitalize id="addinfraccion" name="addinfraccion" ng-model="numInfraccion" maxlength="11" />
+										</div>
+										<span ng-show="validinfra" ng-style="{color:'red'}">El número de infracción es requerido</span>
+									</div>
+								</div>
+								
+								<div class="col-sm-6">
+									<div class="form-group" ng-class="{'has-error': validplaca}">
+										<label for="addplaca">Agrega Placa: </label>
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-long-arrow-down"></i></span> <input type="text"
+												class="form-control" capitalize ng-model="strPlaca"  id="addplaca" name="addplaca" maxlength="10">
+										</div>
+										<span ng-show="validplaca" ng-style="{color:'red'}">La placa es requerida</span>
+									</div>
+								</div>
+							</div>
+							
+							
+							<div class="row">
+								<div class="col-sm-6">								
+									<div class="form-group" ng-class="{'has-error': faltanInfracciones}">
+										<label>Infracciones Seleccionadas: </label>
+										<select id='lstInfrac' name='lstInfrac' multiple="multiple" size='4' style="width:100%" ng-model="optionsAdd">
+											 <option ng-repeat="option in addInfracciones" value='{{$index}}'>{{(option.infracNum+ '-' +option.infracPlaca)}}</option>
+										</select>
+										<div ng-show="faltanInfracciones" ng-style="{color:'red'}">El Número de Infracción es requerido</div>
+									</div>
+								</div>
+								
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>Infracciones Eliminadas: </label>
+										<select id='lstInfracDel' name='lstInfracDel' multiple size='4' style="width:100%" ng-model="optionsDelete">
+											<option ng-repeat="option in deleteInfracciones" value='{{$index}}'>{{(option.infracNum+ '-' +option.infracPlaca)}}</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+
+			<!-- Documentos Recibidos -->
+			<div class="row">
+				<section class="col-lg-12 connectedSortable">
+					<div class="box box-danger">
+						<div class="box-header with-border">
+							<h3 class="box-title">Documentos Recibidos</h3>
+							<div class="box-tools pull-right">
+								<button type="button" class="btn btn-box-tool"
+									data-widget="collapse">
+									<i class="fa fa-minus"></i>
+								</button>
+							</div>
+						</div>
+						<div class="box-body">
+							<div ng-show="faltanDocumentosMensaje" ng-style="{color:'red'}">Es necesario seleccionar al menos un documento</div>
+							
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group" ng-class="{'has-error': form.ifetxt.$invalid && form.ifetxt.$dirty}">
+										<label>Nombre del Dueño</label>
+									    <div class="input-group">
+									      <span class="input-group-addon">
+									      	<input type="checkbox" name="optionsChecks" id="optionsChecks" ng-model="sdocife" ng-change="changeValue()" ng-required="faltanDocumentos">
+									      </span>
+									      <span class="input-group-addon">IFE</span>
+									      <input type="text" class="form-control" capitalize name="ifetxt" ng-model="eDocumento.docIfeNombre" ng-required="sdocife" size="78" maxlength="60">
+									    </div>
+									    <div ng-show="form.ifetxt.$error.required && form.ifetxt.$dirty" ng-style="{color:'red'}">El Nombre del Dueño del IFE es requerido</div>
+								    </div>
+  								</div>
+						
+								<div class="col-md-6">
+									<div class="form-group" ng-class="{'has-error': form.tcirculaciontxt.$invalid && form.tcirculaciontxt.$dirty}">
+										<label>Nombre del Dueño</label>
+									    <div class="input-group">
+									      <span class="input-group-addon">
+									      	<input type="checkbox" name="optionsChecks" id="optionsChecks" ng-model="starcirc" ng-change="changeValue()" ng-required="faltanDocumentos">
+									      </span>
+									      <span class="input-group-addon">T. Circulación</span>
+									      <input type="text" class="form-control" capitalize name="tcirculaciontxt" ng-model="eDocumento.docTarjCircNombre" ng-required="starcirc" size="78" maxlength="60">
+									    </div>
+									    <div ng-show="form.tcirculaciontxt.$error.required && form.tcirculaciontxt.$dirty" ng-style="{color:'red'}">El Nombre del Dueño de la T.Circulación es requerido</div>
+								    </div>
+  								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group" ng-class="{'has-error': form.licenciatxt.$invalid && form.licenciatxt.$dirty}">
+										<label>Nombre del Dueño</label>
+									    <div class="input-group">
+									      <span class="input-group-addon">
+									      	<input type="checkbox" name="optionsChecks" id="optionsChecks" ng-model="sdoclic" ng-change="changeValue()" ng-required="faltanDocumentos">
+									      </span>
+									      <span class="input-group-addon">Licencia</span>
+									      <input type="text" class="form-control" capitalize name="licenciatxt" ng-model="eDocumento.docLicenciaNombre" ng-required="sdoclic" size="78" maxlength="60">
+									    </div>
+									    <div ng-show="form.licenciatxt.$error.required && form.licenciatxt.$dirty" ng-style="{color:'red'}">El Nombre del Dueño de la Licencia es requerido</div>
+								    </div>
+  								</div>
+							
+								<div class="col-md-6">
+									<div class="form-group" ng-class="{'has-error': form.verificaciontxt.$invalid && form.verificaciontxt.$dirty}">
+										<label>Nombre del Dueño</label>
+									    <div class="input-group">
+									      <span class="input-group-addon">
+									      	<input type="checkbox" name="optionsChecks" id="optionsChecks" ng-model="sdocverif" ng-change="changeValue()" ng-required="faltanDocumentos">
+									      </span>
+									      <span class="input-group-addon">Verificación</span>
+									      <input type="text" class="form-control" capitalize name="verificaciontxt" ng-model="eDocumento.docVerificNombre" ng-required="sdocverif" size="78" maxlength="60">
+									    </div>
+									    <div ng-show="form.verificaciontxt.$error.required && form.verificaciontxt.$dirty" ng-style="{color:'red'}">El Nombre del Dueño de la Verificación es requerido</div>						
+								    </div>
+  								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group" ng-class="{'has-error': form.otrotxt.$invalid && form.otrotxt.$dirty}">
+										<label>Detalle</label>
+									    <div class="input-group">
+									      <span class="input-group-addon">
+									      	<input type="checkbox" name="optionsChecks" id="optionsChecks" ng-model="sdocotros" ng-change="changeValue()" ng-required="faltanDocumentos">
+									      </span>
+									      <span class="input-group-addon">Otro</span>
+									      <input type="text" class="form-control" capitalize name="otrotxt" ng-model="eDocumento.docOtrosNombre" ng-required="sdocotros" size="78" maxlength="60">
+									    </div>
+									    <div ng-show="form.otrotxt.$error.required && form.otrotxt.$dirty" ng-style="{color:'red'}">El Detalle de Otro Documento es requerido</div>
+								    </div>
+  								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+			
+			<!-- Observaciones -->
+			<div class="row">
+				<section class="col-lg-12 connectedSortable">
+					<div class="box box-danger">
+						<div class="box-header with-border">
+							<h3 class="box-title">Observaciones</h3>
+							<div class="box-tools pull-right">
+								<button type="button" class="btn btn-box-tool"
+									data-widget="collapse">
+									<i class="fa fa-minus"></i>
+								</button>
+							</div>
+						</div>
+						<div class="box-body">
+							<div class="col-xs-12">
+								<div class="form-group">
+									<div class="input-group">
+										<div class="input-group-addon">
+											<i class="fa fa-sticky-note" aria-hidden="true"></i>
+										</div>
+										<input type="text" maxlength="100" class="form-control" style="width:100%;" ng-model="eDocumento.observacion" capitalize />
+									</div>	
+								</div>	
+							</div>
+						</div>
+						
+						<div class="box-footer">
+							<div class="row itemsBox">
+								<button onClick="window.history.back();" class="btn btn-danger">
+									<span>Regresar</span>
+								</button>
+								<button ng-click="actualizarDocumento(eDocumento,addInfracciones,deleteInfracciones)" class="btn btn-danger" id="btnGuardarDatos">
+									<span>Guardar</span>
+								</button>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+		</form>
+	</section>
+	<div class="control-sidebar-bg"></div>
+	  
+	<script type="text/javascript">
+	$(function () {
+	    $("#fRecepcion").datepicker({             
+			format: 'dd/mm/yyyy',
+			//language: 'es',
+			todayHighlight : true,
+			autoclose : true
+		}).on('changeDate', function (selected) {
+        	var minDate = new Date(selected.date.valueOf());
+        	$('#fEntrega').datepicker('setStartDate', minDate);
+    	});
+		
+		$("#fEntrega").datepicker({             
+			format: 'dd/mm/yyyy',
+			//language: 'es',
+			todayHighlight : true,
+			autoclose : true
+		});
+		
+		
+	});
+    </script>  
+</body>
+</html>

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>saicdmx-api</artifactId>
+	<packaging>war</packaging>
+	<name>ssccdmxsai_api</name>
+	<description>SSP modulo de servicios</description>
+	
+	<properties>
+		<!-- >m2eclipse.wtp.contextRoot>${project.name}_${project.version}</m2eclipse.wtp.contextRoot-->
+		<m2eclipse.wtp.contextRoot>sspcdmxsai_${project.version}_pro_api</m2eclipse.wtp.contextRoot>
+	</properties>
+	
+	<parent>
+		<groupId>mx.com.teclo</groupId>
+		<artifactId>saicdmx-build</artifactId>
+		<version>${revision}</version>
+	</parent>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+			<exclusions>
+				<exclusion>
+					<artifactId>log4j-over-slf4j</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+			<exclusions>
+				<exclusion>
+					<artifactId>log4j-over-slf4j</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.mybatis.spring.boot</groupId>
+			<artifactId>mybatis-spring-boot-starter</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.dozer</groupId>
+			<artifactId>dozer</artifactId>
+			<version>5.4.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.2</version>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.8</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.8</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-scratchpad</artifactId>
+			<version>3.8-beta4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml-schemas</artifactId>
+			<version>3.8</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports</artifactId>
+			<version>5.6.0</version>
+		</dependency>
+		<!-- Librerias Teclo Fw -->
+		<dependency>
+			<groupId>mx.com.teclo</groupId>
+			<artifactId>teclo-exception</artifactId>
+			<version>${tecloframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>mx.com.teclo</groupId>
+			<artifactId>teclo-security</artifactId>
+			<version>${tecloframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>mx.com.teclo</groupId>
+			<artifactId>teclo-excel</artifactId>
+			<version>${tecloframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>mx.com.teclo</groupId>
+			<artifactId>teclo-auditoria</artifactId>
+			<version>${tecloframework.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>javassist</artifactId>
+					<groupId>javassist</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+
+		<!-- Dependencia para pagos MIT -->
+
+		<dependency>
+			<groupId>mx.com.teclo.siidf.mit</groupId>
+			<artifactId>centrodepagos-service</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+
+		<!-- Librerias para manejo de certificados del sat -->
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>0.11.4</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>r06</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			</dependency>
+		<dependency>
+			<groupId>ca.juliusdavies</groupId>
+			<artifactId>not-yet-commons-ssl</artifactId>
+			<version>0.3.11</version>
+		</dependency>
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-ext-jdk15</artifactId>
+			<version>1.45</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-xjc</artifactId>
+			<version>2.1.12</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-impl</artifactId>
+			<version>2.1.12</version>
+		</dependency>
+
+		<!-- Librerias para manejo de certificados del sat -->
+
+		<dependency>
+			<groupId>mx.com.teclomexicana</groupId>
+			<artifactId>WSClientFotoMultas</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+
+		<!-- Dependencia para implementación de código de barra -->
+
+		<dependency>
+			<groupId>net.sourceforge.barbecue</groupId>
+			<artifactId>barbecue</artifactId>
+			<version>1.5-beta1</version>
+		</dependency>
+		
+		<!-- Dependencia gson -->
+			<dependency>
+		<groupId>com.google.code.gson</groupId>
+		<artifactId>gson</artifactId>
+		<version>2.2.4</version>
+	    </dependency>
+	    
+	</dependencies>
+
+	<build>
+		<!-- finalName>${project.name}_${project.version}</finalName-->
+		<finalName>sspcdmxsai_${project.version}_pro_api</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+
+</project>

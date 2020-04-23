@@ -1,0 +1,279 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>Artículos Históricos- Agrega</title>
+</head>
+<body>	
+	<section class="content-header">
+		<h1>Alta de Artículo Histórico</h1>
+		<ol class="breadcrumb">
+			<li>
+				<a><i class="{{breadCrumbs.icono}}"></i>{{breadCrumbs.modulo}}</a>
+			</li>
+			<li>
+				<a href="">{{breadCrumbs.servicio}}</a>
+			</li>
+			<li class="active">
+				Alta
+			</li>
+		</ol>
+	</section>	
+	
+	<section class="content">
+		<form id="formAltaArticulo" role="form" name="frmAltaArticulo">
+			<div class="row">
+				<section class="col-md-6 connectedSortable">
+				<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Fundamentación</h3>
+						</div>						
+						<div class="box-body">
+							<div class="col-xs-12">	
+								<div class="row">
+									<div class="col-md-6 form-group" ng-hide="true">
+										<label>Id:</label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<span class="fa fa-book"></span>
+											</div>
+											<input ng-disabled="true" class="form-control"  type="text" ng-model="art" />
+										</div>
+									</div>		
+									<div class="col-md-6 form-group" ng-class="{'has-error': frmAltaArticulo.articulo.$invalid && frmAltaArticulo.articulo.$dirty}">
+										<label for="articulo">*Artículo:(Solo numeros arabigos)</label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<span class="fa fa-gavel"></span>
+											</div>
+											<input maxlength="10"  ng-required="true" id="articulo" name="articulo" class="form-control"  type="text" ng-model="crudHistorico.artInfrFinArticulo" />
+										</div>
+										<div ng-show="frmAltaArticulo.articulo.$error.required && frmAltaArticulo.articulo.$dirty" ng-style="{color:'red'}">
+										El artículo es requerido
+										</div>
+									</div>
+									<div class="col-md-6 form-group">
+										<label>Fracción:(Solo numeros arabigos)</label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<span class="fa fa-hand-o-right"></span>
+											</div>
+											<input maxlength="20" class="form-control" integer-number type="text" ng-model="crudHistorico.artInfrFinFraccion" />
+										</div>
+									</div>
+									</div>
+									<div class="row">	
+									<div class="col-md-6 form-group">
+										<label>Parrafo:(Solo numeros arabigos)</label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<span class="fa fa-hand-o-right"></span>
+											</div>
+											<input maxlength="20"  class="form-control" integer-number type="text" ng-model="crudHistorico.artInfrFinParrafo" />
+										</div>
+									</div>
+									<div class="col-md-6 form-group">
+										<label>Inciso:(Solo letras y numero arabigos)</label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<span class="fa fa-hand-o-right"></span>
+											</div>
+											<input  maxlength="20"  class="form-control"  type="text" ng-model="crudHistorico.artInfrFinInciso" />
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>						
+					</div>
+				<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Sanción</h3>
+							<div class="box-tools pull-right">
+								<button type="button" class="btn btn-box-tool"
+									data-widget="collapse">
+									<i class="fa fa-minus"></i>
+								</button>
+							</div>
+						</div>	
+						<div class="box-body">
+							<div class="col-xs-12">	
+							<div class="row">	
+									<div class="col-md-6 form-group" ng-class="{'has-error': frmAltaArticulo.diaSancion.$invalid && frmAltaArticulo.diaSancion.$dirty}">
+										<label for="diaSancion">*Salario:</label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<span class="fa fa-map"></span>
+											</div>
+											<input maxlength="5" ng-required="true" id="diaSancion" name="diaSancion" class="form-control"  type="text" ng-model="crudHistorico.artInfrFinSalario" />
+										</div>
+										<div ng-show="frmAltaArticulo.diaSancion.$error.required && frmAltaArticulo.diaSancion.$dirty" ng-style="{color:'red'}">
+										El salario es requerido
+										</div>
+									</div>
+									
+									<div class="col-md-6 form-group" ng-class="{'has-error': (frmAltaArticulo.aplicadoVehiculo.$invalid && frmAltaArticulo.aplicadoVehiculo.$dirty) || crudHistorico.artInfrFinAplicadoVeh < 0 || crudHistorico.artInfrFinAplicadoVeh > 1}">								
+										<label for="aplicadoVehiculo">*Aplicado vehículo (0) o (1):</label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<span class="fa fa-automobile"></span>
+											</div>
+											<input maxlength="1" integer-number ng-required="true" id="aplicadoVehiculo" name="aplicadoVehiculo" class="form-control" type="text" ng-model="crudHistorico.artInfrFinAplicadoVeh" />
+										</div>
+										<div ng-show="frmAltaArticulo.aplicadoVehiculo.$error.required && frmAltaArticulo.aplicadoVehiculo.$dirty" ng-style="{color:'red'}">
+											El aplicado vehículo es requerido
+										</div>
+										<div ng-if="crudHistorico.artInfrFinAplicadoVeh < 0 || crudHistorico.artInfrFinAplicadoVeh > 1" ng-style="{color:'red'}">
+											Aplicado vehículo solo puede ser 0 o 1
+										</div>
+									</div>
+								</div>
+								<div class="row">
+								<div class="col-md-6 form-group">
+										<label for="diaSancion">Arrastro:</label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<span class="fa fa-arrows"></span>
+											</div>
+											<input maxlength="30"  class="form-control"  type="text" ng-model="crudHistorico.artInfrFinArrastro" />
+										</div>
+									</div>
+									
+									<div class="col-md-6 form-group" ng-class="{'has-error': (frmAltaArticulo.puntos.$invalid && frmAltaArticulo.puntos.$dirty) || crudHistorico.artInfrFinPuntos < 0 || crudHistorico.artInfrFinPuntos > 12}">
+										<label for="puntos">*Puntos:(de 0 a 12)</label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<span class="fa fa-star-half-o"></span>
+											</div>
+											<input maxlength="2" integer-number ng-required="true" id="puntos" name="puntos" class="form-control"  type="text" ng-model="crudHistorico.artInfrFinPuntos" />
+										</div>
+										<div ng-show="frmAltaArticulo.puntos.$error.required && frmAltaArticulo.puntos.$dirty" ng-style="{color:'red'}">
+										Los puntos son requeridos
+										</div>
+										<div ng-if="crudHistorico.artInfrFinPuntos < 0 || crudHistorico.artInfrFinPuntos > 12" ng-style="{color:'red'}">
+										El numero de puntos debe estar en un rango entre  0 al 12
+										</div>
+									
+									</div>
+								</div>	
+							</div>
+						</div>						
+					</div>
+					
+				</section>
+				<section class="col-md-6 connectedSortable">
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Motivación</h3>
+							<div class="box-tools pull-right">
+								<button type="button" class="btn btn-box-tool"
+									data-widget="collapse">
+									<i class="fa fa-minus"></i>
+								</button>
+							</div>
+						</div>
+						<div class="box-body">
+							<div class="row">
+								<div class="col-xs-12 col-md-12  form-group" ng-class="{'has-error': (frmAltaArticulo.motivacion.$invalid && frmAltaArticulo.motivacion.$dirty) || detalle.artInfrFinDescripcion.length > 300}">
+									<label for="motivacion">*Descripción:(maximo 300 caracteres)</label>
+									<div class="input-group">
+										<textarea  maxlength="300" ng-required="true" capitalize  ng-model="crudHistorico.artInfrFinDescripcion" cols="120" rows="5" class="col-xs-12 col-md-12" id="motivacion" name="motivacion" style="resize: none;"></textarea>
+									</div>
+									<div ng-show="frmAltaArticulo.motivacion.$error.required && frmAltaArticulo.motivacion.$dirty" ng-style="{color:'red'}">
+										La descripción es requerida
+									</div>
+									<div ng-if="crudHistorico.artInfrFinDescripcion.length > 300" ng-style="{color:'red'}">
+										La longitud maxima de la descripción es de 300 caracteres
+									</div>
+								</div>	
+							</div>						
+						</div>
+					</div>
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Vigencia</h3>
+							<div class="box-tools pull-right">
+								<button type="button" class="btn btn-box-tool"
+									data-widget="collapse">
+									<i class="fa fa-minus"></i>
+								</button>
+							</div>
+						</div>
+						<div class="box-body">
+							<div class="col-xs-12">	
+								<div class="row">
+									<div class="col-md-6 form-group" ng-class="{'has-error': frmAltaArticulo.fechaInicio.$invalid && frmAltaArticulo.fechaInicio.$dirty}">
+										<label for="fechaInicio">*Fecha Inicio:</label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<span class="fa fa-calendar"></span>
+											</div>
+											<input  ng-required="true" id="fechaInicio" name="fechaInicio" class="form-control"  type="text" ng-model="crudHistorico.artInfrFinFechaInicio" onkeydown="return false" autocomplete="off"/>
+										</div>
+										<div ng-show="frmAltaArticulo.fechaInicio.$error.required && frmAltaArticulo.fechaInicio.$dirty" ng-style="{color:'red'}">
+										La fecha inicio es requerida
+										</div>
+									</div>
+									<div class="col-md-6 form-group" ng-class="{'has-error': frmAltaArticulo.fechaFin.$invalid && frmAltaArticulo.fechaFin.$dirty}">
+										<label for="fechaFin">*Fecha Termino:</label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<span class="fa fa-calendar"></span>
+											</div>
+											<input ng-required="true" id="fechaFin" name="fechaFin" class="form-control"  type="text" ng-model="crudHistorico.artInfrFinFechaTermino" onkeydown="return false" autocomplete="off" />
+										</div>
+										<div ng-show="frmAltaArticulo.fechaFin.$error.required && frmAltaArticulo.fechaFin.$dirty" ng-style="{color:'red'}">
+											La fecha termino es requerida
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+ 					</div>
+				</section>
+				</div>
+<!-- 				<div class="row"> -->
+<!-- 					<div class="col-xs-5 text-left"> -->
+<!--                                     <a ng-click="regresarMod()" href="" class="btn pull-left"> -->
+<!-- 										 Realizar otra búsqueda -->
+<!-- 									</a> -->
+<!--                      </div> -->
+<!-- 					<div class="col-xs-5 text-left"> -->
+<!-- 						<button class="btn btn-danger" ng-click="altaHistorico(crudHistorico)" id="btnGuardarDatos" type="button" >Guardar</button> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+				<div class="row itemsBox">
+                                <a ng-click="regresarMod()" class="btn">
+									<i class="fa fa-arrow-circle-left"></i>
+									<span>Regresar</span>
+								</a>
+								<button class="btn btn-danger" id="btnGuardarDatos" ng-click="altaHistorico(crudHistorico)" type="button" >
+									<span>Guardar</span>
+								</button>
+				</div>
+		</form>
+	</section>
+	<div class="control-sidebar-bg"></div>	
+	<script>
+			$(function () {
+		    $("#fechaInicio").datepicker({             
+				format: 'dd/mm/yyyy',
+				//language: 'es',
+				todayHighlight : true,
+				autoclose : true
+			}).on('changeDate', function (selected) {
+	        	var minDate = new Date(selected.date.valueOf());
+	        	$('#fechaFin').datepicker('setStartDate', minDate);
+	    	});
+			
+			$("#fechaFin").datepicker({             
+				format: 'dd/mm/yyyy',
+				//language: 'es',
+				todayHighlight : true,
+				autoclose : true
+			}).on('changeDate', function (selected) {
+	        	var maxDate = new Date(selected.date.valueOf());
+	        	$('#fechaInicio').datepicker('setEndDate', maxDate);
+	    	});
+		});
+	</script>
+</body>
+</html>

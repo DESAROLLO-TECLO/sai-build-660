@@ -1,0 +1,243 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>Modifica Impugnación</title>
+</head>
+<body>
+	<section class="content-header">
+
+		<h1>Modifica Impugnación</h1>
+		<ol class="breadcrumb">
+			<li><a><i class="fa fa-book"></i>Impugnación</a></li>
+			<li class="active">Consulta</li>
+		</ol>
+	</section>
+	<!-- Main content -->
+
+	<section class="content">
+		<form name="userForm">
+			<div class="row">
+				<div class="col-md-2"></div>
+				<div class="col-md-8">
+					<!-- Datos generales -->
+					<div class="box box-danger" align="center">
+						<div class="box-header with-border">
+							<div align="center">
+								<h3 class="box-title">Impugnación</h3>
+							</div>
+						</div>
+						<div class="box-body">
+							<div class="form-group">
+								<div class="col-md-12" align="left">
+									<div class="row">
+										<div class="col-md-6">
+											<!-- NO JUICIO -->
+											<div class="form-group"
+												ng-class="{ 'has-error' : userForm.impugnacionJuicio.$invalid && !userForm.impugnacionJuicio.$pristine }">
+												<label>No. de Juicio:</label>
+
+												<div class="input-group">
+													<span class="input-group-addon"> <i
+														class="fa fa-gavel"></i></span> <input type="text" capitalize
+														name="impugnacionJuicio" class="form-control"
+														maxlength="35" ng-model="impugna[0].impugnacionJuicio"
+														required>
+												</div>
+												<p
+													ng-show="userForm.impugnacionJuicio.$invalid && !userForm.impugnacionJuicio.$pristine"
+													class="help-block">El no. de juicio es requerido</p>
+											</div>
+										</div>
+
+										<div class="col-md-6">
+											<!-- NO JUICIO JURIDICO-->
+											<div class="form-group"
+												ng-class="{ 'has-error' : userForm.impugnacionOficioJur.$invalid && !userForm.impugnacionOficioJur.$pristine }">
+												<label>No. de Oficio Jurídico:</label>
+												<div class="input-group">
+													<span class="input-group-addon"> <i
+														class="fa fa-gavel"></i></span> <input type="text" maxlength="40"
+														capitalize name="impugnacionOficioJur"
+														class="form-control"
+														ng-model="impugna[0].impugnacionOficioJur" required>
+												</div>
+												<p
+													ng-show="userForm.impugnacionOficioJur.$invalid && !userForm.impugnacionOficioJur.$pristine"
+													class="help-block">El no. de oficio jurídico es
+													requerido</p>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group"
+												ng-class="{ 'has-error' : userForm.impugnacionConstanciaCump.$invalid && !userForm.impugnacionConstanciaCump.$pristine }">
+												<label>Constancia de Cumplimiento:</label>
+
+
+												<div class="input-group">
+													<span class="input-group-addon"> <i
+														class="fa fa-file-text-o"></i></span> <input type="text"
+														capitalize name="impugnacionConstanciaCump"
+														class="form-control" maxlength="30"
+														ng-model="impugna[0].impugnacionConstanciaCump" required>
+												</div>
+
+												<p
+													ng-show="userForm.impugnacionConstanciaCump.$invalid && !userForm.impugnacionConstanciaCump.$pristine"
+													class="help-block">La constancia de cumplimiento es
+													requerida</p>
+											</div>
+										</div>
+										<!-- </div> -->
+										<!-- FIN DEL REPEAT -->
+
+										<div class="col-md-6" align="left">
+
+											<div class="form-group"
+												ng-class="{ 'has-error' : userForm.fechaRecepcion.$invalid && !userForm.fechaRecepcion.$pristine }">
+												<label class="text-left">Fecha de Recepción:</label>
+
+												<div class="input-group date" datetimepicker
+													options="dateTimePickerOptions" ng-required="true"
+													ng-model="impugna[0].fechaRecepcion" name="fechaRecepcion"
+													show-button-bar="true">
+													<div class="input-group-addon">
+														<i class="fa fa-calendar"></i>
+													</div>
+													<input type="text" id="fechaRecepcion"
+														class="form-control inputFecha input-append" readonly>
+												</div>
+												<p
+													ng-show="userForm.fechaRecepcion.$invalid && !userForm.fechaRecepcion.$pristine"
+													class="help-block">La fecha de Recepción es requerida</p>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-12"></div>
+
+								<div class="box-header with-border">
+									<div align="center">
+										<h3 class="box-title">Datos del Actor</h3>
+									</div>
+								</div>
+								<div class="box-body">
+									<div class="form-group">
+										<div align="left" ng-repeat="impugna in impugna">
+											<div class="row">
+												<div class="col-md-6">
+													<!-- NAME -->
+													<div class="form-group"
+														ng-class="{ 'has-error' : userForm.actorNombre.$invalid && !userForm.actorNombre.$pristine }">
+														<label>Nombre:</label>
+
+														<div class="input-group">
+															<span class="input-group-addon"> <i
+																class="fa fa-user"></i></span> <input type="text"
+																name="actorNombre" capitalize class="form-control"
+																ng-model="impugna.actorNombre" maxlength="40" required>
+														</div>
+														<p
+															ng-show="userForm.actorNombre.$invalid && !userForm.actorNombre.$pristine"
+															class="help-block">El nombre es requerido</p>
+													</div>
+												</div>
+												<div class="col-md-6">
+													<!-- NAME -->
+													<div class="form-group"
+														ng-class="{ 'has-error' : userForm.actorApellidoPaterno.$invalid && !userForm.actorApellidoPaterno.$pristine }">
+														<label>Apellido Paterno:</label>
+
+														<div class="input-group">
+															<span class="input-group-addon"> <i
+																class="fa fa-user"></i></span> <input type="text"
+																maxlength="40" capitalize name="actorApellidoPaterno"
+																class="form-control"
+																ng-model="impugna.actorApellidoPaterno" required>
+
+														</div>
+														<p
+															ng-show="userForm.actorApellidoPaterno.$invalid && !userForm.actorApellidoPaterno.$pristine"
+															class="help-block">El apellido paterno es requerido</p>
+													</div>
+												</div>
+											</div>
+
+											<div class="row">
+												<div class="col-md-6">
+													<div class="form-group"
+														ng-class="{ 'has-error' : userForm.actorApellidoMaterno.$invalid && !userForm.actorApellidoMaterno.$pristine }">
+														<label>Apellido Materno:</label>
+
+														<div class="input-group">
+															<span class="input-group-addon"> <i
+																class="fa fa-user"></i></span> <input type="text"
+																maxlength="40" capitalize name="actorApellidoMaterno"
+																class="form-control"
+																ng-model="impugna.actorApellidoMaterno" required>
+														</div>
+														<p
+															ng-show="userForm.actorApellidoMaterno.$invalid && !userForm.actorApellidoMaterno.$pristine"
+															class="help-block">El apellido materno es requerido</p>
+													</div>
+												</div>
+											</div>
+											<div class="form-group"
+												ng-class="{ 'has-error' : userForm.name.$invalid && !userForm.name.$pristine }">
+												<label style="visibility: hidden">Name</label> <input
+													type="text" name="name" class="form-control"
+													style="visibility: hidden">
+												<p
+													ng-show="userForm.name.$invalid && !userForm.name.$pristine"
+													class="help-block"></p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="box-footer">
+							<div class="row">
+								<!-- 								<a href="#/consultaImpugnacion" class="btn btn-danger">Cancelar</a> -->
+								<button class="btn btn-danger" onClick="window.history.back()">
+									<span>Cancelar</span>
+								</button>
+								<button class="btn btn-danger" ng-click="modificaDatos(impugna)">
+									<span>Guardar</span>
+								</button>
+								<button class="btn btn-danger"
+									ng-click="verInfracciones(impugna)">
+									<span>Modificar Infracciones</span>
+								</button>
+								<!-- 								<input style="margin-top:5px;" class="btn btn-danger" type="button" ng-click="modificaDatos(impugna)" value="Guardar">	 -->
+								<!-- 								<input style="margin-top:5px;" type="button" class="btn btn-danger" ng-click="verInfracciones(impugna)" value="Modificar">			 -->
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</form>
+	</section>
+
+	<script type="text/javascript">
+// 		$(function() {
+// 			//Date picker
+// 			$('#fechaRecepcion').datepicker({
+// 				format : 'dd/mm/yyyy',
+// 				language : 'es',
+// 				todayHighlight : true,
+// 				autoclose : true
+// 			});
+
+// 			$(".timepicker").timepicker({
+// 				showInputs : false
+// 			});
+
+// 		});
+	</script>
+</body>
+</html>

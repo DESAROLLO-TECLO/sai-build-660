@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Búsqueda de Salidas</title>
+</head>
+<body>
+	
+	<section class="content-header">
+		<h1>Alta de Movimiento</h1>
+		<ol class="breadcrumb">
+			<li><a href=""><i class="fa fa-arrow-circle-down tool"></i>Movimiento entre Depósitos</a></li>
+			<li class="active">Alta de Movimiento</li>
+		</ol>
+	</section>
+	
+		<section class="content"  ng-show="validarPerfilMsg">
+		<div class="row col-md-8 col-md-offset-2">
+			<div class="alert alert-teclo  alert-dismissable text-center">
+				<strong class="mensajeAutorizacion">{{perfilValida}}</strong>
+			</div>
+		</div>
+	</section>
+
+	<section class="content"  ng-show="validarPerfilView">
+		<form name="salidaVehBusqued" role="form">
+			<div class="row">
+				<div class="col-md-3"></div>
+				<div class="col-md-6 ">
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Búsqueda</h3>
+						</div>
+						<div class="box-body">
+							<div class="row">
+								<div class="col-md-6">
+										<div class="form-group input-group">
+											<div class="input-group-addon"><i class="fa fa-list"></i></div>
+										    <select ng-model="salidaVehBusqueda.parametro" class="form-control"
+										    ng-options='option.codigoString as option.descripcion for option in filterGralBusq'>
+											</select>
+										</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group" ng-class="{'has-error': salidaVehBusqued.valorParam.$invalid &&  salidaVehBusqued.valorParam.$dirty }">
+											<div class="input-group date" >
+												<div class="input-group-addon"><i class="fa fa-pencil"></i></div>
+													<input type="text" name="valorParam" ng-model="salidaVehBusqueda.valorBusqueda" maxlength="20" ng-required="true"  class="form-control"></input>
+														<span class="input-group-btn">
+														<button type="button" id="buscarSalida" ng-click="buscarSalidaVehiculo()" class="btn btn-danger btn-flat">Buscar</button></span>
+											</div>
+											<div>
+												<div ng-show="salidaVehBusqued.valorParam.$error.required &&  salidaVehBusqued.valorParam.$dirty "
+													ng-style="{color:'red'}">El valor es requerido</div>
+											</div>
+	                     			</div>
+								 </div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4"></div>
+
+			<div class="row"  ng-if="results.length > 0">
+				<div class="col-xs-12">
+					<div class="box box-danger">
+						<div class="box-header col-md-12">
+									<div class="col-md-6 col-xs-12">
+										<h3 class="box-title">
+											Registros Encontrados: <span>{{ (results | filter:view.searchSomething).length}}</span>
+										</h3>
+									</div>
+									
+									<div class="col-md-offset-3 col-md-3 col-xs-10">
+										<div class="input-group">
+											<input id="searchsomething" type="text" class="form-control" placeholder="Buscar por filtro" ng-model="view.searchSomething">
+											<span class="input-group-addon"><i class="fa fa-search"></i></span>
+										</div>
+									</div>
+		      														
+						</div>
+						<!-- /.box-header -->
+						<div class="box-body table-responsive no-padding">
+							<table id="garantiasTable" class="table table-hover header-fixed">
+								<thead>
+									<tr>
+										<th class="center">NCI</th>
+										<th>NO.INFRACCIÓN</th>
+										<th class="center">NO.PLACA</th>
+										<th>MARCA</th>
+										<th>MODELO</th>
+										<th>COLOR</th>
+										<tH>FECHA INGRESO</th>
+										<th>DEPÓSITO</th>
+										<th class="wrap-text">NÚMERO RESGUARDO</th>
+
+									</tr>
+								</thead>
+								<tbody>
+									<tr dir-paginate="result in results | filter:view.searchSomething | itemsPerPage: view.rowsPerPage">
+
+										<td class="wrap-text"><a href="#/altaSalidaVehiculo/{{result.infracNum}}">{{result.infracNumCtrl}}</a></td>
+										<td class="center">{{result.infracNum}}</td>
+										<td class="center">{{result.placaNum}}</td>
+										<td class="center">{{result.nomMarca}}</td>
+										<td class="center">{{result.nomModelo}}</td>
+										<td class="center">{{result.nomColor}}</td>
+										<td class="center">{{result.ingresoFecha}}</td>
+										<td class="center">{{result.nomDep}}</td>
+										<td class="center">{{result.numResguardo}}</td>
+									</tr>
+									<tr ng-if="(results | filter:view.searchSomething).length < 1"><td colspan="5" class="text-center"><h4>No se encontraron coincidencias</h4></td></tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="container-fluid">
+							<div class="fixed-table-pagination" style="display:block;">
+								<rows-per-page rows="view.rowsPerPage" filtro="view.searchSomething" array="results"></rows-per-page>
+								
+								<div class="pull-right pagination">
+									<dir-pagination-controls class="pagination"></dir-pagination-controls>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+		
+	</section>
+	
+		<script type="text/javascript">
+			$(function () {
+					    $("#fInicio").datepicker({             
+							format: 'dd/mm/yyyy',
+							//language: 'es',
+							todayHighlight : true,
+							autoclose : true
+						}).on('changeDate', function (selected) {
+				        	var minDate = new Date(selected.date.valueOf());
+				        	$('#fFin').datepicker('setStartDate', minDate);
+				    	});
+						
+						$("#fFin").datepicker({             
+							format: 'dd/mm/yyyy',
+							//language: 'es',
+							todayHighlight : true,
+							autoclose : true
+						}).on('changeDate', function (selected) {
+				        	var maxDate = new Date(selected.date.valueOf());
+				        	$('#fInicio').datepicker('setEndDate', maxDate);
+				    	});
+					});
+	
+    </script> 
+</body>
+</html>

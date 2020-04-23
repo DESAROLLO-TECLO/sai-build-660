@@ -1,0 +1,39 @@
+legend.scheduler-border {
+	font-size: 1rem !important;
+	font-weight: bold !important;
+	text-align: left !important;
+	width: auto;
+	padding: 0 0.7143rem;
+	border-bottom: none;
+}
+
+fieldset.scheduler-border {
+	border-radius: 0.5rem; /* applied border radius */
+	border: 1px solid #ccc !important;
+	padding: 0 1.4rem 1.4rem 1.4rem !important;
+	margin: 0 0 1.5rem 0 !important;
+}
+
+
+.modalContent{
+/* 	min-height: 300px !important; */
+	max-height: 46.43rem !important;
+	width: 100% !important;
+	max-width: 39.29rem !important;
+	padding-right: 1.429rem;
+}
+/* tr.spaceUnder > td */
+/* { */
+/*   padding-bottom: 1em; */
+/*   padding-left: 1em; */
+/* } */
+
+/* .inputs{ */
+/* 	width: 100%; */
+/* } */
+
+/* select{ */
+/*     -moz-appearance: none; */
+/*     appearance: none; */
+/*     padding: 2px; */
+/* } */

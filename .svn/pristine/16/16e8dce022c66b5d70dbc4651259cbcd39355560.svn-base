@@ -1,0 +1,1149 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>Pago Acta Administrativa</title>
+</head>
+<body>
+	<section class="content-header">
+		<h1>Pago de Acta Administrativa</h1>
+		<ol class="breadcrumb">
+			<li><i class="fa fa-paypal"></i> Pagos</li>
+			<li class="active">Acta Administrativa</li>
+		</ol>
+	</section>
+
+	<!-- Main content -->
+	<section class="content" ng-init="init()">
+		<div class="row">
+			<applet
+				archive="applets/appcp_v100.jar"
+				code="{{codebase}}" id="App" width="0" height="0"> </applet>
+<!-- archive="{{applet_route}}/applets/appcp_v100.jar" -->
+			<!-- 			<p> -->
+			<!-- 				<object type="application/x-java-applet" classid="java:application.App.class" -->
+			<!-- 					archive="http://localhost:9080/saicdmx-api/applets/appcp_v100.jar" width="7" height="4 "></object> -->
+			<!-- 			</p> -->
+		</div>
+
+		<!-- /.row -->
+		<div class="row col-md-8 col-md-offset-2" ng-if="isCajero == false">
+
+			<div class="alert alert-teclo alert-dismissable center">
+				<strong class="mensajeAutorizacion">¡Cuidado! No puedes realizar esta operación,
+				verifica tu perfil</strong>
+			</div>
+
+		</div>
+
+		<div class="row col-md-8 col-md-offset-2"
+			ng-if="navegador =='chrome' || navegador =='ms-edge'">
+			<div class="alert alert-teclo alert-dismissable center">
+				<strong class="mensajeAutorizacion">¡Cuidado! El módulo pago require de navegador
+				Firefox o Internet Explorer</strong>
+			</div>
+
+		</div>
+		<div class="col-md-3"></div>
+
+		<div
+			ng-show="isCajero == true && (navegador !='chrome' && navegador !='ms-edge')">
+			<div class="row">
+				<div class="col-md-6 ">
+					<div class="box box-danger">
+						<div class="box-header with-border text-center">
+							<h3 class="box-title">Búsqueda</h3>
+						</div>
+						<!-- /.box-header -->
+						<div class="box-body">
+							<form id="form1" role="form" name="infraccionesActa">
+
+								<div class="row">
+
+									<div class="col-md-6">
+										<div class="form-group">
+											<div class="input-group">
+												<span class="input-group-addon"><i class="fa fa-map"></i></span>
+
+												<select class="form-control"
+													ng-class="{'has-error': (infraccionesActa.tipoBusqueda.$error.required && infraccionesActa.tipoBusqueda.$dirty) }"
+													ng-options="tipoBusqueda.codigoString as tipoBusqueda.descripcion for tipoBusqueda in catTiposBusqueda"
+													required ng-model="infraccionActaVO.tipoParametro"
+													name="tipoBusqueda">
+												</select>
+											</div>
+											<div
+												ng-show="infraccionesActa.tipoBusqueda.$error.required && infraccionesActa.tipoBusqueda.$dirty"
+												ng-style="{color:'red'}">Tipo de búsqueda requerida</div>
+											<!-- /.form-group -->
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group"
+											ng-class="{'has-error': (infraccionesActa.infraccionDepositoCampo.$error.required && infraccionesActa.infraccionDepositoCampo.$dirty) }">
+											<div class="input-group">
+												<span class="input-group-addon"><i
+													class="fa  fa-credit-card"></i></span> <input type="text"
+													capitalize class="form-control"
+													id="infraccionDepositoCampo"
+													ng-model="infraccionActaVO.valorParametro" required="true"
+													name="infraccionDepositoCampo"> <span
+													class="input-group-btn">
+													<button type="button" class="btn btn-danger btn-flat center-block"
+														id="btnBuscarInfraccion"
+														ng-click="consultaInfraccionesActa( )">Buscar</button>
+												</span>
+											</div>
+											<div
+												ng-show="infraccionesActa.infraccionDepositoCampo.$error.required && infraccionesActa.infraccionDepositoCampo.$dirty "
+												ng-style="{color:'red'}">El valor es requerido</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="form-group">
+										<div class="col-md-12 text-center"></div>
+									</div>
+								</div>
+
+							</form>
+						</div>
+						<!-- /.row -->
+					</div>
+				</div>
+			</div>
+			</br>
+
+			<div class="row" id="listaInfraccionesActa"
+				ng-if="listaInfraccionesActa.length > 0">
+
+				<div class="col-md-12">
+
+					<div class="box box-danger">
+						<div class="box-header row">
+							<div class="col-md-6 col-md-12">
+								<h3 class="box-title  text-center">Registros Encontrados:
+									{{ (listaInfraccionesActa | filter: view.filterSearch).length }}</h3>
+							</div>
+							<div class="col-md-6 form-group">
+								<div class="row">
+									<div class="col-md-offset-4 col-md-7 col-xs-8">
+										<span class="input-group ">
+											<input id="searchsomething" type="text" class="form-control"
+												placeholder="Buscar por filtro" ng-model="view.filterSearch">
+											<span class="input-group-addon">
+												<i class="fa fa-search"></i>
+											</span>
+										</span>
+									</div>
+<!-- 									<div class="col-md-1 col-xs-1">	 -->
+<!-- 										<a href="#/cargaExpediente/{{idInfraccionDeposito}}/2" class="pull-right" -->
+<!-- 											ng-if="idInfraccionDeposito !=null"> <span> <img -->
+<!-- 												src="static/dist/img/folder.png" width="40px" height="37px"> -->
+<!-- 										</span></a> -->
+<!-- 									</div> -->
+								</div>
+							</div>
+						</div>
+						<div class="box-header row" ng-if="bannerMsgRobo != ''">
+							<div class="col-md-12 center col-xs-12">
+								<h6 ng-style="{color:'red'}" class="box-title  text-center">
+								{{bannerMsgRobo}}
+								</h6>
+							</div>
+						</div>
+
+						<!-- /.box-header -->
+						<div class="box-body table-responsive">
+							<div class="col-xs-12">
+								<div style="display: block; overflow: auto;">
+
+									<table id="tabla_infracciones" class="table table-striped table-hover">
+										<thead>
+											<tr>
+												<th>ESTATUS</th>
+												<th>INFRACCIÓN /No. DCTO</th>
+												<th>PLACA</th>
+<!-- 												<th>NCI</th> -->
+												<th>FECHA</th>
+												<th>MOTIVO</th>
+												<th>SANCIÓN</th>
+												<th>MONTO</th>
+												<th>REDUCCIÓN</th>
+												<th>ACTUALIZACIÓN</th>
+												<th>RECARGOS</th>
+												<th>DERECHO DE PISO</th>
+												<th>ARRASTRE</th>
+												<th>CANDADO</th>
+												<th>TOTAL</th>
+<!-- 												<th>POR PAGAR</th> -->
+												<th>RECIBO</th>
+												<th>VOUCHER</th>
+											</tr>
+										</thead>
+										<tbody class="text-center">
+											<tr dir-paginate="infraccionVO in listaInfraccionesActa | filter: view.filterSearch | itemsPerPage: view.rowsPerPage">
+												<td><span ng-class="infraccionVO.classeStatus">{{infraccionVO.statusOrden}}</span></td>
+												<td>
+													<a href='javascript:void(0)' ng-if="!infraccionVO.estatusUrl && infraccionVO.statusOrden != 'Pagado'"
+														ng-click="seleccionarInfraccionPago(infraccionVO)"><span
+														ng-class="infraccionVO.classeNoInfraccion"
+														data-toggle="modal" data-target="{{infraccionVO.infracTipoActa}}">{{infraccionVO.infracNum}}</span>
+													</a>
+	
+													<a href='javascript:void(0)' ng-class="infraccionVO.classeNoInfraccion" ng-if="infraccionVO.estatusUrl && infraccionVO.statusOrden != 'Pagado'" ng-click="validaInfraccion(infraccionVO.infracTotalPagar,infraccionVO.classeNoInfraccion)">
+														{{infraccionVO.infracNum}}
+													</a>
+													<span href='javascript:void(0)' ng-class="infraccionVO.classeNoInfraccion" ng-if="infraccionVO.estatusUrl && infraccionVO.statusOrden == 'Pagado'">
+														{{infraccionVO.infracNum}}
+													</span>
+													<span ng-class="infraccionVO.classeNoInfraccion" ng-if="!infraccionVO.estatusUrl && infraccionVO.statusOrden == 'Pagado'">
+														{{infraccionVO.infracNum}}
+													</span>
+												</td>
+												<td>{{infraccionVO.infracPlaca}}</td>
+<!-- 												<td>{{infraccionVO.infracNumCtrl}}</td> -->
+												
+												<td>{{infraccionVO.infracFecha}}</td>
+												<td>{{infraccionVO.infracMotivacion}}</td>
+												<td>{{infraccionVO.infracSancion}}</td>
+												<td>{{infraccionVO.infracMonto | currency }}</td>
+												<td>{{infraccionVO.infracDescuento | currency }}</td>
+												<td>{{infraccionVO.infracActualizacion | currency }}</td>
+												<td>{{infraccionVO.infracRecargo | currency }}</td>
+												<td>{{infraccionVO.infracDerechoPiso | currency }}</td>
+												<td>{{infraccionVO.infracArrastre | currency }}</td>
+												<td>{{infraccionVO.infracCandado | currency }}</td>
+												<td>{{infraccionVO.infracTotalPagar | currency }}</td>
+												<td><a ng-if="infraccionVO.pagoConMonto"
+													ng-click="descargaVaucher(infraccionVO.infracNum ,'reporteRecibo')">
+<!-- 														<img src="dist/img/search.png" alt="Ver" width="30%" -->
+<!-- 														height="15%" /> -->
+															<i class="fa fa-download" aria-hidden="true"></i>
+												</a></td>
+												<td><a ng-if="infraccionVO.pagoConVoucher"
+													ng-click="descargaVaucher(infraccionVO.infracNum ,'reporteVoucher')"><img
+														src="dist/img/search.png" alt="Ver" width="30%"
+														height="15%" /> </a></td>
+
+											</tr>
+											
+											<tr ng-if="(listaInfraccionesActa | filter:view.filterSearch).length < 1"><td colspan="17" class="text-center"><h4>No se encontraron coincidencias</h4></td></tr>
+										</tbody>
+									</table>
+								</div>
+								
+								<div class="container-fluid">
+									<div class="fixed-table-pagination" style="display:block;">
+										<rows-per-page rows="view.rowsPerPage" filtro="view.filterSearch" array="listaInfraccionesActa"></rows-per-page>
+										
+										<div class="pull-right pagination">
+											<dir-pagination-controls class="pagination"></dir-pagination-controls>
+										</div>
+									</div>
+								</div>
+								
+								
+								<div class="row" ng-if="botonLiberacion">
+									<div class="col-xs-12 text-center">
+										<a ng-click="liberacionVehiculo()" role="button" class="btn btn-danger">
+											Liberar
+										</a>
+									</div>	
+								</div>
+							</div>
+						</div>
+
+					</div>
+					<!-- /.box -->
+				</div>
+			</div>
+		</div>
+		<!-- Modal -->
+		<form role="form" name="formModalTipoPago02" novalidate>
+
+			<div class="modal fade" id="modalTipoPago02" role="dialog" 
+				style="overflow: auto;" ng-if="success.resultado != 1 " data-keyboard="false" data-backdrop="static">
+				<div class="modal-dialog modal-lg">
+
+					<!-- Modal content-->
+					<div class="modal-content"
+						style="width: 80%; min-width: 280px; margin: auto;">
+
+						<div class="modal-header bg-red-active">
+							<div class="box-header text-center" style="color: white;">
+								<button type="button" class="close" data-dismiss="modal"
+									ng-click="reset()" style="color: blue;">&times;</button>
+								<h3 class="modal-title">Formas de Pago</h3>
+
+							</div>
+						</div>
+
+						<div class="modal-body">
+
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="box box-danger">
+										<div class="box-header with-border">
+											<i class="fa fa-edit"></i>
+											<h3 class="box-title">Pago de Infracción</h3>
+											<div class="box-tools pull-right">
+												<button type="button" class="btn btn-box-tool"
+													data-widget="collapse">
+													<i class="fa fa-minus"></i>
+												</button>
+											</div>
+										</div>
+										<!-- /.box-header -->
+										<div class="box-body">
+											<div class="form-group">
+												<div class="row center">
+													<div class="col-md-6 col-xs-6">
+														<label for="example1">Monto a Pagar: </label>
+													</div>
+													<div class="col-md-6 col-xs-6">
+														<label for="example2">{{infraccionParaPagoVO.infracTotalPagar
+															| currency}}</label>
+													</div>
+												</div>
+												<div class="row center">
+													<div class="col-md-6 col-xs-6">
+														<label for="example1">Número de Infracción: </label>
+													</div>
+													<div class="col-md-6 col-xs-6">
+														<label for="example2">{{infraccionParaPagoVO.infracNum}}</label>
+													</div>
+												</div>
+												<div class="row center">
+													<div class="col-md-6 col-xs-6">
+														<label for="example1">Placa Vehículo: </label>
+													</div>
+													<div class="col-md-6 col-xs-6">
+														<label for="example2">{{infraccionParaPagoVO.infracPlaca}}</label>
+													</div>
+												</div>
+												<div class="row" ng-show='success.resultado != 1'>
+													<div class="col-md-6 col-xs-6">
+														<label for="example1">Tipo de Pago: </label>
+													</div>
+													<div class="col-md-6 col-xs-6" ng-show='success.resultado != 1'>
+
+														<div class="input-group">
+															<span class="input-group-addon"><i
+																class="glyphicon glyphicon-tasks"></i></span> <select
+																class="form-control"
+																ng-options="tipoPago.codigo as tipoPago.descripcion for tipoPago in catTiposPagoActa"
+																ng-model="infraccionParaPagoVO.formaPago "
+																name="formaPago" ng-change="reiniciarPagoDocumentos()">
+																<option value="" selected="selected">Seleccione</option>
+															</select>
+														</div>
+													</div>
+												</div>
+
+
+											</div>
+										</div>
+										<!-- /.box-body -->
+									</div>
+								</div>
+
+							</div>
+
+
+							<div class="row" id="formEfectivo"
+								ng-if="infraccionParaPagoVO.formaPago == '1'">
+								<div class="col-xs-12">
+									<div class="box box-danger">
+
+										<div class="box-header with-border">
+											<i class="fa fa-edit"></i>
+											<h3 class="box-title">Pago en Efectivo</h3>
+
+										</div>
+										<!-- /.box-header -->
+										<div class="box-body">
+											<div class="row" id="mensajeEfectivo">
+												<div class="col-xs-4"></div>
+												<div class="col-xs-5"></div>
+											</div>
+
+											<div class="form-group">
+
+												<div class="row">
+													<div class="col-md-6 col-xs-12 form-group">
+														<label for="example5">Arrastre: </label>
+														<div class="input-group">
+															<span class="input-group-addon"><i
+																class="fa  fa-train"></i></span> <input type="text"
+																class="form-control" id="example5" disabled="disabled"
+																value="{{infraccionParaPagoVO.infracArrastre}}">
+														</div>
+													</div>
+													<div class="col-md-6 col-xs-12 form-group">
+														<label for="example6">Derecho de Piso: </label>
+														<div class="input-group">
+															<span class="input-group-addon"><i
+																class="fa fa-bus"></i></span> <input type="text"
+																class="form-control" id="example6" disabled="disabled"
+																value="{{infraccionParaPagoVO.infracDerechoPiso}}">
+														</div>
+													</div>
+												</div>
+
+												<div class="row">
+													<div class="col-md-6 col-xs-12 form-group " ng-class="{'has-error': formModalTipoPago02.example7.$invalid && formModalTipoPago02.example7.$dirty || botonPago}">
+														<label for="example7">Cantidad Recibida: </label>
+														<div class="input-group">
+															<span class="input-group-addon"><i
+																class="fa  fa-money"></i></span> <input type="text"
+																integer-decimal ng-required="true"
+																ng-change="calcularCambio(pago.cantidadRecibida,  infraccionParaPagoVO )"
+																class="form-control" id="example7" name="example7"
+																ng-model="pago.cantidadRecibida">
+														</div>
+														<div
+															ng-show="formModalTipoPago02.example7.$error.required && formModalTipoPago02.example7.$dirty"
+															ng-style="{color:'#dd4b39'}">La cantidad recibida es requerida</div>
+														<div
+															ng-if="botonPago"
+															ng-style="{color:'#dd4b39'}">La cantidad recibida debe ser igual o mayor al total</div>
+													</div>
+													<div class="col-md-6 col-xs-12 form-group">
+														<label for="example8">Cambio: </label>
+														<div class="input-group">
+															<span class="input-group-addon"><i
+																class="fa  fa-money"></i></span> <input type="text"
+																ng-model="cambio | number:2" class="form-control" id="example8"
+																disabled="disabled">
+														</div>
+													</div>
+												</div>
+												<div class="row">
+												<div class="col-md-2"></div>
+														<div class="form-group col-md-8 col-xs-12"
+															ng-class="{'has-error': formModalTipoPago02.noDocumento.$invalid && formModalTipoPago02.noDocumento.$dirty }">
+															<label> No. Documento </label>
+															<div class="input-group">
+																<span class="input-group-addon"><i
+																	class="fa fa-file-text-o"></i></span> 
+																
+																<input type="text" ng-required="true"
+																	class="form-control" id="example7" name="noDocumento"
+																	ng-model="infraccionParaPagoVO.documentoActa" maxlength="25">
+															</div>
+															<div
+																ng-show="formModalTipoPago02.noDocumento.$error.required && formModalTipoPago02.noDocumento.$dirty "
+																ng-style="{color:'red'}">El no. documento es requerido</div>
+														</div>
+													</div>
+												</div>
+
+											</div>
+											<div class="row">
+
+												<div class="form-group">
+													<div class="col-md-12 text-center">
+														<button class="btn btn-danger" id="btnPagarEfectivo"
+															ng-click=" pagarInfraccionActa(infraccionParaPagoVO, pago.cantidadRecibida)">Pagar
+														</button>
+<!-- 														ng-disabled="formModal.$invalid || botonPago" -->
+													</div>
+												</div>
+											</div><br>
+										</div>
+										<!-- /.box-body -->
+									</div>
+								</div>
+				
+							<div class="row" id="formTarjeta"
+								ng-if="infraccionParaPagoVO.formaPago == '3'">
+								<div class="col-xs-12">
+									<div class="box box-danger">
+										<div class="box-header with-border">
+											<i class="fa fa-edit"></i>
+											<h3 class="box-title">Pago con tarjeta</h3>
+
+										</div>
+										<div class="box-body">
+											<div class="form-group">
+												<div class="row">
+													<div class="col-md-6 col-xs-12 form-group">
+														<label for="example5">Arrastre: </label>
+														<div class="input-group">
+															<span class="input-group-addon"><i
+																class="fa  fa-train"></i></span> <input type="text"
+																class="form-control" id="example5" disabled="disabled"
+																value="{{infraccionParaPagoVO.infracArrastre}}">
+														</div>
+													</div>
+													<div class="col-md-6 col-xs-12 form-group">
+														<label for="example6">Derecho de Piso: </label>
+														<div class="input-group">
+															<span class="input-group-addon"><i
+																class="fa fa-bus"></i></span> <input type="text"
+																class="form-control" id="example6" disabled="disabled"
+																value="{{infraccionParaPagoVO.infracDerechoPiso}}">
+														</div>
+													</div>
+													</div>
+
+													<div class="row">
+														<div class="col-md-2"></div>
+														<div class="form-group col-md-8 col-xs-12 form-group"
+															ng-class="{'has-error': formModalTipoPago02.noDocumento.$invalid && formModalTipoPago02.noDocumento.$dirty  }">
+															<label> No. Documento </label>
+															<div class="input-group">
+																<span class="input-group-addon"><i
+																	class="fa fa-file-text-o"></i></span> 
+																<input type="text" name="noDocumento" maxlength="25"
+																	required="true" class="form-control" id="example7"
+																	ng-model="infraccionParaPagoVO.documentoActa">
+															</div>
+															<div	ng-show="formModalTipoPago02.noDocumento.$error.required && formModalTipoPago02.noDocumento.$dirty "
+																	ng-style="{color:'red'}">El no. documento es requerido</div>
+														</div>
+													</div>
+												</div>
+
+												<br>
+												<div class="row">
+													<div class="form-group">
+														<div class="col-md-4"></div>
+
+														<div class="col-md-4 text-center">
+															<button class="btn btn-danger" id="btnPagar"
+																ng-if="funcionBtnPago == 1"
+																ng-click="pagarInfraccionActa(infraccionParaPagoVO)">{{labelBtnPago}}</button>
+															<button class="btn btn-danger"
+																ng-if="funcionBtnPago == 2"
+																ng-click="realizarCobroActa(infraccionParaPagoVO)">{{labelBtnPago}}</button>
+														</div>
+														<div class="col-md-12 text-center">
+															<br>
+															<label ng-if="funcionBtnPago == 2" style="{color:red}"><strong>{{labelTarjeta}}</strong></label>
+														</div>
+													</div>
+
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- 						<div class="modal-footer"> -->
+						<!-- 							<button type="button" class="btn bg-red-active" -->
+						<!-- 								data-dismiss="modal" ng-click="reset()">Salir</button> -->
+						<!-- 						</div> -->
+					</div>
+			</div>
+		</form>
+
+
+		<form role="form" name="formModal" novalidate>
+			<div class="modal fade" id="modalTipoPago" role="dialog"
+				style="overflow: auto;" ng-if='success.resultado != 1' data-keyboard="false" data-backdrop="static">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content" style="width: 80%; min-width: 280px; margin: auto;">
+						<div class="modal-header bg-red-active">
+							<div class="box-header text-center" style="color: white;">
+								<button type="button" class="close" data-dismiss="modal"
+									ng-click="reset()" style="color: blue;">&times;</button>
+								<h3 class="modal-title">Formas de Pago</h3>
+							</div>
+						</div>
+						<div class="modal-body">
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="box box-danger">
+										<div class="box-header with-border">
+											<i class="fa fa-edit"></i>
+											<h3 class="box-title">Pago de Infracción</h3>
+											<div class="box-tools pull-right">
+												<button type="button" class="btn btn-box-tool"
+													data-widget="collapse">
+													<i class="fa fa-minus"></i>
+												</button>
+											</div>
+										</div>
+										<div class="box-body">
+											<div class="form-group">
+												<div class="row center">
+													<div class="col-md-6 col-xs-6">
+														<label for="example1">Monto a Pagar: </label>
+													</div>
+													<div class="col-md-6 col-xs-6">
+														<label for="example2">{{infraccionParaPagoVO.infracTotalPagar
+															| currency}}</label>
+													</div>
+												</div>
+												<div class="row center">
+													<div class="col-md-6 col-xs-6">
+														<label for="example1">Número de Infracción: </label>
+													</div>
+													<div class="col-md-6 col-xs-6">
+														<label for="example2">{{infraccionParaPagoVO.infracNum}}</label>
+													</div>
+												</div>
+												<div class="row" ng-show='success.resultado != 1'>
+													<div class="col-md-6 col-xs-6">
+														<label for="example1">Tipo de Pago: </label>
+													</div>
+													<div class="col-md-6 col-xs-6" ng-show='success.resultado != 1'>
+
+														<div class="input-group">
+															<span class="input-group-addon"><i class="glyphicon glyphicon-tasks"></i></span> 
+																<select class="form-control" ng-options="tipoPago.codigoString as tipoPago.descripcion for tipoPago in catTiposPago "
+																ng-model="infraccionParaPagoVO.formaPago " name="formaPago" ng-change="reiniciarPagoDocumentos()">
+																<option value="" selected="selected" ng-model="valueOfComb">Seleccione</option>
+															</select>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="row" id="formEfectivo" ng-show="infraccionParaPagoVO.formaPago == 'EFECTIVO'">
+								<div class="col-xs-12">
+									<div class="box box-danger">
+										<div class="box-header with-border">
+											<i class="fa fa-edit"></i>
+											<h3 class="box-title">Pago en Efectivo</h3>
+										</div>
+										<div class="box-body">
+											<div class="row" id="mensajeEfectivo">
+												<div class="col-xs-4"></div>
+												<div class="col-xs-5"></div>
+											</div>
+										<div class="form-group">
+												<div class="row">
+													<div class="col-md-6 col-xs-12 form-group">
+														<label for="example1">Monto de Infracción: </label>
+														<div class="input-group">
+															<span class="input-group-addon"><i
+																class="glyphicon glyphicon-usd"></i></span> <input type="text"
+																class="form-control" id="example1" disabled="disabled"
+																value="{{infraccionParaPagoVO.infracMonto}}">
+														</div>
+													</div>
+													<div class="col-md-6 col-xs-12 form-group">
+														<label for="example2">Descuento:</label>
+														<div class="input-group">
+															<span class="input-group-addon"><i
+																class="glyphicon glyphicon-minus-sign"></i></span> <input
+																type="text" class="form-control" id="example2"
+																disabled="disabled"
+																value="{{infraccionParaPagoVO.infracDescuento}}">
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-md-6 col-xs-12 form-group">
+														<label for="example3">Actualización: </label>
+														<div class="input-group">
+															<span class="input-group-addon"><i
+																class="glyphicon glyphicon-refresh"></i></span> <input
+																type="text" class="form-control" id="example3"
+																disabled="disabled"
+																value="{{infraccionParaPagoVO.infracActualizacion}}">
+														</div>
+													</div>
+													<div class="col-md-6 col-xs-12 form-group">
+														<label for="example4">Recargos: </label>
+														<div class="input-group">
+															<span class="input-group-addon"><i
+																class="glyphicon glyphicon-plus"></i></span> <input type="text"
+																class="form-control" id="example4" disabled="disabled"
+																value="{{infraccionParaPagoVO.infracRecargo}}">
+														</div>
+													</div>
+												</div>
+
+												<div class="row">
+													<div class="col-md-6 col-xs-12 form-group">
+														<label for="example5">Arrastre: </label>
+														<div class="input-group">
+															<span class="input-group-addon"><i
+																class="fa  fa-train"></i></span> <input type="text"
+																class="form-control" id="example5" disabled="disabled"
+																value="{{infraccionParaPagoVO.infracArrastre}}">
+														</div>
+													</div>
+													<div class="col-md-6 col-xs-12 form-group">
+														<label for="example6">Derecho de Piso: </label>
+														<div class="input-group">
+															<span class="input-group-addon"><i
+																class="fa fa-bus"></i></span> <input type="text"
+																class="form-control" id="example6" disabled="disabled"
+																value="{{infraccionParaPagoVO.infracDerechoPiso}}">
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-md-6 col-xs-12 form-group">
+														<label for="example7">Candado: </label>
+														<div class="input-group">
+															<span class="input-group-addon"><i
+																class="fa  fa-train"></i></span> <input type="text"
+																class="form-control" id="example7" disabled="disabled"
+																value="{{infraccionParaPagoVO.infracCandado}}">
+														</div>
+													</div>
+													<div class=col-md-6></div>
+												</div>
+												<div class="row">
+														<div class="col-md-6 col-xs-12 form-group" ng-class="{'has-error': formModal.example7.$invalid && formModal.example7.$dirty || botonPago}">
+															<label for="example7">Cantidad Recibida: </label>
+															<div class="input-group">
+																<span class="input-group-addon"><i
+																	class="fa  fa-money"></i></span> <input type="text"
+																	ng-model="pago.cantidadRecibida" ng-required="true"
+																	ng-change="calcularCambio( pago.cantidadRecibida,  infraccionParaPagoVO )"
+																	integer-decimal class="form-control" id="example7" name="example7">
+	
+															</div>
+															<div
+																ng-show="formModal.example7.$error.required && formModal.example7.$dirty"
+																ng-style="{color:'#dd4b39'}">La cantidad recibida es requerida</div>
+															<div
+																ng-if="botonPago"
+																ng-style="{color:'#dd4b39'}">La cantidad recibida debe ser igual o mayor al total</div>
+													</div>
+													<div class="col-md-6 col-xs-12">
+														<label for="example8">Cambio: </label>
+														<div class="input-group">
+															<span class="input-group-addon"><i
+																class="fa  fa-money"></i></span> <input type="text"
+																ng-model="cambio" class="form-control" id="example8"
+																disabled="disabled">
+														</div>
+													</div>
+												</div>
+
+											</div>
+											<div class="row">
+												<div class="form-group">
+
+													<div class="col-md-12 text-center">
+														<button class="btn btn-danger" id="btnPagarEfectivo"
+															ng-click="pagarInfraccion(infraccionParaPagoVO, pago.cantidadRecibida)">Pagar
+														</button>
+<!-- 														ng-disabled="botonPago || pago.cantidadRecibida==0" -->
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="row" id="formDocumento"
+								ng-if="infraccionParaPagoVO.formaPago == 'DOCUMENTO'">
+								<div class="col-xs-12">
+									<div class="box box-danger">
+										<div class="box-header with-border">
+											<i class="fa fa-edit"></i>
+											<h3 class="box-title">Pago con Documento</h3>
+
+										</div>
+										<div class="box-body">
+											<div class="row" id="mensajeDocumento">
+												<div class="col-md-4"></div>
+												<div class="col-md-5"></div>
+											</div>
+											<div class="row" ng-if="infraccionParaPagoVO.infracMonto > 0">
+												<div class="col-md-4 col-xs-12 form-group">
+													<div class="input-group">
+															<label class="control-sidebar-subheading"> <input
+																type="checkbox" data-layout="layout-boxed"
+																ng-model="checkModel.infraccion"
+																ng-change="checkedInfraccion(infraccionParaPagoVO)"
+																class="pull-left">Monto:
+																{{montoInfraccion}}
+															</label>
+													</div>
+												</div>
+												<div class="form-group col-md-4 col-xs-12"
+														ng-class="{'has-error': formModal.infracEntidad.$invalid && formModal.infracEntidad.$dirty && checkModel.infraccion }">
+														<label>Entidad Pago: </label>
+														<div class="input-group">
+															<span class="input-group-addon"><i
+																class="glyphicon glyphicon-tasks"></i></span> <select
+																class="form-control"
+																ng-options="entidadPago.codigo as entidadPago.descripcion for entidadPago in catTiposEntidadesPago"
+																ng-model="documentoVO.infraccionEntidad"
+																ng-required="checkModel.infraccion" name="infracEntidad"
+																ng-disabled="!checkModel.infraccion">
+																<option value="" selected="selected">Seleccione</option>
+
+															</select>
+														</div>
+														<div
+															ng-show="formModal.infracEntidad.$error.required && formModal.infracEntidad.$dirty && checkModel.infraccion"
+															ng-style="{color:'#dd4b39'}">La entidad pago es requerida</div>
+												</div>
+												<div class="form-group col-md-4 col-xs-12 "
+														ng-class="{'has-error': formModal.infracDocumento.$invalid && formModal.infracDocumento.$dirty && checkModel.infraccion}">
+														<label>Documento: </label>
+														<div class="input-group">
+															<span class="input-group-addon"><i
+																class="glyphicon glyphicon-book"></i></span> <input type="text"
+																class="form-control" id="example1"
+																ng-required="checkModel.infraccion"
+																ng-model="documentoVO.infraccionReferencia"
+																ng-disabled="!checkModel.infraccion"
+																name="infracDocumento">
+														</div>
+														<div
+															ng-show="formModal.infracDocumento.$error.required && formModal.infracDocumento.$dirty && checkModel.infraccion"
+															ng-style="{color:'#dd4b39'}">El documento es requerido</div>
+												</div>
+											</div>
+											<div class="row center">
+													<div class="form-group col-md-6 col-xs-7">
+														<label>Monto de infracción:  </label>{{infraccionParaPagoVO.infracMonto}}
+													</div>
+													<div class="form-group col-md-6 col-xs-6">
+														<label>Actualización:  </label>{{infraccionParaPagoVO.infracActualizacion}}
+													</div>
+													<div class="form-group col-md-6 col-xs-6">
+														<label>Descuento:  </label>{{infraccionParaPagoVO.infracDescuento}}
+													</div>
+													<div class="form-group col-md-6 col-xs-4">
+														<label>Recargos:  </label>{{infraccionParaPagoVO.infracRecargo}}
+													</div>
+											</div>
+											<BR>
+											<div class="row" ng-if="infraccionParaPagoVO.infracArrastre > 0">
+												<div class="col-md-4 col-xs-12 form-group">
+														<label class="control-sidebar-subheading"> <input
+															type="checkbox" data-layout="layout-boxed"
+															ng-click="checkedInfraccion(infraccionParaPagoVO)"
+															ng-model="checkModel.arrastre"
+															ng-change="cambiarValor(checked)" class="pull-left">Arrastre
+															: {{infraccionParaPagoVO.infracArrastre}}
+														</label>
+												</div>
+												<div class="form-group col-md-4 col-xs-12"
+														ng-class="{'has-error': formModal.arrastreEntidad.$invalid && formModal.arrastreEntidad.$dirty && checkModel.arrastre}">
+														<label>Entidad Pago: </label>
+														<div class="input-group">
+															<span class="input-group-addon"><i class="glyphicon glyphicon-tasks"></i></span> 
+															<select class="form-control"
+																ng-options="entidadPago.codigo as entidadPago.descripcion for entidadPago in catTiposEntidadesPago"
+																ng-model="documentoVO.arrastreEntidad "
+																ng-required="checkModel.arrastre"
+																ng-disabled="!checkModel.arrastre"
+																name="arrastreEntidad">
+																<option value="" selected="selected">Seleccione</option>
+															</select>
+														</div>
+														<div
+															ng-show="formModal.arrastreEntidad.$error.required && formModal.arrastreEntidad.$dirty && checkModel.arrastre"
+															ng-style="{color:'#dd4b39'}">La entidad pago es requerida</div>
+													</div>
+													<div class="form-group col-md-4 col-xs-12"
+														ng-class="{'has-error': formModal.arrastreDocumento.$invalid && formModal.arrastreDocumento.$dirty && checkModel.arrastre}">
+														<label for="example1">Documento: </label>
+														<div class="input-group">
+															<span class="input-group-addon"><i
+																class="glyphicon glyphicon-book"></i></span> <input type="text"
+																class="form-control" id="example1"
+																name="arrastreDocumento"
+																ng-disabled="!checkModel.arrastre"
+																ng-required="checkModel.arrastre"
+																ng-model="documentoVO.arrastreReferencia">
+														</div>
+														<div
+															ng-show="formModal.arrastreDocumento.$error.required && formModal.arrastreDocumento.$dirty && checkModel.arrastre"
+															ng-style="{color:'#dd4b39'}">El documento es requerido</div>
+													</div>
+											</div>
+											
+											<div class="row" ng-if="infraccionParaPagoVO.infracDerechoPiso > 0">
+												<div class="col-md-4 col-xs-12 form-group">
+													<div class="input-group">
+														<label class="control-sidebar-subheading"> <input
+															type="checkbox" data-layout="layout-boxed"
+															ng-click="checkedInfraccion(infraccionParaPagoVO)"
+															ng-model="checkModel.piso"
+															ng-change="cambiarValor(checked)" class="pull-left">Derecho
+															de piso: {{infraccionParaPagoVO.infracDerechoPiso}}
+														</label>
+													</div>
+												</div>
+												<div class="form-group col-md-4 col-xs-12"
+														ng-class="{'has-error': formModal.pisoEntidad.$invalid && formModal.pisoEntidad.$dirty && checkModel.piso}">
+														<label>Entidad Pago: </label>
+														<div class="input-group">
+															<span class="input-group-addon"><i
+																class="glyphicon glyphicon-tasks"></i></span> <select
+																class="form-control" ng-required="checkModel.piso"
+																ng-options="entidadPago.codigo as entidadPago.descripcion for entidadPago in catTiposEntidadesPago"
+																ng-model="entidadPagoDoumento.id"
+																ng-disabled="!checkModel.piso" name="pisoEntidad">
+																<option value="" selected="selected">Seleccione</option>
+															</select>
+														</div>
+														<div
+															ng-show="formModal.pisoEntidad.$error.required && formModal.pisoEntidad.$dirty && checkModel.piso"
+															ng-style="{color:'#dd4b39'}">La entidad pago es requerida</div>
+												</div>
+												<div class="form-group col-xs-12 col-md-4"
+														ng-class="{'has-error': formModal.pisoDocumento.$invalid && formModal.pisoDocumento.$dirty && checkModel.piso}">
+														<label for="example1">Documento: </label>
+														<div class="input-group">
+															<span class="input-group-addon"><i
+																class="glyphicon glyphicon-book"></i></span> <input type="text"
+																class="form-control" id="example1"
+																ng-required="checkModel.piso"
+																ng-disabled="!checkModel.piso" name="pisoDocumento"
+																ng-model="documentoVO.pisoReferencia">
+														</div>
+														<div
+															ng-show="formModal.pisoDocumento.$error.required && formModal.pisoDocumento.$dirty && checkModel.piso"
+															ng-style="{color:'#dd4b39'}">El documento es requerido</div>
+												</div>
+												<div class="form-group col-xs-12 col-md-4">
+													<label>Ampara: </label>
+														<div class="input-group">
+															<span class="input-group-addon"><i class="fa fa-bus"></i></span>
+															<input type="text" class="form-control" id="pisoAmpara" integer-decimal
+																name="amapraDerechoPiso" ng-disabled="!checkModel.piso"
+																ng-model="amparaPiso" ng-change="calcularMontoPisoAmparadoChanged(amparaPiso,infraccionParaPagoVO.infracDerechoPiso )">
+														</div>
+												</div>
+											</div>
+											
+											<div class="row" ng-if="infraccionParaPagoVO.infracCandado > 0">
+												<div class="col-md-4 col-xs-12 form-group">
+													<label for="example1"> </label>
+													<div class="input-group">
+														<label class="control-sidebar-subheading"> <input
+															type="checkbox" data-layout="layout-boxed"
+															ng-click="checkedInfraccion( infraccionParaPagoVO)"
+															ng-model="checkModel.candado"
+															ng-change="cambiarValor(checked)" class="pull-left">Candado:
+															{{infraccionParaPagoVO.infracCandado}}
+														</label>
+													</div>
+												</div>
+												<div class="col-md-4 col-xs-12 form-group"
+														ng-class="{'has-error': formModal.candadoEntidad.$invalid && formModal.candadoEntidad.$dirty && checkModel.candado}">
+														<label>Entidad Pago: </label>
+														<div class="input-group">
+															<span class="input-group-addon"><i
+																class="glyphicon glyphicon-tasks"></i></span> 
+															<select class="form-control" ng-required="checkModel.candado"
+																ng-options="entidadPago.codigo as entidadPago.descripcion for entidadPago in catTiposEntidadesPago"
+																ng-model="documentoVO.candadoEntidad"
+																ng-disabled="!checkModel.candado" name="candadoEntidad">
+																<option value="" selected="selected">Seleccione</option>
+															</select>
+														</div>
+														<div
+															ng-show="formModal.candadoEntidad.$error.required && formModal.candadoEntidad.$dirty"
+															ng-style="{color:'#dd4b39'}">La entidad pago es requerida</div>
+												</div>
+												<div class="form-group col-md-4 col-xs-12"
+														ng-class="{'has-error': formModal.candadoDocumento.$invalid && formModal.candadoDocumento.$dirty && checkModel.candado}">
+														<label>Documento: </label>
+														<div class="input-group">
+															<span class="input-group-addon"><i
+																class="glyphicon glyphicon-book"></i></span> 
+																<input type="text"
+																class="form-control" id="example1"
+																ng-required="checkModel.candado"
+																ng-disabled="!checkModel.candado"
+																name="candadoDocumento"
+																ng-model="documentoVO.candadoReferencia">
+														</div>
+														<div
+															ng-show="formModal.candadoDocumento.$error.required && formModal.candadoDocumento.$dirty && checkModel.candado"
+															ng-style="{color:'#dd4b39'}">El documento es requerido</div>
+												</div>
+											</div>
+											<br> <br>
+											<div class="row form-group">
+												<div class="col-md-12 text-center">
+														<h3 class="box-title">Resto por Pagar:
+															{{totalPagoDocumento}}</h3>
+												</div>
+											</div>
+											<div class="row" ng-if="totalPagoDocumento > 0">
+												<div class="col-md-4"></div>
+													<div class="form-group col-md-4 text-center"
+														ng-class="{'has-error': formModal.formaPagoDocumentos.$invalid && formModal.formaPagoDocumentos.$dirty}">
+														<label for="example1">Tipo de Pago: </label>
+														<div class="input-group">
+															<span class="input-group-addon"><i
+																class="glyphicon glyphicon-tasks"></i></span> <select
+																class="form-control"
+																ng-options="tipoPago.codigo as tipoPago.descripcion for tipoPago in catTiposPago | filter:  { codigo: '!99' }"
+																ng-model="infraccionParaPagoVO.formaPagoDocumentos"
+																ng-click="formaPagoConDocumento(infraccionParaPagoVO)"
+																ng-required="true" name="formaPagoDocumentos">
+																<option value="" selected="selected">Seleccione</option>
+															</select>
+														</div>
+														<div
+															ng-show="formModal.formaPagoDocumentos.$error.required && formModal.formaPagoDocumentos.$dirty"
+															ng-style="{color:'#dd4b39'}">El tipo de pago es
+															requerido</div>
+												</div>
+											</div>
+											<div class="col-md-1"></div>
+											<div class="row form-group col-md-12 text-center">
+														<button class="btn btn-danger" id="btnPagar"
+															ng-if="funcionBtnPagoDoc == 1"
+															ng-click="pagarInfraccion(infraccionParaPagoVO)">{{labelBtnPagoDoc}}</button>
+														<button class="btn btn-danger" id="btnPagar"
+															ng-if="funcionBtnPagoDoc == 3"
+															ng-click="realizarCobroDocumento(infraccionParaPagoVO)">{{labelBtnPagoDoc}}</button>
+														<button class="btn btn-danger" id="btnLeerTarjeta"
+															ng-if="funcionBtnPagoDoc == 2"
+															ng-click="pagarInfraccion(infraccionParaPagoVO)">Leer
+															Tarjeta</button>
+											</div>
+											<div class="col-md-12 text-center">
+												<br>
+												<label style="{color:red}" ng-if="funcionBtnPagoDoc == 3"><strong>tarjeta {{labelTarjeta}}</strong></label>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="row" id="formTarjeta" ng-if="infraccionParaPagoVO.formaPago == 'TARJETA'">
+								<div class="col-xs-12">
+									<div class="box box-danger">
+										<div class="box-header with-border">
+											<i class="fa fa-edit"></i>
+											<h3 class="box-title">Pago con tarjeta</h3>
+										</div>
+										<div class="box-body">
+											<div class="form-group">
+												<div class="row">
+													<div class="col-md-6 col-xs-12 form-group">
+														<label for="example1">Monto de Infracción: </label>
+														<div class="input-group">
+															<span class="input-group-addon"><i
+																class="glyphicon glyphicon-usd"></i></span> <input type="text"
+																class="form-control" id="example1" disabled="disabled"
+																value="{{infraccionParaPagoVO.infracMonto}}">
+
+														</div>
+													</div>
+													<div class="col-md-6 col-xs-12 form-group">
+														<label for="example2">Descuento:</label>
+														<div class="input-group">
+															<span class="input-group-addon"><i
+																class="glyphicon glyphicon-minus-sign"></i></span> <input
+																type="text" class="form-control" id="example2"
+																disabled="disabled"
+																value="{{infraccionParaPagoVO.infracDescuento}}">
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-md-6 col-xs-12 form-group">
+														<label for="example3">Actualización: </label>
+														<div class="input-group">
+															<span class="input-group-addon"><i
+																class="glyphicon glyphicon-refresh"></i></span> <input
+																type="text" class="form-control" id="example3"
+																disabled="disabled"
+																value="{{infraccionParaPagoVO.infracActualizacion}}">
+														</div>
+													</div>
+													<div class="col-md-6 col-xs-12 form-group">
+														<label for="example4">Recargos: </label>
+														<div class="input-group">
+															<span class="input-group-addon"><i
+																class="glyphicon glyphicon-plus"></i></span> <input type="text"
+																class="form-control" id="example4" disabled="disabled"
+																value="{{infraccionParaPagoVO.infracRecargo}}">
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-md-6 col-xs-12 form-group">
+														<label for="example5">Arrastre: </label>
+														<div class="input-group">
+															<span class="input-group-addon"><i
+																class="fa  fa-train"></i></span> <input type="text"
+																class="form-control" id="example5" disabled="disabled"
+																value="{{infraccionParaPagoVO.infracArrastre}}">
+														</div>
+													</div>
+													<div class="col-md-6 col-xs-12 form-group">
+														<label for="example6">Derecho de Piso: </label>
+														<div class="input-group">
+															<span class="input-group-addon"><i
+																class="fa fa-bus"></i></span> <input type="text"
+																class="form-control" id="example6" disabled="disabled"
+																value="{{infraccionParaPagoVO.infracDerechoPiso}}">
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-md-6 col-xs-12 form-group">
+														<label for="example7">Candado: </label>
+														<div class="input-group">
+															<span class="input-group-addon"><i
+																class="fa  fa-train"></i></span> <input type="text"
+																class="form-control" id="example7" disabled="disabled"
+																value="{{infraccionParaPagoVO.infracCandado}}">
+														</div>
+													</div>
+												</div>
+
+											</div>
+											<div class="row form-group col-md-12 text-center">
+														<button class="btn btn-danger" id="btnPagar"
+															ng-if="funcionBtnPago == 1"
+															ng-click="pagarInfraccion(infraccionParaPagoVO)">{{labelBtnPago}}</button>
+														<button class="btn btn-danger" ng-if="funcionBtnPago == 2"
+															ng-click="realizarCobro(infraccionParaPagoVO)">{{labelBtnPago}}</button>
+											</div>
+											<div class="col-md-12 text-center">
+														<br>
+														<label ng-if="funcionBtnPago == 2" style="{color:red}"><strong>{{labelTarjeta}}</strong></label>
+													</div>
+										</div>
+										<!-- /.box-body -->
+
+									</div>
+
+								</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- 						<div class="modal-footer"> -->
+						<!-- 							<button type="button" class="btn bg-red-active" -->
+						<!-- 								data-dismiss="modal" ng-click="reset()">Salir</button> -->
+						<!-- 						</div> -->
+					</div>
+				</div>
+		</form>
+
+	</section>
+
+	<script type="text/javascript">
+		var app=angular.module("siidfApp");
+			app.controller("pagosInfraccionActaController",function(){
+			return new cancelaPorTimeOut();
+		});
+		function cancelaPorTimeOut(){
+			this.timeOutParaPagar();
+			
+		}
+	</script>
+
+</body>
+</html>

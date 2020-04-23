@@ -1,0 +1,13 @@
+.pInfo .spanInfo:not(:first-child){
+  border-left:1px solid #000;
+}
+
+.pInfo{
+    padding:0.3571rem 0;
+    margin:0;
+}
+
+.spanInfo{
+    padding:0 0.3571rem;
+    color: #00a1ff !important;
+}
