@@ -1242,7 +1242,22 @@ angular.module('siidfApp').config(function($routeProvider, $locationProvider) {
 		templateUrl : "views/atencionCiudadana/seguimientoTramite.html",
 		controller: "seguimientoTramiteController"
 	});
-	
+
+	/**
+	 * EMPIEZA EVALUACIONES
+	 * */
+	$routeProvider.when("/evaluaciones", {
+        templateUrl: "views/evaluaciones/evaluaciones.html",
+        controller: "evaluacionesController"
+    });
+
+    $routeProvider.when("/usuariosEvaluacion/:idEvaluacion", {
+        templateUrl: "views/evaluaciones/evaluacionesUsuarios.html",
+        controller: "evaluacionesUsuariosController",
+        resolve: {
+            idEvaluacion: function($route) { return $route.current.params.idEvaluacion; }
+        }
+    });
 
 	$routeProvider.otherwise({redirectTo: "/index"});
 });

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Evaluaciones</title>
+		<style>
+			.etiquetaCancelado {
+				display: inline-block;
+				min-width: 0.7143rem;
+				padding: 0.2143rem 0.0rem;
+				font-size: 0.8857rem;
+				font-weight: 600;
+				line-height: 1;
+				vertical-align: baseline;
+				white-space: nowrap;
+				text-align: center;
+				border-radius: 0.7143rem;
+			}
+			
+			.botonDescargaPDFM {
+				display: inline-block;
+				min-width: 0.7143rem;
+				padding: 0.2143rem 0.0rem;
+				font-size: 0.8857rem;
+				font-weight: 600;
+				line-height: 1;
+				vertical-align: baseline;
+				white-space: nowrap;
+				text-align: center;
+				border-radius: 0.7143rem;
+				border: 3px solid rgba(85, 86, 90, .9);
+				background: rgba(210, 210, 210, 0.9);
+			}
+			
+			/* Color del elemento activo */
+			.tema-tecloLight .switcher.active .switcher-label.true {
+				color: #2ccf0a !important;
+			}
+			/* Color del label false */
+			.tema-tecloLight .swTeclo .switcher-line:before {
+				background: #cf0a2c !important;
+			}
+			/* Color del label true */
+			.tema-tecloLight .swTeclo .active .switcher-line:before {
+				background: #2ccf0a !important;
+			}
+			.thumbnail{
+				padding: 0 !important;
+				margin-bottom: 0 !important;
+				min-height: 10px !important;
+			}
+			.text-16{
+				display:inline !important;
+			}
+		</style>
+	</head>
+	<body>
+		<section class="content-header">
+			<h1>Evaluados</h1>
+			<ol class="breadcrumb">
+				<li><a><i class="fa fa-book"></i>Evaluaciones</a></li>
+				<li class="active">Evaluados</li>
+			</ol>
+		</section>
+		
+		<!-- Main content -->
+		<section class="content">
+			<form role="form" name="form" novalidate>
+				<div class="row">
+					<div class="col-md-offset-1 col-md-10">
+						<div class="box box-danger">
+							<div class="box-header with-border text-center">
+								<div class="col-md-1 pull-left">
+									<div class="pull-left">
+										<button type="button" class="btn btn-box-tool btn-danger" ng-click="regresarBusq()" 
+											style="font-size: 1.2rem;margin-top: 0px;padding-bottom: 0px;padding-top: 0px;" 
+											data-toggle="tooltip" data-placement="right" title="" data-original-title="Regresar">
+											<i class="fa fa-arrow-circle-left"></i>
+										</button>
+									</div>
+								</div>
+								<div class="col-md-10 center">
+									<h3 class="box-title">Evaluación</h3>
+								</div>
+							</div>
+							<div class="row center">
+								<div class="col-md-10 col-md-offset-1">
+									<div class="row">
+										<div class="col-md-12">
+											<div class="form-group" style="margin-bottom: 0 !important;">
+												<div class="thumbnail">
+											      <div class="caption">
+											        <h3>
+										        		{{evaluacion.nbEvaluacion}}
+										        	</h3>
+											      </div>
+											    </div>
+											</div>
+										</div>
+										<div class="col-md-3">
+											<div class="form-group" style="margin-bottom: 0 !important;">
+												<div class="thumbnail">
+											      <div class="caption">
+											        <h5>
+											        	<i class="fa fa-user"></i>
+														<label>Tipo: </label>
+														<label class="text-16">
+											        		{{evaluacion.nbTipoEvaluacion}}
+											        	</label>
+													</h5>
+											        
+											      </div>
+											    </div>
+											</div>
+										</div>
+										<div class="col-md-3">
+											<div class="form-group" style="margin-bottom: 0 !important;">
+												<div class="thumbnail">
+											      <div class="caption">
+											        <h5>
+											        	<i class="fa fa-exchange"></i>
+														<label>Secciones: </label>
+														<label class="text-16">
+											        		{{evaluacion.nuSecciones}}
+											        	</label>
+													</h5>
+											      </div>
+											    </div>
+											</div>
+										</div>
+										<div class="col-md-3">
+											<div class="form-group">
+												<div class="thumbnail">
+											      <div class="caption">
+											        <h5>
+											        	<i class="fa fa-exchange"></i>
+														<label>Preguntas: </label>
+														<label class="text-16">
+											        		{{evaluacion.nuPreguntas}}
+											        	</label>
+													</h5>
+											        
+											      </div>
+											    </div>
+											</div>
+										</div>
+										<div class="col-md-3">
+											<div class="form-group">
+												<div class="thumbnail">
+											      <div class="caption">
+											        <h5>
+											        	<i class="fa fa-cloud-download"></i>
+														<label>Descargar: </label>
+														<a ng-click="descargaPDFRecibida(consultaEvaData[0].nbEncuestaOrigen)" class="text-16">
+															<img src="static/dist/img/pdf_logo.png" width="25px;" class="text-16">
+														</a>
+													</h5>
+											      </div>
+											    </div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row" ng-if="listUsuarios.length > 0">
+					<div class="col-xs-12">
+						<div class="box box-danger">
+							<div class="box-header row">
+								<div class="col-md-9 col-xs-12">
+									<h3 class="box-title"> Registros Encontrados: <span>{{ (listUsuarios | filter:view.searchSomething).length }}
+										</span>
+									</h3>					
+								</div>
+								<div class="col-md-3 col-xs-3">
+									<div class="input-group">
+										<input id="searchsomething" type="text" class="form-control" placeholder="Buscar por filtro" ng-model="view.searchSomething">
+										<span class="input-group-addon"><i class="fa fa-search"></i></span>
+										<a class="img-rounded" title="Genera Reporte Evaluación {{evaluacion.cdEvaluacion}}" ng-click="descargarExcel(evaluacion.idEvaluacion)">
+											<span class="pull-right">
+												<img src="static/dist/img/excel.png" width="25px;">
+											</span>
+										</a>
+									</div>
+							 	</div>
+							</div>
+							<div class="box-body table-responsive no-padding ">
+								<table id="evaluacionTabla" class="table table-hover header-fixed">
+									<thead>
+										<tr>
+											<th sort order="'usuario.cdUsuario'" 	by="order" reverse="reverse" class="text-center">PLACA OFICIAL</th>
+											<th sort order="'empNombre'" 			by="order" reverse="reverse" class="text-center" style="width: 200px;">NOMBRE OFICIAL</th>
+											<th sort order="'fhInicio'" 			by="order" reverse="reverse" class="text-center">FECHA APLICACIÓN</th>
+											<th sort order="'nuIntentos'"			by="order" reverse="reverse" class="text-center">INTENTOS</th>
+											<th sort order="'nuCalificacion'" 		by="order" reverse="reverse" class="text-center">CALIFICACIÓN</th>
+											<th sort order="'nbStCalificacion'"		by="order" reverse="reverse" class="text-center">RESULTADO</th>
+										</tr>
+									</thead>
+								
+									<tbody>
+										<tr dir-paginate="us in listUsuarios | orderBy:order:reverse | filter:view.searchSomething | itemsPerPage: view.rowsPerPage">
+											<td class="text-center">{{us.empPlaca}}</td>
+											<td class="" style="width: 200px;">{{us.empNombre}} {{us.empApePaterno}} {{us.empApeMaterno}}</td>
+											<td class="text-center">{{us.fhInicio}}</td>
+											<td class="text-center">{{us.nuIntentos}}</td>
+											<td class="text-center">{{us.nuCalificacion}}</td>
+											<td class="text-center" ng-if="us.nbStCalificacion == 'APROBADO'">
+												<span class="label label-success">{{us.nbStCalificacion}}</spam></td>
+											<td class="text-center" ng-if="us.nbStCalificacion == 'NO APROBADO'">
+												<span class="label label-warning">{{us.nbStCalificacion}}</spam></td>
+											<td class="text-center" ng-if="us.nbStCalificacion == 'SIN CALIFICACION'">
+												<span class="label label-default">{{us.nbStCalificacion}}</td>
+										</tr>
+										<tr ng-if="(listUsuarios | filter:view.searchSomething).length < 1"><td colspan="5" class="text-center"><h4>No se encontraron coincidencias</h4></td></tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="container-fluid">
+								<div class="fixed-table-pagination" style="display:block;">
+									<rows-per-page rows="view.rowsPerPage" filtro="view.searchSomething" array="listUsuarios"></rows-per-page>
+									
+									<div class="pull-right pagination">
+										<dir-pagination-controls class="pagination"></dir-pagination-controls>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</section>
+	</body>
+</html>
