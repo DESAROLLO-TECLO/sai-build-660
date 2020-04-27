@@ -79,7 +79,7 @@ public class EvaluacionesResController {
 	public ResponseEntity<byte[]> evaluacionUsuarioExcel(
 			@RequestParam(value="idEvaluacion") Integer idEvaluacion) throws NotFoundException{
 		EvaluacionUsuarioVO evaluacionUsuario = evaluacionesService.getEvaluacionUsuarios(idEvaluacion);
-		String NombreReporte = "Evaluaciones Usuarios Evaluación " + evaluacionUsuario.getEvaluacion().getNbEvaluacion();
+		String NombreReporte = "REPORTE USUARIOS - EVALUACIÓN " + evaluacionUsuario.getEvaluacion().getNbEvaluacion();
 		ByteArrayOutputStream reporteExcel = evaluacionesService.generaReporteEvaluacionUsuario(evaluacionUsuario);
 		final byte[] bytes = reporteExcel.toByteArray();
 

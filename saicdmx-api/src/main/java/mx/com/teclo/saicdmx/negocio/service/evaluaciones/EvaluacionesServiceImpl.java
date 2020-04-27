@@ -130,7 +130,7 @@ public class EvaluacionesServiceImpl implements EvaluacionesService {
 		List<String> subtitulos = new ArrayList<String>();
 		
 		subtitulos.add("FOLIO: " + evaluacionUsuario.getEvaluacion().getCdEvaluacion());
-		subtitulos.add("EVALUACIÓN " + evaluacionUsuario.getEvaluacion().getNbEvaluacion());
+		subtitulos.add("EVALUACIÓN: " + evaluacionUsuario.getEvaluacion().getNbEvaluacion());
 		
 		titulos.add("PLACA OFICIAL");
 		titulos.add("NOMBRE OFICIAL");

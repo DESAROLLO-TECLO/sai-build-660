@@ -46,8 +46,8 @@ angular.module('siidfApp').controller('evaluacionesUsuariosController',
 			});
 	};
 	
-	$scope.descargaPDF = function(nbEvaluacion){
-	    savepdf("././static/dist/documentosEvaluaciones/" + nbEvaluacion + ".pdf");
+	$scope.descargaPDF = function(cdEvaluacion){
+	    savepdf("././static/dist/documentosEvaluaciones/" + cdEvaluacion + ".pdf");
 	};
 	
 	function save(file, fileName) {
