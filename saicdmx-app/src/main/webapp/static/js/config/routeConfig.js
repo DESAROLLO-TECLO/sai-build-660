@@ -1080,12 +1080,6 @@ angular.module('siidfApp').config(function($routeProvider, $locationProvider) {
     });
 
 	
-//	Configurar Aplicación
-	$routeProvider.when("/configuracion", {
-		templateUrl : "views/administracion/configuracionApp.html",
-		controller: "configuracionAppController"
-    });
-	
 //	Componentes Web
 	$routeProvider.when("/componentesWeb",{
 		templateUrl : "views/administracion/resources/pluginsWeb.html",

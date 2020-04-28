@@ -5,3 +5,4 @@ function ($localStorageProvider) {
 	$localStorageProvider.setKeyPrefix('-');
 
 }])
+
