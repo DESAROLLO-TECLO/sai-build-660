@@ -1332,12 +1332,16 @@ angular.module('siidfApp').controller('pagosInfraccionController',	function($sco
 			$scope.consultaInfraccionesDeposito($scope.infraccionDepositoVO);
 		}
 		
-		$scope.validaInfraccion = function (monto,etiquetaColor) {
-			if(monto>0 &&   angular.equals(etiquetaColor,"label label-warning")){
+		$scope.validaInfraccion = function (total,etiquetaColor) {
+			
+			if(total > 0 &&   angular.equals(etiquetaColor,"label label-warning")){
 				showAlert.aviso('No se puede pagar esta infracción, es requerido cubrir primero las demas infracciones ');
-			}else{
+			}
+			
+			if(total < 0 ){
 				showAlert.aviso('No se puede pagar esta infracción, el monto debe ser mayor a cero');
 			}
+			
 		}
 		
 	});

@@ -468,13 +468,6 @@ angular.module('siidfApp').config(function($routeProvider, $locationProvider) {
 		controller : "adminUsuariosModificaClaveController"
 	});
 	
-
-	/***Administración de reporte***/
-	$routeProvider.when("/reportes",{
-		templateUrl : "views/administracion/adminReporte.html",
-		controller : "admiReporteController"
-	});
-	
 	
      /****** REPORTES ******/
 	
@@ -1092,70 +1085,6 @@ angular.module('siidfApp').config(function($routeProvider, $locationProvider) {
 		controller : "pluginsWebController"
 	});
 	
-// Reporteador Dinamico
-//	Componentes Web
-	$routeProvider.when("/ConsultaReportes",{
-		templateUrl : "views/reportes/consultaReportes.html",
-		controller : "consultaReportesController"
-			
-	});
-	
-	/**
-	 * EMPIEZA EL LOS PATH DEL REQUERIMIENTO DE REPORTES
-	 * */
-	$routeProvider.when("/asignacionReportes",{
-		templateUrl : "views/reportes/asignarReportes.html",
-		controller : "asignarReportesController",
-		resolve :{
-			dataRepPerfiles: function (reporteService) {
-				return reporteService.getDataPefilesReportes();
-			}
-		}
-	});	
-	
-	$routeProvider.when("/dinamicReporte",{
-		templateUrl : "views/reportes/dinamicReporte.html",
-		controller : "dinamicReporteController"
-	});
-	
-	$routeProvider.when("/formBusqueda/:idReporte", {
-		templateUrl : "views/reportes/formBusqueda.html",
-		controller: "formBusquedaController",
-		resolve: {
-			reporte: function (reporteService, $route) {
-				return reporteService.getReporte($route.current.params.idReporte);
-			}
-        }
-    });
-	
-	$routeProvider.when("/infraccionesEmpleados/:idReporte", {
-		templateUrl : "views/reportes/infraccionesEmpleados.html",
-		controller: "InfraccionesEmpleadosController",
-		resolve: {
-			reporte: function (reporteService, $route) {
-				reporteService.getReporte($route.current.params.idReporte);
-			}
-        }
-    });
-	
-	/**
-	 * TERMINA EL LOS PATH DEL REQUERIMIENTO DE REPORTES
-	 * */
-
-	/*$routeProvider.when("/asignacionReportes",{
-		templateUrl : "views/reportes/asignarReportes.html",
-		controller : "asignarReportesController",
-		resolve :{
-			dataRepPerfiles: function (reporteService) {
-				return reporteService.getDataPefilesReportes();
-			}
-		}
-	});	
-	
-	$routeProvider.when("/dinamicReporte",{
-		templateUrl : "views/reportes/dinamicReporte.html",
-		controller : "dinamicReporteController"
-	});	*/
 	
 	//INICIA ATENCION  CIUDADANA
 	$routeProvider.when("/altaTramite", {
