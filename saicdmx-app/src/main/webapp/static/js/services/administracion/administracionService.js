@@ -112,10 +112,6 @@ angular.module("siidfApp").service("administracionService", function($http, conf
 
 	/*PERFILES WEB*/
 
-	this.ejecutaSoporteOperacion = function(soporteOperacionVO){
-		return $http.post(config.baseUrl + "/administracionController/ejecutaSoporteOperacion",soporteOperacionVO);
-	}
-
 	this.obtenerPerfilesTodos = function () {
 		return $http.get(config.baseUrl + "/administracionController/obtenerAllPerfiles");
 	};
@@ -207,10 +203,6 @@ angular.module("siidfApp").service("administracionService", function($http, conf
 	this.buscarCajasDesactivar = function() {
 		return $http.get(config.baseUrl + "/administracionController/buscarCajaExtemporaneasDesactivar");
 	};
-	
-	this.buscarUsuarioHH = function(placa){
-		return $http.get(config.baseUrl + "/administracionController/buscarUsuarioHH", {params:{"placa": placa}});
-	}
 	
 	this.buscarFoliosUsuario = function(empleadoId){
 		return $http.get(config.baseUrl + "/administracionController/buscarFoliosUsuario", {params:{"empleadoId": empleadoId}});
