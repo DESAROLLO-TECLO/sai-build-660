@@ -4,8 +4,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import mx.com.teclo.arquitectura.ortogonales.util.ResponseConverter;
 import mx.com.teclo.saicdmx.bitacora.cambios.administracion.BitProcDeshabilitarExtemporanea;
 import mx.com.teclo.saicdmx.bitacora.cambios.administracion.BitProcHabilitarExtemporanea;
+import mx.com.teclo.saicdmx.bitacora.cambios.administracion.BitSoporteBitacora;
 import mx.com.teclo.saicdmx.bitacora.cambios.administracion.BitSpAdminPerfilWeb;
 import mx.com.teclo.saicdmx.bitacora.cambios.administracion.BitSpAdminUsuarioCaja;
 import mx.com.teclo.saicdmx.bitacora.cambios.administracion.BitSpAdminUsuarioDeposito;
@@ -56,6 +59,7 @@ import mx.com.teclo.saicdmx.persistencia.mybatis.dao.administracion.ModificaCaja
 import mx.com.teclo.saicdmx.persistencia.mybatis.dao.administracion.ModificaUsuarioMyBatisDAO;
 import mx.com.teclo.saicdmx.persistencia.mybatis.dao.administracion.OperacionesExtemporaneasMyBatisDAO;
 import mx.com.teclo.saicdmx.persistencia.mybatis.dao.administracion.RegionalUsuarioMyBtisDAO;
+import mx.com.teclo.saicdmx.persistencia.mybatis.dao.administracion.SoporteOperacionMyBatisDAO;
 import mx.com.teclo.saicdmx.persistencia.mybatis.dao.administracion.UsuarioAdminEstatusMyBatisDAO;
 import mx.com.teclo.saicdmx.persistencia.mybatis.dao.cajas.CajaMyBatisDAO;
 import mx.com.teclo.saicdmx.persistencia.mybatis.dao.infracciones.InfraccionMyBatisDAO;
@@ -66,9 +70,14 @@ import mx.com.teclo.saicdmx.persistencia.vo.administracion.AdminPerfilesParamVO;
 import mx.com.teclo.saicdmx.persistencia.vo.administracion.AdminUsuarioClaveVO;
 import mx.com.teclo.saicdmx.persistencia.vo.administracion.AdminUsuarioEstatusVO;
 import mx.com.teclo.saicdmx.persistencia.vo.administracion.AdscripcionVO;
+import mx.com.teclo.saicdmx.persistencia.vo.administracion.EjecutaSoporteOperacionVO;
 import mx.com.teclo.saicdmx.persistencia.vo.administracion.MenuAdminVO;
 import mx.com.teclo.saicdmx.persistencia.vo.administracion.OperacionesExtemporaneasVO;
 import mx.com.teclo.saicdmx.persistencia.vo.administracion.PerfilesAdminVO;
+import mx.com.teclo.saicdmx.persistencia.vo.administracion.SoporteEmbargoConsultaVO;
+import mx.com.teclo.saicdmx.persistencia.vo.administracion.SoporteEmbargoVO;
+import mx.com.teclo.saicdmx.persistencia.vo.administracion.SoporteFoliosVO;
+import mx.com.teclo.saicdmx.persistencia.vo.administracion.SoporteOperacionVO;
 import mx.com.teclo.saicdmx.persistencia.vo.administracion.UsuarioAdminVO;
 import mx.com.teclo.saicdmx.persistencia.vo.caja.CajaVO;
 import mx.com.teclo.saicdmx.persistencia.vo.caja.VBuscarCorteCaja;
@@ -76,8 +85,12 @@ import mx.com.teclo.saicdmx.persistencia.vo.caja.VCajaConsultaVO;
 import mx.com.teclo.saicdmx.persistencia.vo.caja.VCajaExtDesactivarVO;
 import mx.com.teclo.saicdmx.persistencia.vo.certificados.ConsultaUsersVO;
 import mx.com.teclo.saicdmx.persistencia.vo.certificados.EmpleadoVO;
+import mx.com.teclo.saicdmx.persistencia.vo.empleados.EmpleadosPorPlacaVO;
+import mx.com.teclo.saicdmx.persistencia.vo.infracciones.VSSPInfracConsGralFVO;
+import mx.com.teclo.saicdmx.persistencia.vo.ingresos.IngresosVO;
 import mx.com.teclo.saicdmx.util.comun.RutinasTiempoImpl;
 import mx.com.teclo.saicdmx.util.enumerados.CodigoPerfilesEnum;
+import mx.com.teclo.saicdmx.util.enumerados.ConceptosSoporteOperacion;
 import mx.com.teclo.saicdmx.util.enumerados.ParametrosBitacoraEnum;
 import mx.com.teclomexicana.arquitectura.ortogonales.seguridad.vo.BitacoraCambiosVO;
 import mx.com.teclomexicana.arquitectura.ortogonales.seguridad.vo.UsuarioFirmadoVO;
@@ -116,6 +129,8 @@ public class AdministracionServiceImpl implements AdministracionService {
 	private CajaUsuarioAdminMyBatisDAO cajaUsuarioAdminMyBatisDAO;
 	@Autowired
 	private ModificaCajaUsuarioMyBatisDAO modificaCajaUsuarioMyBatisDAO;
+	@Autowired
+	private SoporteOperacionMyBatisDAO soporteOperacionMyBatisDAO;
 
 	@Autowired
 	private MenuAdminMyBatisDAO menuAdminMyBatisDAO;
@@ -123,6 +138,10 @@ public class AdministracionServiceImpl implements AdministracionService {
 	private PerfilDAO perfilDAO;
 	@Autowired
 	private AdminPerfilesAdminMyBatisDAO crudPerfilesMybatisDAO;
+	@Autowired
+	private EmpleadoDAO empleadoDAO;
+	@Autowired
+	private ConceptosSoporteDAO conceptosSoporteDAO;
 
 	@Autowired
 	private OperacionesExtemporaneasMyBatisDAO operacionesExtemporaneasMyBatisDAO;
@@ -158,9 +177,22 @@ public class AdministracionServiceImpl implements AdministracionService {
 	@Autowired
 	private BitTrBitacOpeExtemporanea bitTrBitacOpeExtemporanea; 
 	@Autowired
+	private BitSoporteBitacora bitSoporteBitacora;
+	@Autowired
+	private BitTrgSoporteBitacora bitTrgSoporteBitacora;
+	@Autowired
+	private BitTrBitUpInfrac bitTrBitUpInfrac;
+	@Autowired
+	private BitTrBitacIngresos bitTrBitacIngresos;
+	@Autowired
 	private OperacionExtDAO operacionExtDAO;
 	@Autowired
 	private EmpleadoService empleadoService;
+	
+
+	
+	@Autowired
+	private InfraccionMyBatisDAO infraccionMyBatisDAO;
 	
 	
 	
@@ -620,6 +652,18 @@ public class AdministracionServiceImpl implements AdministracionService {
 		return adminCajaParametrosVO.getP_mensaje();
 	}
 
+	/***
+	 * {@inheritDoc}
+	 */
+	@Override
+	public EmpleadosPorPlacaVO buscaAutorizacion(Integer conceptoId, String placa) {
+		if (conceptoId == ConceptosSoporteOperacion.USUARIOS_ASIGNAR_FOLIOS) {
+			return soporteOperacionMyBatisDAO.buscaAutorizacionOficialAsignarFolios(placa);
+		}
+
+		return soporteOperacionMyBatisDAO.buscaAutorizacionOficial(placa);
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -645,6 +689,218 @@ public class AdministracionServiceImpl implements AdministracionService {
 		}
 
 		return lista;
+	}
+
+	/***
+	 * {@inheritDoc}
+	 * @throws ParseException 
+	 */
+	@Override
+	public EjecutaSoporteOperacionVO ejecutarSoporteOperacion(SoporteOperacionVO objeto, Long usuario) throws ParseException {
+				
+		List<BitacoraCambiosVO> listBitCambios = new ArrayList<>();
+		
+		EjecutaSoporteOperacionVO execValues = new EjecutaSoporteOperacionVO();
+		execValues.setUsuarioId(usuario);
+		execValues.setInfraccionNum(objeto.getInfraccionNum());
+			
+		execValues.setFechaHora(objeto.getFechaHora());
+		execValues.setInfraccionPreImpresa(objeto.getInfraccionPreImpresa());
+		execValues.setInfraccionNumNueva(objeto.getInfraccionNumNueva());
+
+		execValues.setNciNuevo(objeto.getNciNuevo());
+		execValues.setInfraccionPlaca(objeto.getInfraccionPlaca());
+		execValues.setLstCausaIngreso(objeto.getLstCausaIngreso());
+		execValues.setLstTipoIngreso(objeto.getLstTipoIngreso());
+
+		execValues.setNumOficio(objeto.getNumOficio());
+		execValues.setOficialPlaca(objeto.getOficialPlaca());
+		execValues.setResguardo(objeto.getResguardo());
+		execValues.setFolioInicial(objeto.getFolioInicial());
+		execValues.setFolioFinal(objeto.getFolioFinal());
+		execValues.setReciboTotal(objeto.getReciboTotal());
+		execValues.setReciboUtilizados(objeto.getReciboUtilizados());
+		execValues.setReciboCancelados(objeto.getReciboCancelados());
+		execValues.setTipoSoporte(objeto.getTipoSoporte());
+		execValues.setOperacionEfectuada(objeto.getOperacionEfectuada());
+		execValues.setEmpIdFolios(objeto.getEmpIdFolios());
+		execValues.setUsuarioAutoriza(objeto.getUsuarioAutoriza());
+		
+		IngresosVO oldIngresos =  null;
+		VSSPInfracConsGralFVO oldInfraccion = null;
+		VSSPInfracConsGralFVO oldInfraccionDig = null;
+		VCajaConsultaVO oldCaja  = null; 
+		Long cajaId = null;
+		
+		/* Consulta de información en la tabla de Infracciones antes de realizar cambios por el sp sp_admin_soporte_operacion*/
+		if(objeto.getTipoSoporte() == 1 || objeto.getTipoSoporte() == 3 || objeto.getTipoSoporte() == 4 ||
+				objeto.getTipoSoporte() == 5 ||	objeto.getTipoSoporte() == 6 ||	objeto.getTipoSoporte() == 8 ||
+				objeto.getTipoSoporte() == 9 ||	objeto.getTipoSoporte() == 10 || objeto.getTipoSoporte() == 11 ||
+				objeto.getTipoSoporte() == 18)
+			oldInfraccion = infraccionMyBatisDAO.getDatosInfraccionParaBitacora(objeto.getInfraccionNum());
+		
+		/* Consulta de información en la tabla de Ingresos antes de realizar cambios por el sp sp_admin_soporte_operacion*/
+		if(objeto.getTipoSoporte() == 7 || objeto.getTipoSoporte() == 9 || objeto.getTipoSoporte() == 12 ||
+				objeto.getTipoSoporte() == 13 || objeto.getTipoSoporte() == 15 ||
+				objeto.getTipoSoporte() == 16 || objeto.getTipoSoporte() == 18)
+			oldIngresos = soporteOperacionMyBatisDAO.getInformacionIngreso(objeto.getInfraccionNum());
+
+		/* Consulta de información en la tabla de Infracciones_Digitalizacion antes de realizar cambios por el sp sp_admin_soporte_operacion*/
+		else if(objeto.getTipoSoporte() == 11 && oldInfraccion == null)
+			oldInfraccionDig = infraccionMyBatisDAO.getDatosInfraccionParaBitacora(objeto.getInfraccionNum());
+		
+		/* Consulta de información en la tabla de Cajas antes de realizar cambios por el sp sp_admin_soporte_operacion*/
+		else if(objeto.getTipoSoporte() == 19 && objeto.getEmpIdFolios() != null){
+				cajaId = modificaCajaUsuarioMyBatisDAO.getCajaIdFromEmpId(objeto.getEmpIdFolios().longValue());
+				if(cajaId != null)
+					oldCaja = modificaCajaUsuarioMyBatisDAO.getDatosCaja(cajaId);			
+		}
+		
+		soporteOperacionMyBatisDAO.EjecutarSoporteOperacion(execValues);
+		
+		if(!execValues.getResultado().equals("-1")){
+			
+			try{
+				/* Cambio del numero de Infracción en el caso de tipo soporte 9, puesto que se le asigna un nuevo numero de infraccion*/
+				if(objeto.getTipoSoporte() == 9)
+					objeto.setInfraccionNum(objeto.getInfraccionNumNueva());
+				
+				/* Consulta de información en la tabla de Infracciones despues de realizar cambios por el sp sp_admin_soporte_operacion,
+				 *  para poder generar bitacora de cambios */
+				if(oldInfraccion!=null){
+					VSSPInfracConsGralFVO newInfraccion = infraccionMyBatisDAO.getDatosInfraccionParaBitacora(objeto.getInfraccionNum());
+					newInfraccion.setModificadoPor(usuario.intValue());
+//					newInfraccion.setAutorizaId(objeto.getUsuarioAutoriza());
+					listBitCambios.addAll(bitTrBitUpInfrac.guardarCambiosBitacora(newInfraccion, oldInfraccion));
+				}
+				
+				/* Consulta de información en la tabla de Ingresos despues de realizar cambios por el sp sp_admin_soporte_operacion,
+				 *  para poder generar bitacora de cambios */
+				if(oldIngresos!=null){
+					if(objeto.getTipoSoporte() == 12 || objeto.getTipoSoporte() == 18)
+						objeto.setInfraccionNum(objeto.getInfraccionNum().substring(1));
+					
+					IngresosVO newIngresos = soporteOperacionMyBatisDAO.getInformacionIngreso(objeto.getInfraccionNum());
+					newIngresos.setInfracNum(objeto.getInfraccionNum());
+					listBitCambios.addAll(bitTrBitacIngresos.generarBitacoraIngresos(oldIngresos, newIngresos));
+				}
+				
+				/* Consulta de información en la tabla de Cajas_empleados despues de realizar cambios por el sp sp_admin_soporte_operacion,
+				 *  para poder generar bitacora de cambios */
+				if(oldCaja != null){
+					VCajaConsultaVO newCaja =  modificaCajaUsuarioMyBatisDAO.getDatosCaja(cajaId);
+					newCaja.setModificadoPor(usuario.toString());
+					newCaja.setCajaIdD(cajaId.toString());
+					listBitCambios.addAll(bitTrBitacCajas.guardarCambiosBitacora(newCaja, oldCaja));			
+					
+				}
+				
+				/* Generación de bitacora de cambios al realizar cambios en la tabla de Infracciones Digitalizacion*/
+				if(execValues.getTipoSoporte() == 11 && oldInfraccionDig != null){
+					listBitCambios.add(new BitacoraCambiosVO(
+							ParametrosBitacoraEnum.TAI_BITACORA_CAMBIOS.getParametro(), 
+							5L,
+							2L,
+							oldInfraccionDig.getVehiculoPlaca(),
+							objeto.getInfraccionPlaca(),
+							objeto.getOficialPlaca() != null ? new Long(objeto.getOficialPlaca()) : 0L,
+							objeto.getInfraccionNum().toString(),
+							"",
+							ParametrosBitacoraEnum.ORIGEN_W.getParametro()
+							));			
+					listBitCambios.add(new BitacoraCambiosVO(
+							ParametrosBitacoraEnum.TAI_BITACORA_CAMBIOS.getParametro(), 
+							5L,
+							44L,
+							oldInfraccionDig.getAutorizaId(),
+							objeto.getUsuarioAutoriza(),
+							objeto.getOficialPlaca() != null ? new Long(objeto.getOficialPlaca()) : 0L,
+							objeto.getInfraccionNum().toString(),
+							"",
+							ParametrosBitacoraEnum.ORIGEN_W.getParametro()
+							));			
+				}
+				
+				/* Bitacora generada cuando se realiza un ingreso a deposito desde el servicio soporte operación
+				 * para ello se crea el registro y se manda a guardar la información en bitacoras_cambio */
+				if(execValues.getTipoSoporte() == 14){
+					IngresosVO newIngreso = soporteOperacionMyBatisDAO.getInformacionIngreso(objeto.getInfraccionNum());
+					listBitCambios.add(new BitacoraCambiosVO(
+							ParametrosBitacoraEnum.TAI_BITACORA_CAMBIOS.getParametro(), 
+							11L,
+							1L,
+							newIngreso.getIngrResguardo(),
+							newIngreso.getDepId().toString(),
+							newIngreso.getModificadoPor() != null ? new Long(newIngreso.getModificadoPor()) : 0L, // Siempre se registra con el Emp_ID = 75L
+							objeto.getInfraccionNum().toString(),
+							"",
+							ParametrosBitacoraEnum.ORIGEN_W.getParametro()
+							));			
+				}
+				
+				bitacoraCambiosService.guardarListaBitacoraCambios(listBitCambios);
+				
+			}catch(Exception e){
+				System.err.println(e.getMessage());
+			}finally{
+				/*Metodo que permite realizar el bitacoreo de soporte_Bitacora ...*/
+				try{
+				//persisteSoporteBitacora(execValues);
+				}catch(Exception e){
+					System.err.println(e.getMessage());
+				}
+			}
+		}
+				
+		return execValues;
+
+	}
+	/***
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("rawtypes")
+	@Override
+	public Map buscaIngresoPorInfraccion(String infraccion) {
+		Map ingreso = soporteOperacionMyBatisDAO.buscaIngresoPorInfraccion(infraccion);
+		return ingreso;
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public Map buscaIngresoDetallePorInfraccion(String infraccion) {
+		Map ingresodetalle = soporteOperacionMyBatisDAO.buscaIngresoDetallePorInfraccion(infraccion);
+		return ingresodetalle;
+	}
+
+	/***
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<SoporteEmbargoVO> buscaEmbargoPorPlaca(String placa) {
+		return soporteOperacionMyBatisDAO.buscaEmbargoPorPlaca(placa);
+	}
+
+	/***
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String buscarPagoDeInfraccion(String infraccion) {
+		String infraccionPagada = this.soporteOperacionMyBatisDAO.buscaPagoDeInfraccion(infraccion);
+		if (infraccionPagada != null) {
+			if (infraccionPagada.equals("SI")) {
+				return "La infracción YA fue pagada";
+			}
+			return "La infracción NO ha sido pagada";
+		}
+		return infraccionPagada;
+	}
+
+	/***
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<SoporteEmbargoConsultaVO> buscaEmbargos(Integer tipoBusqueda, String valor) {
+		return soporteOperacionMyBatisDAO.buscaEmbargos(tipoBusqueda, valor);
 	}
 
 	/**
@@ -829,6 +1085,91 @@ public class AdministracionServiceImpl implements AdministracionService {
 		}
 		
 	}
+
+	/***
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ConsultaUsersVO buscaUsuarioHH(String placa) {
+		return soporteOperacionMyBatisDAO.buscaUsuarioHH(placa, codeApplication);
+	}
+
+	/***
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public Map buscaFoliosEmpleado(Long empleadoId) {
+		Map folios = new HashMap<String, Integer>();
+
+		folios.put(ConceptosSoporteOperacion.FOLIO_INFRACCION, 0);
+		folios.put(ConceptosSoporteOperacion.FOLIO_ARRASTRE, 0);
+		folios.put(ConceptosSoporteOperacion.FOLIO_PLACAS, 0);
+		folios.put(ConceptosSoporteOperacion.FOLIO_PAGO, 0);
+		folios.put(ConceptosSoporteOperacion.FOLIO_TRANSACCION, 0);
+		folios.put(ConceptosSoporteOperacion.FOLIO_CORTE_CAJA, 0);
+
+		List<SoporteFoliosVO> listaFolios = soporteOperacionMyBatisDAO.buscaFoliosEmpleado(empleadoId);
+
+		for (SoporteFoliosVO objeto : listaFolios) {
+			folios.put(objeto.getFolioClave(), objeto.getCantidad());
+		}
+
+		return folios;
+	}
+
+	public String cabeceraFolio(String folioClave) {
+		if (folioClave.equals(ConceptosSoporteOperacion.FOLIO_INFRACCION)) {
+			return "INFRACCIÓN";
+		} else if (folioClave.equals(ConceptosSoporteOperacion.FOLIO_ARRASTRE)) {
+			return "ARRASTRE";
+		} else if (folioClave.equals(ConceptosSoporteOperacion.FOLIO_PLACAS)) {
+			return "PLACA";
+		} else if (folioClave.equals(ConceptosSoporteOperacion.FOLIO_PAGO)) {
+			return "PAGO";
+		} else if (folioClave.equals(ConceptosSoporteOperacion.FOLIO_TRANSACCION)) {
+			return "TRANSACCIÓN";
+		} else if (folioClave.equals(ConceptosSoporteOperacion.FOLIO_CORTE_CAJA)) {
+			return "CORTE DE CAJA";
+		} else {
+			return "";
+		}
+	}
+	
+
+	public void persisteSoporteBitacora(EjecutaSoporteOperacionVO objeto) {
+
+		String fechaSoporteOcorteId = null;
+		Long conceptosId = conceptosSoporteDAO.buscarComponenteId(objeto.getTipoSoporte().longValue());
+		EmpleadosDTO empleadosDTO = empleadoDAO.consultaEmpleadoAutorizaSoporte(objeto.getUsuarioAutoriza());
+		Long cambioId = bitTrgSoporteBitacora.consultaIdMaximoSoporteBitacora();
+
+		/* Enviar fechas segun tipo de soporte */
+		if (objeto.getTipoSoporte().equals(13) || objeto.getTipoSoporte().equals(16)
+				|| objeto.getTipoSoporte().equals(17)) {
+
+			fechaSoporteOcorteId = objeto.getFechaHora();
+
+			if (objeto.getTipoSoporte().equals(17)) {
+
+				VBuscarCorteCaja corte = obtenerCorteId(fechaSoporteOcorteId, objeto.getOficialPlaca());
+				fechaSoporteOcorteId = corte.getCorteId();
+				empleadosDTO.setEmpId(Long.valueOf(corte.getEmpId()));
+
+			} else if (objeto.getTipoSoporte().equals(13)) {
+
+				String fecha = buscaIngresoPorInfraccionFecha(objeto.getInfraccionNum());
+				fechaSoporteOcorteId = fecha;
+
+			}
+
+		}
+
+		bitSoporteBitacora.persisteSoporteBitacora(objeto, empleadosDTO.getEmpId(), cambioId, conceptosId,
+				fechaSoporteOcorteId);
+
+	}
+	
 	
 	public VBuscarCorteCaja obtenerCorteId(String fecha, String placaOficial) {
 
@@ -837,6 +1178,11 @@ public class AdministracionServiceImpl implements AdministracionService {
 		return corte;
 	}
 	
+
+	public String buscaIngresoPorInfraccionFecha(String infraccion) {
+		String fecha = soporteOperacionMyBatisDAO.buscaIngresoPorInfraccionFecha(infraccion);
+		return fecha;
+	}
 	@Override
 	@Transactional
 	public List<PerfilesAdminVO> getPerfilByCdApp() {
@@ -851,5 +1197,4 @@ public class AdministracionServiceImpl implements AdministracionService {
 		}
 		return listVOReturn;
 	}
-
 }

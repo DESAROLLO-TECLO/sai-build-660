@@ -29,6 +29,7 @@ import mx.com.teclo.saicdmx.negocio.service.comun.UsuarioFirmadoService;
 import mx.com.teclo.saicdmx.negocio.service.empleado.EmpleadoService;
 import mx.com.teclo.saicdmx.persistencia.hibernate.dto.administracion.PerfilDTO;
 import mx.com.teclo.saicdmx.persistencia.hibernate.dto.cajas.VCajaExtDesactivarDTO;
+import mx.com.teclo.saicdmx.persistencia.hibernate.dto.catalogos.CajaDTO;
 import mx.com.teclo.saicdmx.persistencia.hibernate.dto.catalogos.DepositosDTO;
 import mx.com.teclo.saicdmx.persistencia.hibernate.dto.catalogos.RegionalesDTO;
 import mx.com.teclo.saicdmx.persistencia.hibernate.dto.empleados.EmpleadosDTO;
@@ -42,16 +43,22 @@ import mx.com.teclo.saicdmx.persistencia.vo.administracion.AdminPerfilesParamVO;
 import mx.com.teclo.saicdmx.persistencia.vo.administracion.AdminUsuarioClaveVO;
 import mx.com.teclo.saicdmx.persistencia.vo.administracion.AdminUsuarioEstatusVO;
 import mx.com.teclo.saicdmx.persistencia.vo.administracion.AdscripcionVO;
+import mx.com.teclo.saicdmx.persistencia.vo.administracion.EjecutaSoporteOperacionVO;
 import mx.com.teclo.saicdmx.persistencia.vo.administracion.MenuAdminVO;
 import mx.com.teclo.saicdmx.persistencia.vo.administracion.OperacionesExtemporaneasVO;
 import mx.com.teclo.saicdmx.persistencia.vo.administracion.PerfilesAdminVO;
+import mx.com.teclo.saicdmx.persistencia.vo.administracion.SoporteEmbargoConsultaVO;
+import mx.com.teclo.saicdmx.persistencia.vo.administracion.SoporteEmbargoVO;
+import mx.com.teclo.saicdmx.persistencia.vo.administracion.SoporteOperacionVO;
 import mx.com.teclo.saicdmx.persistencia.vo.administracion.UsuarioAdminVO;
 import mx.com.teclo.saicdmx.persistencia.vo.caja.CajaVO;
 import mx.com.teclo.saicdmx.persistencia.vo.caja.VCajaConsultaConTieneOperacionesVO;
 import mx.com.teclo.saicdmx.persistencia.vo.caja.VCajaExtDesactivarVO;
 import mx.com.teclo.saicdmx.persistencia.vo.caja.VFoliosCajaVO;
 import mx.com.teclo.saicdmx.persistencia.vo.certificados.ConsultaUsersVO;
+import mx.com.teclo.saicdmx.persistencia.vo.empleados.EmpleadosPorPlacaVO;
 import mx.com.teclo.saicdmx.util.comun.ResponseConverter;
+import mx.com.teclo.saicdmx.util.enumerados.ConceptosSoporteOperacion;
 import mx.com.teclomexicana.arquitectura.ortogonales.exception.BusinessException;
 import mx.com.teclomexicana.arquitectura.ortogonales.exception.NotFoundException;
 import mx.com.teclomexicana.arquitectura.ortogonales.seguridad.vo.UsuarioFirmadoVO;
@@ -323,6 +330,39 @@ public class AdministracionRestController {
 
 	}
 
+	@RequestMapping(value = "/buscaAutorizacion", method = RequestMethod.GET)
+	@PreAuthorize("hasAnyAuthority('BUSCAR_AUTORIZACION')")
+	public ResponseEntity<EmpleadosPorPlacaVO> buscarAutorizacion(@RequestParam("concepto") Integer conceptoId,
+			@RequestParam("placa") String placa) throws NotFoundException {
+		EmpleadosPorPlacaVO oficial = administracionService.buscaAutorizacion(conceptoId, placa);
+		if (oficial == null) {
+			throw new NotFoundException("No existe el oficial buscado o no tiene el perfil autorizado");
+		}
+		return new ResponseEntity<EmpleadosPorPlacaVO>(oficial, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/buscarUsuarioHH", method = RequestMethod.GET)
+	@PreAuthorize("hasAnyAuthority('BUSCAR_USUARIOHH')")
+	public ResponseEntity<ConsultaUsersVO> buscarUsuarioHH(@RequestParam("placa") String placa)
+			throws NotFoundException {
+		ConsultaUsersVO usuario = administracionService.buscaUsuarioHH(placa);
+		if (usuario == null) {
+			throw new NotFoundException("No se encontro el usuario");
+		} else if (!usuario.getPerfil_id().equals(ConceptosSoporteOperacion.PERFIL_HH)) {
+			throw new NotFoundException("El usuario no tiene perfil handheld");
+		}
+		return new ResponseEntity<ConsultaUsersVO>(usuario, HttpStatus.OK);
+	}
+
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "/buscarFoliosUsuario", method = RequestMethod.GET)
+	@PreAuthorize("hasAnyAuthority('BUSCAR_FOLIOS_USUARIO')")
+	public ResponseEntity<Map> buscarFoliosUsuario(@RequestParam("empleadoId") Long empleadoId)
+			throws NotFoundException {
+		Map folios = administracionService.buscaFoliosEmpleado(empleadoId);
+		return new ResponseEntity<Map>(folios, HttpStatus.OK);
+	}
+
 	/**
 	 * @author Jesus Gutierrez
 	 * @return <List<PerfilesAdminVO>
@@ -386,6 +426,15 @@ public class AdministracionRestController {
 
 	}
 
+	@RequestMapping(value = "/ejecutaSoporteOperacion", method = RequestMethod.POST)
+	@PreAuthorize("hasAnyAuthority('EJECUTA_SOPORTE_OPERACION')")
+	public ResponseEntity<EjecutaSoporteOperacionVO> ejecutaSoporteOperacion(
+			@RequestBody SoporteOperacionVO soporteOperacionVO) throws ParseException {
+		EjecutaSoporteOperacionVO object = administracionService.ejecutarSoporteOperacion(soporteOperacionVO,
+				usuarioFirmadoService.getUsuarioFirmadoVO().getId());
+		return new ResponseEntity<EjecutaSoporteOperacionVO>(object, HttpStatus.OK);
+	}
+
 	@RequestMapping(value = "/buscarCajaExtemporaneas", method = RequestMethod.GET)
 	@PreAuthorize("hasAnyAuthority('BUSCAR_CAJA_EXTEMPORANEA')")
 	public ResponseEntity<CajaVO> buscarCajaExtemporaneas(@RequestParam(value = "valor") String valor,
@@ -400,6 +449,19 @@ public class AdministracionRestController {
 //				+ " " + cajaDTO.getEmpleado().getEmpApeMaterno());
 //		cajaVO.setPlacaEmpleado(cajaDTO.getEmpleado().getEmpPlaca());
 		return new ResponseEntity<CajaVO>(cajaVO, HttpStatus.OK);
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@RequestMapping(value = "/buscaIngresoPorInfraccion", method = RequestMethod.GET)
+	@PreAuthorize("hasAnyAuthority('BUSCA_INGRESO_POR_INFRACCION')")
+	public ResponseEntity<Map> buscaIngresoPorInfraccion(@RequestParam("infraccion") String infraccion)
+			throws NotFoundException {
+		Map response = administracionService.buscaIngresoPorInfraccion(infraccion);
+		if (response == null) {
+			throw new NotFoundException("No existe la infracción o no tiene ingreso");
+		}
+		response.put("mensaje", "La fecha de la infracción es: " + response.get("FECHA"));
+		return new ResponseEntity<Map>(response, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/habilitarExtemporanea", method = RequestMethod.POST)
@@ -426,6 +488,55 @@ public class AdministracionRestController {
 			@RequestBody VCajaExtDesactivarVO vCajaExtDesactivarVO, UriComponentsBuilder ucBuilder) throws ParseException {
 		administracionService.desabilitarExtemporanea(vCajaExtDesactivarVO);
 		return new ResponseEntity<VCajaExtDesactivarVO>(vCajaExtDesactivarVO, HttpStatus.CREATED);
+	}
+
+	@SuppressWarnings({ "rawtypes" })
+	@RequestMapping(value = "/buscaIngresoDetallePorInfraccion", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAnyAuthority('BUSCA_INGRESO_DETALLE_POR_INFRACCION')")
+	public ResponseEntity<Map> buscaIngresoDetallePorInfraccion(@RequestParam("infraccion") String infraccion)
+			throws NotFoundException {
+		Map response = administracionService.buscaIngresoDetallePorInfraccion(infraccion);
+		if (response == null) {
+			throw new NotFoundException("No existen ingresos activos para la infracción buscada");
+		}
+		return new ResponseEntity<Map>(response, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/buscaEmbargoPorPlaca", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAnyAuthority('BUSCA_EMBARGO_POR_PLACA')")
+	public ResponseEntity<List<SoporteEmbargoVO>> buscaEmbargoPorPlaca(@RequestParam("placa") String placa)
+			throws NotFoundException {
+		List<SoporteEmbargoVO> response = administracionService.buscaEmbargoPorPlaca(placa);
+		if (response.isEmpty()) {
+			throw new NotFoundException("No se encontraron registros");
+		}
+		return new ResponseEntity<List<SoporteEmbargoVO>>(response, HttpStatus.OK);
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@RequestMapping(value = "/buscaPagoDeInfraccion", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAnyAuthority('BUSCA_PAGO_DE_INFRACCION')")
+	public ResponseEntity<Map> buscaPagoDeInfraccion(@RequestParam("infraccion") String infraccion)
+			throws NotFoundException {
+		String infraccionPagada = administracionService.buscarPagoDeInfraccion(infraccion);
+		if (infraccionPagada == null) {
+			throw new NotFoundException("No existe la infracción");
+		}
+		Map response = new HashMap();
+		response.put("mensaje", infraccionPagada);
+		return new ResponseEntity<Map>(response, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/buscaEmbargos", method = RequestMethod.GET)
+	@PreAuthorize("hasAnyAuthority('BUSCA_EMBARGOS')")
+	public ResponseEntity<List<SoporteEmbargoConsultaVO>> buscaEmbargos(
+			@RequestParam("tipoBusqueda") Integer tipoBusqueda, @RequestParam("valor") String valor)
+			throws NotFoundException {
+		List<SoporteEmbargoConsultaVO> response = administracionService.buscaEmbargos(tipoBusqueda, valor);
+		if (response.isEmpty()) {
+			throw new NotFoundException("No se encontraron registros");
+		}
+		return new ResponseEntity<List<SoporteEmbargoConsultaVO>>(response, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/cajaByCajaCodEmpPlacaDepId", method = RequestMethod.GET)

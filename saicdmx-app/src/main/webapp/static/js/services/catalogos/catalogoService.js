@@ -429,6 +429,19 @@ angular.module("siidfApp").service("catalogoService", function($http, config) {
 		return $http.get(config.baseUrl + "/tipoBusquedaCaja");
 	};
 	
+	/*SOPORTE OPERACION*/
+	this.filtroComponentesSoporte = function(){
+		return $http.get(config.baseUrl + "/filtroComponentesSoporte");
+	}
+	
+	this.filtroConceptosSoporte = function(componenteId){
+		return $http.get(config.baseUrl + "/filtroConceptosSoporte", {
+			params : {
+				"componente" : componenteId
+			}
+		});
+	}
+	
 	this.buscaCausasIngreso = function(){
 		return $http.get(config.baseUrl + "/causasIngreso");
 	}
